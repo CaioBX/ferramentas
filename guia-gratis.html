@@ -1,0 +1,765 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Coloque seu negócio no guia do seu bairro | Hoje no Ceará</title>
+<meta name="description" content="Cadastre seu negócio gratuitamente no Guia Comercial do seu bairro no Hoje no Ceará. Leva 1 minuto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1554d1; --blue-soft:#edf3ff; --navy:#0a1f44; --yellow:#ffc629;
+  --bg:#ffffff; --surface:#f5f7fb; --ink:#0d1b33; --muted:#5f6b80; --line:#e4e8f0;
+  --green:#14995a; --wa:#1faa59; --orange:#e07b0c; --red:#d63c35;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font-family:"Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+button,select,input{font:inherit;color:inherit}
+.app{max-width:520px;margin:0 auto;height:100vh;height:100dvh;display:flex;flex-direction:column;position:relative;overflow:hidden;background:var(--bg)}
+
+/* topo */
+.top{display:flex;align-items:center;gap:12px;padding:14px 18px 6px}
+.is-hero .top{display:none}
+.back{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;cursor:pointer;flex:none;display:grid;place-items:center}
+.back[hidden]{visibility:hidden}
+.prog{flex:1;min-width:0}
+.prog-t{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--muted)}
+.prog-b{height:4px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:7px}
+.prog-b i{display:block;height:100%;width:0;background:var(--blue);border-radius:99px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+
+/* tela */
+.screen{flex:1;overflow-y:auto;padding:10px 18px 24px;-webkit-overflow-scrolling:touch}
+.screen.fwd{animation:fwd .3s cubic-bezier(.2,.8,.2,1) both}
+.screen.bwd{animation:bwd .3s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fwd{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+@keyframes bwd{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+h2{font-size:24px;line-height:1.2;margin:12px 0 8px;letter-spacing:-.02em;font-weight:800}
+.sub{color:var(--muted);margin:0 0 22px;font-size:15px;line-height:1.5}
+.lbl{font-size:13px;font-weight:700;color:var(--muted);margin:20px 0 10px}
+
+/* opções */
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:17px 16px;border-radius:14px;border:1.5px solid var(--line);background:#fff;cursor:pointer;transition:border-color .15s,background .15s,transform .1s}
+.opt:active{transform:scale(.985)}
+.opt b{display:block;font-size:16px;font-weight:700}
+.opt small{display:block;color:var(--muted);font-size:13px;margin-top:2px;font-weight:500}
+.rd{margin-left:auto;width:22px;height:22px;border-radius:50%;border:1.5px solid #c9d1df;flex:none;transition:.15s}
+.opt.on{border-color:var(--blue);background:var(--blue-soft)}
+.opt.on .rd{border:6px solid var(--blue)}
+
+/* ramos */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:92px;padding:12px 6px;border-radius:14px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-size:12.5px;font-weight:700;text-align:center;line-height:1.25;transition:transform .1s}
+.tile:active{transform:scale(.96)}
+.tile .ic{font-size:26px;line-height:1}
+.tile.on{border-color:var(--blue);background:var(--blue-soft)}
+.tile .s{font-size:11px;color:var(--blue)}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:11px 15px;border-radius:99px;border:1.5px solid var(--line);background:#fff;font-weight:600;font-size:14.5px;cursor:pointer;transition:background .15s,border-color .15s,transform .1s}
+.chip:active{transform:scale(.96)}
+.chip.on{border-color:var(--blue);background:var(--blue);color:#fff}
+
+/* bairro */
+.selbox{display:flex;align-items:center;gap:12px;width:100%;padding:17px 16px;border-radius:14px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;text-align:left;font-size:16px;font-weight:600;color:var(--muted)}
+.selbox.ok{border-color:var(--blue);color:var(--navy);background:var(--blue-soft);font-weight:700}
+.selbox svg{margin-left:auto;flex:none}
+
+/* horário */
+.hrow{border:1.5px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.hrow-h{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:10px}
+.rm{background:none;border:0;color:var(--red);font-size:13px;font-weight:700;cursor:pointer;padding:0}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:12px}
+.day{aspect-ratio:1;border-radius:50%;border:1.5px solid var(--line);background:#fff;font-size:12.5px;font-weight:700;cursor:pointer;padding:0;transition:.15s}
+.day.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.times{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.times label{font-size:12px;font-weight:700;color:var(--muted)}
+.times select{display:block;width:100%;margin-top:5px;padding:13px 12px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-size:16px;font-weight:600;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235f6b80' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+.add{display:block;width:100%;padding:14px;border-radius:14px;border:1.5px dashed #c9d1df;background:none;color:var(--blue);font-weight:700;font-size:14.5px;cursor:pointer}
+
+/* conscientização */
+.insight{margin-top:16px;padding:15px 16px;border-radius:14px;background:var(--surface);border-left:4px solid var(--blue);font-size:14.5px;line-height:1.55;animation:fwd .3s both}
+.insight b{display:block;margin-bottom:4px;font-size:15px}
+.insight.warn{border-left-color:var(--orange)}
+.insight.bad{border-left-color:var(--red)}
+.insight.good{border-left-color:var(--green)}
+
+/* confiança */
+.editor{display:flex;align-items:center;gap:14px;margin:6px 0 16px}
+.av{width:56px;height:56px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-weight:800;font-size:19px;flex:none;overflow:hidden}
+.av img{width:100%;height:100%;object-fit:cover}
+.editor b{display:block;font-size:17px}
+.editor small{color:var(--muted);font-size:13px}
+.quote{margin:0 0 18px;padding:0 0 0 14px;border-left:3px solid var(--yellow);font-size:15.5px;line-height:1.55;color:var(--navy);font-weight:600}
+.ticks{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:12px}
+.ticks li{position:relative;padding-left:30px;font-size:14.5px;line-height:1.45}
+.ticks li:before{content:"";position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:50%;background:var(--blue-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4L18 8' fill='none' stroke='%231554d1' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/13px no-repeat}
+.ticks b{font-weight:700}
+.about{font-size:14px;line-height:1.55;color:var(--muted);background:var(--surface);border-radius:14px;padding:14px 16px}
+.about b{color:var(--ink)}
+
+/* campos */
+.field{margin-bottom:16px}
+.field label{display:flex;justify-content:space-between;font-size:14px;font-weight:700;margin-bottom:7px}
+.field label em{font-style:normal;font-weight:600;color:var(--muted);font-size:12.5px}
+.inp{display:flex;align-items:center;background:#fff;border:1.5px solid var(--line);border-radius:12px;transition:border-color .15s}
+.inp:focus-within{border-color:var(--blue)}
+.inp span{padding-left:14px;color:var(--muted);font-weight:600}
+.inp input{flex:1;min-width:0;border:0;outline:0;background:transparent;padding:14px;font-size:16px}
+.hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+.toggle{display:flex;align-items:center;gap:12px;width:100%;padding:14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;cursor:pointer;text-align:left;font-size:14.5px;font-weight:600;margin-bottom:10px}
+.toggle .bx{width:22px;height:22px;border-radius:6px;border:1.5px solid #c9d1df;flex:none;transition:.15s}
+.toggle.on{border-color:var(--blue);background:var(--blue-soft)}
+.toggle.on .bx{background:var(--blue) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4L18 8' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat;border-color:var(--blue)}
+
+/* entrada do guia */
+.entry{border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.entry-h{padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--line);font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--blue)}
+.entry-b{padding:16px}
+.entry h3{font-size:18px;margin:0 0 8px;font-weight:800}
+.entry p{margin:0 0 8px;font-size:14.5px;line-height:1.6;color:#2a3650}
+.entry p:last-child{margin-bottom:0}
+.entry p b{color:var(--ink)}
+.consent{display:flex;gap:12px;align-items:flex-start;margin:16px 0 4px;padding:14px;border:1.5px solid var(--line);border-radius:14px;cursor:pointer;font-size:14px;line-height:1.45}
+.consent input{width:20px;height:20px;accent-color:var(--blue);flex:none;margin:1px 0 0}
+.consent.on{border-color:var(--green)}
+.consent a{color:var(--blue)}
+.err{color:var(--red);font-size:13px;font-weight:700;margin-top:8px;display:none}
+.err.show{display:block}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
+
+/* rodapé */
+.foot{padding:12px 18px calc(14px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid var(--line)}
+.is-hero .foot{border-top:0}
+.foot:empty{display:none}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 18px;border-radius:14px;border:0;font-weight:800;font-size:16.5px;text-decoration:none;cursor:pointer;transition:transform .1s,background .2s}
+.btn:active{transform:scale(.985)}
+.btn.pri{background:var(--blue);color:#fff}
+.btn.pri:disabled{background:#cdd5e3;cursor:default}
+.btn.wa{background:var(--wa);color:#fff}
+.btn.ghost{background:#fff;color:var(--blue);border:1.5px solid var(--line);font-size:15px;padding:14px}
+.btn.wa-o{background:#fff;color:var(--wa);border:1.5px solid var(--wa);font-size:15px;padding:14px}
+.fnote{text-align:center;font-size:12.5px;color:var(--muted);margin-top:9px}
+.link{background:none;border:0;color:var(--blue);font-weight:700;font-size:14px;cursor:pointer;display:block;margin:10px auto 0;padding:4px}
+
+/* hero */
+.hero{padding:22px 2px 6px}
+.brand{font-size:15px;font-weight:800;letter-spacing:.01em;color:var(--navy)}
+.brand b{color:var(--blue)}
+.eyebrow{display:inline-block;margin:28px 0 12px;font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--navy);background:var(--yellow);padding:5px 10px;border-radius:6px}
+.hero h1{font-size:31px;line-height:1.12;margin:0 0 14px;letter-spacing:-.03em;font-weight:800;color:var(--navy)}
+.hero h1 span{color:var(--blue)}
+.lead{font-size:16px;line-height:1.55;color:var(--muted);margin:0 0 20px}
+.sample{margin-top:22px}
+.sample-l{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px}
+.urg{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin-top:18px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(20,153,90,.5)}70%{box-shadow:0 0 0 7px rgba(20,153,90,0)}100%{box-shadow:0 0 0 0 rgba(20,153,90,0)}}
+
+/* fim */
+.done{width:64px;height:64px;border-radius:50%;background:#e8f6ee;display:grid;place-items:center;margin:18px auto 6px;animation:pop .45s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes pop{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+.center{text-align:center}
+.steps{list-style:none;padding:0;margin:8px 0 18px;display:grid;gap:10px;counter-reset:n}
+.steps li{counter-increment:n;display:flex;gap:12px;align-items:center;font-size:15px;line-height:1.4}
+.steps li:before{content:counter(n);width:28px;height:28px;border-radius:50%;background:var(--surface);color:var(--navy);font-weight:800;font-size:13px;display:grid;place-items:center;flex:none}
+.share{margin-top:18px;padding:16px;border-radius:14px;background:var(--surface)}
+.share b{display:block;font-size:15.5px;margin-bottom:4px}
+.share p{margin:0 0 12px;font-size:14px;color:var(--muted);line-height:1.5}
+
+/* bottom sheet */
+.ov{position:fixed;inset:0;background:rgba(8,18,40,.45);opacity:0;pointer-events:none;transition:opacity .22s;z-index:20}
+.ov.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:50%;bottom:0;width:100%;max-width:520px;max-height:84%;transform:translate(-50%,105%);background:#fff;border-radius:20px 20px 0 0;z-index:21;transition:transform .3s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+.sheet.open{transform:translate(-50%,0)}
+.grip{width:40px;height:4px;border-radius:99px;background:#d5dceb;margin:10px auto 2px}
+.sheet-h{display:flex;align-items:center;justify-content:space-between;padding:8px 18px 10px}
+.sheet-h b{font-size:17px}
+.x{width:34px;height:34px;border-radius:50%;border:0;background:var(--surface);cursor:pointer;display:grid;place-items:center}
+.sheet-b{overflow-y:auto;padding:0 18px calc(18px + env(safe-area-inset-bottom))}
+.li{display:flex;align-items:center;justify-content:space-between;width:100%;padding:15px 2px;border:0;border-bottom:1px solid var(--line);background:none;font-size:16px;font-weight:600;text-align:left;cursor:pointer}
+.li:active{background:var(--surface)}
+.li.more{color:var(--blue);border-bottom:0}
+.search{position:sticky;top:0;background:#fff;padding-bottom:6px;z-index:1}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="top">
+    <button class="back" id="back" data-act="back" aria-label="Voltar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button>
+    <div class="prog">
+      <div class="prog-t"><span id="progL"></span><span id="progP"></span></div>
+      <div class="prog-b"><i id="progB"></i></div>
+    </div>
+  </div>
+  <main class="screen" id="screen"></main>
+  <footer class="foot" id="foot"></footer>
+</div>
+
+<div class="ov" id="ov" data-act="closeSheet"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="grip"></div>
+  <div class="sheet-h"><b id="sheetT"></b><button class="x" data-act="closeSheet" aria-label="Fechar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+  <div class="sheet-b" id="sheetB"></div>
+</div>
+
+<script>
+/* =====================================================================
+   CONFIGURAÇÃO — edite só aqui
+   ===================================================================== */
+var CONFIG = {
+  whatsapp: "5585920063154",     // número que recebe os cadastros
+  editorNome: "Caio Xavier",
+  editorCargo: "Editor do Hoje no Ceará",
+  editorFoto: "",                // URL de uma foto sua (opcional). Vazio = mostra as iniciais
+  siteNome: "Hoje no Ceará",
+  paginaUrl: "",                 // link da notícia onde o formulário está (usado no botão "Indicar")
+  privacidadeUrl: ""             // link da política de privacidade do site (recomendado)
+};
+
+/* =====================================================================
+   DADOS
+   ===================================================================== */
+var PAPEIS = [
+  {id:"dono", t:"Sou o dono ou a dona", d:"O negócio é meu", m:"dono(a)"},
+  {id:"gerente", t:"Sou gerente ou responsável", d:"Cuido do dia a dia", m:"gerente/responsável"},
+  {id:"divulgacao", t:"Cuido da divulgação", d:"Redes sociais e marketing", m:"responsável pela divulgação"}
+];
+
+var CATS = [
+  {id:"comida", ic:"🍽️", t:"Comida e bebida", ex:"pães artesanais, bolos e lanches", subs:["Restaurante","Lanchonete","Hamburgueria","Pizzaria","Padaria","Açaí e sorveteria","Doceria e confeitaria","Bar e petiscaria","Cafeteria","Marmitaria","Mercadinho","Distribuidora de bebidas"]},
+  {id:"beleza", ic:"💇", t:"Beleza e estética", ex:"corte, escova e coloração", subs:["Salão de beleza","Barbearia","Clínica de estética","Manicure e nail designer","Design de sobrancelhas e cílios","Maquiagem","Depilação","Spa e massagem"]},
+  {id:"saude", ic:"🩺", t:"Saúde", ex:"consultas e exames", subs:["Clínica médica","Odontologia","Fisioterapia","Psicologia","Nutrição","Farmácia","Ótica","Laboratório"]},
+  {id:"fitness", ic:"🏋️", t:"Academia e esporte", ex:"musculação e treino funcional", subs:["Academia","Treino funcional","Artes marciais","Pilates","Loja de esportes"]},
+  {id:"moda", ic:"👗", t:"Moda", ex:"roupas femininas e acessórios", subs:["Roupa feminina","Roupa masculina","Moda infantil","Calçados","Moda praia","Joias e semijoias","Bolsas e acessórios"]},
+  {id:"casa", ic:"🏠", t:"Casa e construção", ex:"material elétrico e hidráulico", subs:["Material de construção","Móveis","Decoração","Eletrodomésticos","Vidraçaria","Marmoraria","Serralheria","Ar-condicionado e refrigeração"]},
+  {id:"auto", ic:"🚗", t:"Automotivo", ex:"revisão, freios e suspensão", subs:["Oficina mecânica","Auto elétrica","Lava-jato","Autopeças","Borracharia","Funilaria e pintura","Som e acessórios"]},
+  {id:"pet", ic:"🐾", t:"Pet", ex:"banho, tosa e rações", subs:["Pet shop","Banho e tosa","Clínica veterinária","Ração e acessórios"]},
+  {id:"servicos", ic:"🛠️", t:"Serviços", ex:"conserto de celulares e acessórios", subs:["Assistência técnica de celular","Informática","Gráfica","Contabilidade","Advocacia","Imobiliária","Fotografia","Festas e eventos","Lavanderia","Costura e ajustes"]},
+  {id:"educacao", ic:"📚", t:"Educação", ex:"aulas de inglês para crianças e adultos", subs:["Escola","Curso livre","Escola de idiomas","Reforço escolar","Autoescola"]},
+  {id:"turismo", ic:"🏖️", t:"Turismo", ex:"passeios de buggy e transfer", subs:["Pousada","Hotel","Agência de passeios","Barraca de praia","Aluguel por temporada","Transfer e transporte"]},
+  {id:"outro", ic:"✨", t:"Outro ramo", ex:"o que vocês vendem ou fazem", subs:null}
+];
+
+var DIFS = [
+  {id:"qualidade", t:"Qualidade", f:"qualidade dos produtos e serviços"},
+  {id:"atendimento", t:"Atendimento", f:"atendimento atencioso"},
+  {id:"preco", t:"Preço justo", f:"preço justo"},
+  {id:"rapidez", t:"Rapidez", f:"agilidade no atendimento"},
+  {id:"variedade", t:"Variedade", f:"variedade de opções"},
+  {id:"tradicao", t:"Tradição no bairro", f:"tradição no bairro"},
+  {id:"entrega", t:"Entrega", f:"serviço de entrega"},
+  {id:"pagamento", t:"Facilidade de pagamento", f:"facilidade de pagamento"},
+  {id:"cuidado", t:"Higiene e cuidado", f:"higiene e cuidado"},
+  {id:"equipe", t:"Equipe experiente", f:"equipe experiente"},
+  {id:"ambiente", t:"Ambiente agradável", f:"ambiente agradável"},
+  {id:"estacionamento", t:"Estacionamento", f:"estacionamento próprio"}
+];
+
+var GOOGLE = [
+  {id:"sim", t:"Sim, aparece com fotos e avaliações", m:"aparece, com fotos e avaliações", cls:"good",
+   h:"Ótimo sinal.", b:"Estar no guia do bairro soma: é mais um lugar confiável mostrando o seu negócio, com endereço e contato."},
+  {id:"meio", t:"Aparece, mas está desatualizado", m:"aparece, mas desatualizado", cls:"warn",
+   h:"Ponto de atenção.", b:"Horário errado, fotos antigas e avaliações sem resposta passam insegurança, e o cliente acaba escolhendo outro lugar. Estar no guia já ajuda, e depois, se você quiser, eu mostro como deixar o seu perfil no Google em dia."},
+  {id:"nao", t:"Não aparece", m:"não aparece", cls:"bad",
+   h:"Isso pode estar custando clientes.", b:"Muita gente pesquisa no Google antes de sair de casa, e quem não aparece fica de fora da escolha. No guia do bairro, o seu negócio passa a estar numa página com nome, endereço e contato, que o Google consegue encontrar."},
+  {id:"naosei", t:"Não sei", m:"não sabe", cls:"",
+   h:"Vale descobrir.", b:"Depois, pesquise o nome do seu negócio no Google e veja o que aparece. Seja como for, estar no guia ajuda quem procura você a encontrar o seu endereço e o seu contato."}
+];
+
+var CIDADES = ["Fortaleza","Caucaia","Maracanaú","Eusébio","Aquiraz","Maranguape","Pacatuba","Horizonte","Outra cidade"];
+
+var BAIRROS = ("na|Aldeota;no|Meireles;no|Centro;na|Messejana;na|Parangaba;no|Montese;no|Benfica;em|Fátima;no|Cocó;no|Papicu;na|Varjota;na|Praia de Iracema;no|Mucuripe;no|Dionísio Torres;no|Joaquim Távora;no|José Bonifácio;na|Cidade dos Funcionários;no|Edson Queiroz;na|Água Fria;no|Cambeba;na|Lagoa Redonda;no|José de Alencar;no|Passaré;em|Cajazeiras;no|Jangurussu;no|Barroso;no|Conjunto Palmeiras;na|Paupina;na|Sapiranga;no|Guajeru;no|Coaçu;na|Maraponga;no|Mondubim;no|Jóquei Clube;no|Antônio Bezerra;na|Barra do Ceará;no|Pirambu;no|Carlito Pamplona;na|Jacarecanga;no|Henrique Jorge;no|João XXIII;no|Conjunto Ceará;no|Bom Jardim;na|Granja Portugal;na|Granja Lisboa;no|Siqueira;na|Vila Velha;no|Quintino Cunha;no|Rodolfo Teófilo;na|Parquelândia;no|Pici;na|Bela Vista;no|Itaperi;na|Serrinha;na|Aerolândia;no|Alto da Balança;no|Dias Macedo;no|Castelão;na|Praia do Futuro;no|Vicente Pinzón;no|Cais do Porto;em|Guararapes;no|Engenheiro Luciano Cavalcante;no|Parque Manibura;no|Parque Iracema;na|Cidade 2000;no|São João do Tauape;em|Damas;no|Jardim América;na|Vila União;no|Panamericano;no|Demócrito Rocha;no|Couto Fernandes;na|Itaoca;no|Ancuri;em|Pedras;no|Curió;no|Planalto Ayrton Senna;no|Prefeito José Walter;no|Canindezinho;no|Genibaú;no|Autran Nunes;no|Dom Lustosa;no|Parque Dois Irmãos;no|Conjunto Esperança;no|Presidente Kennedy;no|Padre Andrade;na|Floresta;no|Álvaro Weyne;no|Monte Castelo;no|Farias Brito;no|São Gerardo;no|Amadeu Furtado;no|Bonsucesso;na|Lagoa Sapiranga")
+  .split(";").map(function(x){ var p=x.split("|"); return {p:p[0], n:p[1]}; })
+  .filter(function(b,i,a){ return a.findIndex(function(y){return y.n===b.n;})===i; })
+  .sort(function(a,b){ return a.n.localeCompare(b.n,"pt-BR"); });
+
+var DIAS_CURTO = ["S","T","Q","Q","S","S","D"];
+var DIAS_NOME = ["segunda","terça","quarta","quinta","sexta","sábado","domingo"];
+var DIAS_ABREV = ["seg.","ter.","qua.","qui.","sex.","sáb.","dom."];
+var HORAS = (function(){ var h=[]; for(var i=5;i<=23;i++){ h.push(pad(i)+":00"); h.push(pad(i)+":30"); } h.push("00:00"); return h; })();
+
+/* =====================================================================
+   ESTADO
+   ===================================================================== */
+var STEPS = ["hero","papel","ramo","bairro","dif","horario","google","confianca","negocio","contato","preview","fim"];
+var TOTAL = 10;
+var KEY = "hnc_guia_v2";
+var S = novoEstado(), cur = 0;
+var params = new URLSearchParams(location.search);
+var ORIGEM = params.get("utm_campaign") || params.get("origem") || params.get("utm_source") || "";
+var salvo = carregar();
+
+function novoEstado(){ return {papel:"",cat:"",sub:"",cidade:"",cidadeOutra:"",bairro:"",prep:"",dif:"",
+  horarios:[{d:[0,1,2,3,4,5],a:"08:00",f:"18:00"}], google:"", nome:"", oque:"", detalhe:"", endereco:"",
+  mesmoZap:true, zap:"", pessoa:"", ok:false}; }
+function salvar(){ try{ localStorage.setItem(KEY, JSON.stringify({S:S,cur:cur})); }catch(e){} }
+function carregar(){ try{ return JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ return null; } }
+function limpar(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+
+(function bairroDaURL(){
+  var pb = params.get("bairro"); if(!pb) return;
+  var f = BAIRROS.find(function(b){ return slug(b.n)===slug(pb); });
+  if(f){ S.cidade="Fortaleza"; S.bairro=f.n; S.prep=f.p; return; }
+  S.bairro = cap(pb.replace(/[-_]+/g," ")); S.prep = "no bairro";
+  var pc = params.get("cidade");
+  if(pc){ var c = CIDADES.find(function(x){ return slug(x)===slug(pc); }); if(c){ S.cidade=c; } else { S.cidade="Outra cidade"; S.cidadeOutra=cap(pc.replace(/[-_]+/g," ")); } }
+})();
+
+/* =====================================================================
+   UTILITÁRIOS
+   ===================================================================== */
+function $(s){ return document.querySelector(s); }
+function pad(n){ return (n<10?"0":"")+n; }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c];}); }
+function slug(s){ return String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""); }
+function cap(s){ s=String(s||"").trim(); return s.charAt(0).toUpperCase()+s.slice(1); }
+function low(s){ s=String(s||"").trim(); return s.charAt(0).toLowerCase()+s.slice(1); }
+function semPonto(s){ return String(s||"").trim().replace(/[.\s]+$/,""); }
+function joinPt(a){ a=a.filter(Boolean); if(a.length<2) return a[0]||""; return a.slice(0,-1).join(", ")+" e "+a[a.length-1]; }
+function buzz(){ try{ navigator.vibrate && navigator.vibrate(8); }catch(e){} }
+function byId(list,id){ return list.find(function(x){ return x.id===id; }); }
+function de(p){ return p==="na"?"da":p==="no"?"do":p==="no bairro"?"do bairro":"de"; }
+function cidadeNome(){ return S.cidade==="Outra cidade" ? (S.cidadeOutra||"Ceará") : (S.cidade||"Fortaleza"); }
+function primeiroNome(n){ return String(n||"").trim().split(/\s+/)[0]; }
+function guiaNome(){ return S.bairro ? "Guia Comercial " + de(S.prep) + " " + S.bairro : "Guia Comercial do seu bairro"; }
+function ondeBairro(){ return S.bairro ? (S.prep||"em") + " " + S.bairro : "no seu bairro"; }
+function fmtHora(h){ var p=h.split(":"); var hh=+p[0]; return hh + "h" + (p[1]!=="00" ? p[1] : ""); }
+function fmtDias(d){
+  d = d.slice().sort(function(a,b){return a-b;});
+  var runs=[], s=null, prev=null;
+  d.forEach(function(x){ if(s===null){ s=x; prev=x; } else if(x===prev+1){ prev=x; } else { runs.push([s,prev]); s=x; prev=x; } });
+  if(s!==null) runs.push([s,prev]);
+  return joinPt(runs.map(function(r){
+    if(r[0]===r[1]) return DIAS_ABREV[r[0]];
+    if(r[1]===r[0]+1) return DIAS_ABREV[r[0]] + " e " + DIAS_ABREV[r[1]];
+    return DIAS_ABREV[r[0]] + " a " + DIAS_ABREV[r[1]];
+  }));
+}
+function horarioTexto(){
+  return S.horarios.filter(function(r){ return r.d.length; })
+    .map(function(r){ return fmtDias(r.d) + ", " + fmtHora(r.a) + " às " + fmtHora(r.f); }).join("; ");
+}
+function fmtFone(v){
+  var d = String(v||"").replace(/\D/g,"").slice(0,11);
+  if(d.length<=2) return d.length ? "(" + d : "";
+  if(d.length<=7) return "(" + d.slice(0,2) + ") " + d.slice(2);
+  if(d.length<=10) return "(" + d.slice(0,2) + ") " + d.slice(2,6) + "-" + d.slice(6);
+  return "(" + d.slice(0,2) + ") " + d.slice(2,7) + "-" + d.slice(7);
+}
+
+/* =====================================================================
+   TEXTO DO GUIA (formato oficial)
+   ===================================================================== */
+function guiaLinhas(paraMensagem){
+  var d = byId(DIFS, S.dif);
+  var difTxt = semPonto(S.detalhe) ? low(semPonto(S.detalhe)) : (d ? d.f : "");
+  var desc = cap(S.sub||"Negócio") + (semPonto(S.oque) ? " com " + low(semPonto(S.oque)) : "") + ", segundo a empresa.";
+  if(difTxt) desc += " Diferencial: " + difTxt + ", segundo a empresa.";
+  var onde = semPonto(S.endereco) + (S.bairro ? ", " + S.bairro : "") + (cidadeNome()!=="Fortaleza" ? ", " + cidadeNome() : "");
+  var contato = [];
+  if(S.google==="sim" || S.google==="meio") contato.push("ver no Google");
+  var zapTxt = S.mesmoZap ? (paraMensagem ? "[número desta conversa]" : "(número desta conversa)") : fmtFone(S.zap);
+  contato.push("WhatsApp " + zapTxt);
+  return {
+    nome: S.nome,
+    desc: desc,
+    onde: onde,
+    horario: horarioTexto(),
+    contato: contato.join(" | ")
+  };
+}
+
+/* =====================================================================
+   MENSAGEM DO WHATSAPP
+   ===================================================================== */
+function mensagem(){
+  var g = guiaLinhas(true), cat = byId(CATS,S.cat), pp = byId(PAPEIS,S.papel), go = byId(GOOGLE,S.google);
+  var L = [];
+  L.push("Oi, " + primeiroNome(CONFIG.editorNome) + "! Quero entrar no " + guiaNome() + ".");
+  L.push("");
+  L.push("*TEXTO PARA O GUIA*");
+  L.push("*" + g.nome + "*");
+  L.push(g.desc);
+  L.push("Onde: " + g.onde + ". Horário: " + g.horario + ". Contato: " + g.contato);
+  L.push("");
+  L.push("*INFORMAÇÕES PARA O EDITOR*");
+  L.push("Responsável: " + S.pessoa + (pp ? " (" + pp.m + ")" : ""));
+  L.push("Ramo: " + (cat && cat.id!=="outro" ? cat.t + " > " : "") + S.sub);
+  if(go) L.push("No Google: " + go.m);
+  if(ORIGEM) L.push("Origem: " + ORIGEM);
+  L.push("");
+  L.push("Autorizo a publicação dessas informações no " + CONFIG.siteNome + ".");
+  return L.join("\n");
+}
+function linkWhats(){ return "https://wa.me/" + CONFIG.whatsapp.replace(/\D/g,"") + "?text=" + encodeURIComponent(mensagem()); }
+function linkIndicar(){
+  var url = CONFIG.paginaUrl || location.href.split("#")[0];
+  return "https://wa.me/?text=" + encodeURIComponent("O " + CONFIG.siteNome + " está cadastrando comércios no guia do bairro, de graça. Leva 1 minuto: " + url);
+}
+
+/* =====================================================================
+   COMPONENTES
+   ===================================================================== */
+var SETA = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1554d1" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+function opt(k,o,sel){
+  return '<button class="opt'+(sel?' on':'')+'" data-act="pick" data-k="'+k+'" data-v="'+o.id+'"><span><b>'+esc(o.t)+'</b>'+(o.d?'<small>'+esc(o.d)+'</small>':'')+'</span><span class="rd"></span></button>';
+}
+function btnNext(txt, ok){ return '<button class="btn pri" data-act="next"'+(ok?'':' disabled')+'>'+txt+'</button>'; }
+function campo(id,f,label,ph,val,extra,opcional){
+  return '<div class="field"><label for="'+id+'">'+label+(opcional?' <em>opcional</em>':'')+'</label><div class="inp"><input id="'+id+'" data-f="'+f+'" value="'+esc(val)+'" placeholder="'+esc(ph)+'" '+(extra||'')+'></div></div>';
+}
+function entrada(){
+  var g = guiaLinhas(false);
+  return '<div class="entry"><div class="entry-h">'+esc(guiaNome())+'</div><div class="entry-b">'+
+    '<h3>'+esc(g.nome)+'</h3>'+
+    '<p>'+esc(g.desc)+'</p>'+
+    '<p><b>Onde:</b> '+esc(g.onde)+'. <b>Horário:</b> '+esc(g.horario)+'. <b>Contato:</b> '+esc(g.contato)+'</p>'+
+  '</div></div>';
+}
+
+/* =====================================================================
+   TELAS
+   ===================================================================== */
+var VIEWS = {
+  hero: function(){
+    var retomar = salvo && salvo.cur>1 && salvo.cur<11;
+    return {
+      h: '<section class="hero">'+
+           '<div class="brand">HOJE <b>NO CEARÁ</b></div>'+
+           '<span class="eyebrow">Cadastro gratuito</span>'+
+           '<h1>Coloque seu negócio no guia '+(S.bairro?esc(de(S.prep))+' '+esc(S.bairro):'do seu bairro')+'. <span>De graça.</span></h1>'+
+           '<p class="lead">Quem procura um serviço perto de casa consulta o guia. Garanta que o seu negócio esteja lá, com endereço, horário e contato.</p>'+
+           '<ul class="ticks">'+
+             '<li><b>Publicado no Hoje no Ceará</b>, no guia do seu bairro</li>'+
+             '<li><b>Mais credibilidade</b> para quem ainda não conhece você</li>'+
+             '<li><b>Um link para divulgar</b> no Instagram e no WhatsApp</li>'+
+           '</ul>'+
+           '<div class="sample"><div class="sample-l">Exemplo de como aparece no guia</div>'+
+             '<div class="entry"><div class="entry-h">Guia Comercial da Messejana</div><div class="entry-b">'+
+               '<h3>Padaria Exemplo</h3>'+
+               '<p>Padaria com pães artesanais, bolos e lanches, segundo a empresa. Diferencial: pão de fermentação natural feito todo dia, segundo a empresa.</p>'+
+               '<p><b>Onde:</b> Av. Frei Cirilo, 1234, Messejana. <b>Horário:</b> seg. a sáb., 6h às 20h; dom., 6h às 12h.</p>'+
+             '</div></div></div>'+
+           '<div class="urg"><span class="dot"></span>Cadastros publicados por ordem de chegada</div>'+
+         '</section>',
+      f: '<button class="btn pri" data-act="start">Quero entrar no guia</button>'+
+         '<div class="fnote">Leva 1 minuto. Quase tudo é só tocar.</div>'+
+         (retomar ? '<button class="link" data-act="resume">Continuar de onde parei</button>' : '')
+    };
+  },
+
+  papel: function(){
+    return {
+      h: '<h2>Para começar, você é:</h2>'+
+         '<p class="sub">O guia mostra quem faz o comércio do bairro acontecer.</p>'+
+         '<div class="opts">'+PAPEIS.map(function(p){ return opt("papel",p,S.papel===p.id); }).join("")+'</div>',
+      f: ''
+    };
+  },
+
+  ramo: function(){
+    return {
+      h: '<h2>Qual é o ramo do seu negócio?</h2>'+
+         '<p class="sub">Toque para escolher. É assim que o cliente encontra você no guia.</p>'+
+         '<div class="tiles">'+CATS.map(function(c){
+           var on = S.cat===c.id && S.sub;
+           return '<button class="tile'+(on?' on':'')+'" data-act="cat" data-v="'+c.id+'"><span class="ic">'+c.ic+'</span>'+esc(c.t)+(on?'<span class="s">'+esc(S.sub)+'</span>':'')+'</button>';
+         }).join("")+'</div>',
+      f: S.sub ? btnNext("Continuar", true) : ''
+    };
+  },
+
+  bairro: function(){
+    var cidade = S.cidade || "Fortaleza";
+    return {
+      h: '<h2>Em qual bairro fica o seu negócio?</h2>'+
+         '<p class="sub">É no guia desse bairro que ele vai aparecer.</p>'+
+         '<div class="lbl">Cidade</div>'+
+         '<div class="chips">'+CIDADES.map(function(c){
+           var t = (c==="Outra cidade" && S.cidade==="Outra cidade" && S.cidadeOutra) ? S.cidadeOutra : c;
+           return '<button class="chip'+(cidade===c?' on':'')+'" data-act="cidade" data-v="'+esc(c)+'">'+esc(t)+'</button>';
+         }).join("")+'</div>'+
+         '<div class="lbl">Bairro</div>'+
+         '<button class="selbox'+(S.bairro?' ok':'')+'" data-act="bairroSheet">'+(S.bairro?esc(S.bairro):'Toque para escolher o bairro')+SETA+'</button>',
+      f: btnNext("Continuar", !!S.bairro)
+    };
+  },
+
+  dif: function(){
+    return {
+      h: '<h2>Qual é o principal diferencial do seu negócio?</h2>'+
+         '<p class="sub">Escolha um. Ele aparece em destaque no guia.</p>'+
+         '<div class="chips">'+DIFS.map(function(d){
+           return '<button class="chip'+(S.dif===d.id?' on':'')+'" data-act="pick" data-k="dif" data-v="'+d.id+'">'+esc(d.t)+'</button>';
+         }).join("")+'</div>',
+      f: ''
+    };
+  },
+
+  horario: function(){
+    var rows = S.horarios.map(function(r,ri){
+      return '<div class="hrow"><div class="hrow-h"><span>'+(ri===0?'Dias e horário':'Outro horário')+'</span>'+(ri>0?'<button class="rm" data-act="rmRow" data-r="'+ri+'">Remover</button>':'')+'</div>'+
+        '<div class="days">'+DIAS_CURTO.map(function(l,di){
+          return '<button class="day'+(r.d.indexOf(di)>-1?' on':'')+'" data-act="day" data-r="'+ri+'" data-d="'+di+'" aria-label="'+DIAS_NOME[di]+'">'+l+'</button>';
+        }).join("")+'</div>'+
+        '<div class="times">'+
+          '<label>Abre às<select data-r="'+ri+'" data-t="a">'+HORAS.map(function(h){ return '<option value="'+h+'"'+(h===r.a?' selected':'')+'>'+fmtHora(h)+'</option>'; }).join("")+'</select></label>'+
+          '<label>Fecha às<select data-r="'+ri+'" data-t="f">'+HORAS.map(function(h){ return '<option value="'+h+'"'+(h===r.f?' selected':'')+'>'+fmtHora(h)+'</option>'; }).join("")+'</select></label>'+
+        '</div></div>';
+    }).join("");
+    return {
+      h: '<h2>Qual é o horário de funcionamento?</h2>'+
+         '<p class="sub">Toque nos dias em que abre e escolha os horários.</p>'+
+         rows+
+         (S.horarios.length<3 ? '<button class="add" data-act="addRow">+ Adicionar horário diferente (ex.: domingo)</button>' : ''),
+      f: btnNext("Continuar", horarioOk())
+    };
+  },
+
+  google: function(){
+    var g = byId(GOOGLE,S.google);
+    return {
+      h: '<h2>Quando alguém pesquisa o seu negócio no Google, ele aparece?</h2>'+
+         '<p class="sub">Responda de cabeça, sem precisar conferir agora.</p>'+
+         '<div class="opts">'+GOOGLE.map(function(x){ return opt("google",x,S.google===x.id); }).join("")+'</div>'+
+         (g ? '<div class="insight '+g.cls+'"><b>'+esc(g.h)+'</b>'+esc(g.b)+'</div>' : ''),
+      f: S.google ? btnNext("Continuar", true) : ''
+    };
+  },
+
+  confianca: function(){
+    var ini = CONFIG.editorNome.split(/\s+/).map(function(p){ return p.charAt(0); }).slice(0,2).join("");
+    var av = CONFIG.editorFoto ? '<img src="'+esc(CONFIG.editorFoto)+'" alt="">' : esc(ini);
+    return {
+      h: '<h2>Quem cuida do guia</h2>'+
+         '<div class="editor"><div class="av">'+av+'</div><div><b>'+esc(CONFIG.editorNome)+'</b><small>'+esc(CONFIG.editorCargo)+'</small></div></div>'+
+         '<p class="quote">“Eu leio cada cadastro e publico pessoalmente no guia do seu bairro. Suas respostas vêm direto para o meu WhatsApp, e não para uma lista de disparo.”</p>'+
+         '<ul class="ticks">'+
+           '<li><b>Sem spam.</b> Seus dados não são vendidos nem repassados.</li>'+
+           '<li><b>Sem telemarketing.</b> Ninguém vai ficar ligando para você.</li>'+
+           '<li><b>Você recebe o link</b> assim que o seu negócio estiver no guia.</li>'+
+         '</ul>'+
+         '<div class="about"><b>O que é o Hoje no Ceará?</b> Um portal de notícias e guias focado no comércio local e no turismo do Ceará. Mostramos quem faz a economia do bairro girar, para quem mora aqui e para quem vem visitar.</div>',
+      f: btnNext("Continuar", true)
+    };
+  },
+
+  negocio: function(){
+    var c = byId(CATS,S.cat);
+    return {
+      h: '<h2>Agora, conte sobre o seu negócio</h2>'+
+         '<p class="sub">São as únicas partes de digitar. Respostas curtas já bastam.</p>'+
+         campo("f-nome","nome","Nome do negócio","Ex.: Padaria Exemplo",S.nome,'autocomplete="organization" autocapitalize="words" enterkeyhint="next" maxlength="60"')+
+         campo("f-oque","oque","O que vocês vendem ou fazem?","Ex.: "+(c?c.ex:"o que vocês vendem ou fazem"),S.oque,'autocapitalize="none" enterkeyhint="next" maxlength="90"')+
+         campo("f-det","detalhe","Quer detalhar o diferencial?","Ex.: pão de fermentação natural feito todo dia",S.detalhe,'autocapitalize="none" enterkeyhint="done" maxlength="90"',true),
+      f: btnNext("Continuar", negocioOk())
+    };
+  },
+
+  contato: function(){
+    return {
+      h: '<h2>Por último, onde encontrar você</h2>'+
+         '<p class="sub">Esta é a última etapa.</p>'+
+         campo("f-end","endereco","Endereço (rua e número)","Ex.: Av. Frei Cirilo, 1234",S.endereco,'autocomplete="street-address" enterkeyhint="next" maxlength="80"')+
+         '<div class="field"><label>WhatsApp do negócio</label>'+
+           '<button class="toggle'+(S.mesmoZap?' on':'')+'" data-act="mesmoZap"><span class="bx"></span>É o mesmo número que vou usar para enviar</button>'+
+           (S.mesmoZap ? '' : '<div class="inp"><input id="f-zap" data-f="zap" type="tel" inputmode="numeric" value="'+esc(fmtFone(S.zap))+'" placeholder="(85) 90000-0000" autocomplete="tel-national" enterkeyhint="next" maxlength="16"></div>')+
+         '</div>'+
+         campo("f-pessoa","pessoa","Seu primeiro nome","Ex.: José",S.pessoa,'autocomplete="given-name" autocapitalize="words" enterkeyhint="done" maxlength="30"'),
+      f: btnNext("Ver como vai ficar no guia", contatoOk())
+    };
+  },
+
+  preview: function(){
+    var priv = CONFIG.privacidadeUrl ? ' Veja a <a href="'+esc(CONFIG.privacidadeUrl)+'" target="_blank" rel="noopener">política de privacidade</a>.' : '';
+    return {
+      h: '<h2>Veja como o seu negócio vai aparecer</h2>'+
+         '<p class="sub">Este é o texto que entra no '+esc(guiaNome())+'. O editor revisa antes de publicar.</p>'+
+         entrada()+
+         '<label class="consent'+(S.ok?' on':'')+'" id="consentBox"><input type="checkbox" id="ok"'+(S.ok?' checked':'')+'><span>Autorizo o '+esc(CONFIG.siteNome)+' a publicar essas informações sobre o meu negócio.'+priv+'</span></label>'+
+         '<div class="err" id="err">Marque a autorização acima para podermos publicar.</div>',
+      f: '<a class="btn wa" id="send" href="'+esc(linkWhats())+'" target="_blank" rel="noopener" data-act="send">'+
+           '<svg width="20" height="20" viewBox="0 0 24 24" fill="#fff" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.4.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3z"/></svg>'+
+           'Enviar pelo WhatsApp</a>'+
+         '<div class="fnote">O WhatsApp vai abrir com tudo preenchido. É só tocar em enviar.</div>'
+    };
+  },
+
+  fim: function(){
+    return {
+      h: '<div class="done"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#14995a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>'+
+         '<div class="center"><h2>Falta só tocar em enviar, '+esc(primeiroNome(S.pessoa))+'</h2>'+
+         '<p class="sub">Confirme o envio no WhatsApp. Depois disso, é com a gente.</p></div>'+
+         '<ol class="steps">'+
+           '<li>Toque em enviar na conversa do WhatsApp</li>'+
+           '<li>Se quiser, mande também a localização do seu negócio</li>'+
+           '<li>Você recebe o link quando o seu negócio estiver no guia</li>'+
+         '</ol>'+
+         '<a class="btn ghost" href="'+esc(linkWhats())+'" target="_blank" rel="noopener">O WhatsApp não abriu? Toque aqui</a>'+
+         '<div class="share"><b>Conhece outro comerciante '+esc(ondeBairro())+'?</b>'+
+           '<p>Envie o link para ele também. O cadastro é gratuito.</p>'+
+           '<a class="btn wa-o" href="'+esc(linkIndicar())+'" target="_blank" rel="noopener">Indicar pelo WhatsApp</a></div>',
+      f: ''
+    };
+  }
+};
+
+function horarioOk(){ return S.horarios.some(function(r){ return r.d.length; }); }
+function negocioOk(){ return semPonto(S.nome).length>=2 && semPonto(S.oque).length>=3; }
+function contatoOk(){ return semPonto(S.endereco).length>=4 && semPonto(S.pessoa).length>=2 && (S.mesmoZap || String(S.zap).replace(/\D/g,"").length>=10); }
+function etapaOk(){ var id=STEPS[cur]; return id==="negocio" ? negocioOk() : id==="contato" ? contatoOk() : id==="horario" ? horarioOk() : true; }
+
+/* =====================================================================
+   RENDER E NAVEGAÇÃO
+   ===================================================================== */
+var screen = $("#screen"), foot = $("#foot"), app = $("#app");
+
+function render(dir){
+  var id = STEPS[cur], v = VIEWS[id]();
+  screen.innerHTML = v.h; foot.innerHTML = v.f || "";
+  app.classList.toggle("is-hero", id==="hero");
+  $("#back").hidden = (id==="hero" || id==="fim");
+  var pct = id==="fim" ? 100 : Math.min(100, Math.round(cur/TOTAL*100));
+  $("#progB").style.width = pct + "%";
+  $("#progL").textContent = id==="fim" ? "Cadastro enviado" : id==="preview" ? "Cadastro pronto" : "Seu cadastro no guia";
+  $("#progP").textContent = pct + "%";
+  if(dir){ screen.classList.remove("fwd","bwd"); void screen.offsetWidth; screen.classList.add(dir); }
+  screen.scrollTop = 0;
+}
+function go(i, dir){ cur = Math.max(0, Math.min(STEPS.length-1, i)); if(STEPS[cur]!=="fim") salvar(); render(dir||"fwd"); }
+function next(){ go(cur+1,"fwd"); }
+function back(){ go(cur-1,"bwd"); }
+function refresh(){ var y = screen.scrollTop, v = VIEWS[STEPS[cur]](); screen.innerHTML = v.h; foot.innerHTML = v.f || ""; screen.scrollTop = y; salvar(); }
+function atualizaBotao(){ var b = foot.querySelector('[data-act="next"]'); if(b) b.disabled = !etapaOk(); }
+
+/* bottom sheet */
+var ov = $("#ov"), sheet = $("#sheet");
+function openSheet(title, body, focus){
+  $("#sheetT").textContent = title; $("#sheetB").innerHTML = body; $("#sheetB").scrollTop = 0;
+  ov.classList.add("open"); sheet.classList.add("open");
+  if(focus){ var i = $("#sheetB input"); if(i) setTimeout(function(){ i.focus(); }, 320); }
+}
+function closeSheet(){ ov.classList.remove("open"); sheet.classList.remove("open"); }
+function sheetInput(ph, act, val){
+  return '<div class="field" style="margin-top:4px"><div class="inp"><input id="sheetInput" placeholder="'+esc(ph)+'" value="'+esc(val||"")+'" maxlength="50" autocapitalize="words" enterkeyhint="done" data-enter="'+act+'"></div></div>'+
+         '<button class="btn pri" data-act="'+act+'">Confirmar</button>';
+}
+function abrirSubs(c){
+  openSheet(c.ic+" "+c.t,
+    c.subs.map(function(s){ return '<button class="li" data-act="sub" data-v="'+esc(s)+'">'+esc(s)+SETA+'</button>'; }).join("")+
+    '<button class="li more" data-act="subOutroForm">Outro tipo de negócio</button>');
+}
+function abrirBairros(){
+  if((S.cidade||"Fortaleza")!=="Fortaleza"){ openSheet("Qual é o bairro?", sheetInput("Ex.: Centro","bairroOutro", S.prep==="no bairro"?S.bairro:""), true); return; }
+  openSheet("Bairros de Fortaleza",
+    '<div class="search"><div class="inp"><input id="bq" placeholder="Buscar bairro" autocomplete="off" enterkeyhint="search"></div></div>'+
+    '<div id="blist">'+BAIRROS.map(function(b,i){ return '<button class="li" data-act="bairro" data-v="'+i+'" data-s="'+slug(b.n)+'">'+esc(b.n)+SETA+'</button>'; }).join("")+'</div>'+
+    '<button class="li more" data-act="bairroOutroForm">Meu bairro não está na lista</button>');
+}
+
+/* cliques */
+document.addEventListener("click", function(e){
+  var el = e.target.closest("[data-act]"); if(!el) return;
+  var a = el.getAttribute("data-act"), k = el.getAttribute("data-k"), v = el.getAttribute("data-v");
+
+  if(a==="start"){ buzz(); go(1); return; }
+  if(a==="resume"){ buzz(); S = Object.assign(novoEstado(), salvo.S); go(salvo.cur); return; }
+  if(a==="next"){ if(el.disabled) return; buzz(); next(); return; }
+  if(a==="back"){ back(); return; }
+  if(a==="closeSheet"){ closeSheet(); return; }
+
+  if(a==="pick"){
+    buzz(); S[k] = v;
+    Array.prototype.forEach.call(el.parentNode.children, function(b){ b.classList.toggle("on", b===el); });
+    salvar();
+    if(k==="google"){ refresh(); var ins = screen.querySelector(".insight"); if(ins) setTimeout(function(){ ins.scrollIntoView({behavior:"smooth", block:"nearest"}); }, 60); return; }
+    setTimeout(next, 260); return;
+  }
+
+  if(a==="cat"){
+    buzz(); var c = byId(CATS,v);
+    if(!c.subs){ S.cat = v; openSheet("Qual é o ramo do seu negócio?", sheetInput("Ex.: loja de presentes","subOutro", S.cat==="outro"?S.sub:""), true); return; }
+    S.cat = v; abrirSubs(c); return;
+  }
+  if(a==="sub"){ buzz(); S.sub = v; closeSheet(); salvar(); refresh(); setTimeout(next, 220); return; }
+  if(a==="subOutroForm"){ openSheet("Qual é o tipo de negócio?", sheetInput("Digite o tipo de negócio","subOutro"), true); return; }
+  if(a==="subOutro"){ var t = semPonto($("#sheetInput").value); if(t.length<2){ $("#sheetInput").parentNode.classList.add("shake"); return; } S.sub = cap(t); closeSheet(); salvar(); refresh(); setTimeout(next, 220); return; }
+
+  if(a==="cidade"){
+    buzz();
+    if(v==="Outra cidade"){ openSheet("Qual é a cidade?", sheetInput("Ex.: Sobral","cidadeOutra", S.cidadeOutra), true); return; }
+    if(S.cidade!==v){ S.bairro=""; S.prep=""; }
+    S.cidade = v; refresh(); setTimeout(abrirBairros, 180); return;
+  }
+  if(a==="cidadeOutra"){ var cv = semPonto($("#sheetInput").value); if(cv.length<2) return; S.cidade="Outra cidade"; S.cidadeOutra=cap(cv); S.bairro=""; S.prep=""; closeSheet(); refresh(); setTimeout(abrirBairros, 320); return; }
+  if(a==="bairroSheet"){ abrirBairros(); return; }
+  if(a==="bairro"){ buzz(); var b = BAIRROS[+v]; S.bairro=b.n; S.prep=b.p; if(!S.cidade) S.cidade="Fortaleza"; closeSheet(); salvar(); refresh(); setTimeout(next, 260); return; }
+  if(a==="bairroOutroForm"){ openSheet("Qual é o bairro?", sheetInput("Digite o nome do bairro","bairroOutro"), true); return; }
+  if(a==="bairroOutro"){ var bv = semPonto($("#sheetInput").value); if(bv.length<2) return; S.bairro=cap(bv); S.prep="no bairro"; if(!S.cidade) S.cidade="Fortaleza"; closeSheet(); salvar(); refresh(); setTimeout(next, 260); return; }
+
+  if(a==="day"){
+    buzz(); var r = +el.getAttribute("data-r"), d = +el.getAttribute("data-d"), row = S.horarios[r], i = row.d.indexOf(d);
+    if(i>-1){ row.d.splice(i,1); }
+    else { S.horarios.forEach(function(o,oi){ if(oi!==r){ var j=o.d.indexOf(d); if(j>-1) o.d.splice(j,1); } }); row.d.push(d); }
+    refresh(); return;
+  }
+  if(a==="addRow"){
+    buzz(); var livres = [0,1,2,3,4,5,6].filter(function(x){ return !S.horarios.some(function(o){ return o.d.indexOf(x)>-1; }); });
+    var nd = livres.indexOf(6)>-1 ? [6] : livres.slice(0,1);
+    if(!nd.length){ nd=[6]; S.horarios.forEach(function(o){ var j=o.d.indexOf(6); if(j>-1) o.d.splice(j,1); }); }
+    S.horarios.push({d:nd, a:"08:00", f:"12:00"}); refresh(); return;
+  }
+  if(a==="rmRow"){ S.horarios.splice(+el.getAttribute("data-r"),1); refresh(); return; }
+
+  if(a==="mesmoZap"){ buzz(); S.mesmoZap = !S.mesmoZap; refresh(); if(!S.mesmoZap){ var z=$("#f-zap"); if(z) z.focus(); } return; }
+
+  if(a==="send"){
+    if(!S.ok){ e.preventDefault(); var cb=$("#consentBox"); cb.classList.remove("shake"); void cb.offsetWidth; cb.classList.add("shake"); $("#err").classList.add("show"); buzz(); return; }
+    el.href = linkWhats(); limpar(); salvo = null;
+    setTimeout(function(){ go(STEPS.indexOf("fim")); }, 700);
+    return;
+  }
+});
+
+/* digitação e selects */
+document.addEventListener("input", function(e){
+  var t = e.target;
+  if(t.id==="bq"){
+    var q = slug(t.value);
+    Array.prototype.forEach.call(document.querySelectorAll("#blist .li"), function(li){ li.style.display = li.getAttribute("data-s").indexOf(q)>-1 ? "" : "none"; });
+    return;
+  }
+  var f = t.getAttribute("data-f");
+  if(f){
+    if(f==="zap"){ var fm = fmtFone(t.value); if(fm!==t.value) t.value = fm; S.zap = fm.replace(/\D/g,""); }
+    else S[f] = t.value;
+    salvar(); atualizaBotao();
+  }
+});
+document.addEventListener("change", function(e){
+  var t = e.target;
+  if(t.id==="ok"){ S.ok = t.checked; $("#consentBox").classList.toggle("on", S.ok); $("#err").classList.remove("show"); buzz(); salvar(); return; }
+  if(t.tagName==="SELECT" && t.hasAttribute("data-t")){ S.horarios[+t.getAttribute("data-r")][t.getAttribute("data-t")] = t.value; salvar(); }
+});
+document.addEventListener("keydown", function(e){
+  if(e.key==="Escape"){ closeSheet(); return; }
+  if(e.key!=="Enter") return;
+  var t = e.target;
+  if(t.id==="sheetInput"){ e.preventDefault(); var b = document.querySelector('#sheetB [data-act="'+t.getAttribute("data-enter")+'"]'); if(b) b.click(); return; }
+  if(t.getAttribute && t.getAttribute("data-f")){
+    e.preventDefault();
+    var ins = Array.prototype.slice.call(document.querySelectorAll("#screen [data-f]")), i = ins.indexOf(t);
+    if(i < ins.length-1) ins[i+1].focus(); else { t.blur(); if(etapaOk()) next(); }
+  }
+});
+
+render();
+</script>
+</body>
+</html>
