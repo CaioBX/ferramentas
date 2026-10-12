@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calculadora de Viagem pro Ceará</title>
+<style>
+  :root{
+    --sea:#0e7c86; --sea-dark:#0a5a62; --sun:#f2893a; --sand:#fbf5ea; --card:#ffffff;
+    --ink:#1d2b2e; --muted:#6a7b7e; --line:#e8dfcf; --good:#1f9d6b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--sand); color:var(--ink); padding:14px; line-height:1.45;
+  }
+  .wrap{max-width:760px;margin:0 auto}
+  header{
+    background:linear-gradient(135deg,var(--sea) 0%,var(--sea-dark) 60%,#073f45 100%);
+    color:#fff;border-radius:18px;padding:22px 20px;position:relative;overflow:hidden;
+  }
+  header:after{
+    content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;border-radius:50%;
+    background:radial-gradient(circle,#ffc26b 0%,var(--sun) 55%,transparent 70%);opacity:.9;
+  }
+  header h1{margin:0 0 6px;font-size:1.45rem;position:relative;z-index:1;max-width:80%}
+  header p{margin:0;opacity:.92;font-size:.95rem;position:relative;z-index:1;max-width:85%}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:14px}
+  .card h2{margin:0 0 12px;font-size:1.02rem}
+  label{display:block;font-size:.85rem;font-weight:600;margin:0 0 6px;color:var(--ink)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:560px){.grid{grid-template-columns:1fr}}
+  select,input[type=number]{
+    width:100%;padding:12px;border:1.5px solid var(--line);border-radius:12px;font-size:1rem;
+    background:#fff;color:var(--ink);appearance:none;-webkit-appearance:none;
+  }
+  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236a7b7e' stroke-width='2'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+  select:focus,input:focus{outline:none;border-color:var(--sea)}
+  .stepper{display:flex;align-items:center;gap:8px}
+  .stepper button{
+    width:44px;height:44px;border-radius:12px;border:1.5px solid var(--line);background:#fff;
+    font-size:1.3rem;cursor:pointer;color:var(--sea-dark);flex:none;
+  }
+  .stepper button:active{background:var(--sand)}
+  .stepper input{text-align:center;font-weight:700}
+  .styles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .styles input{position:absolute;opacity:0;pointer-events:none}
+  .styles label{
+    margin:0;border:1.5px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center;
+    cursor:pointer;font-weight:600;font-size:.88rem;background:#fff;
+  }
+  .styles label small{display:block;font-weight:400;color:var(--muted);font-size:.74rem;margin-top:2px}
+  .styles input:checked + label{border-color:var(--sea);background:#e7f4f5;color:var(--sea-dark)}
+  .row{margin-top:14px}
+  .range-head{display:flex;justify-content:space-between;font-size:.85rem;font-weight:600}
+  input[type=range]{width:100%;accent-color:var(--sea);margin-top:8px}
+  .check{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:.9rem}
+  .check input{width:20px;height:20px;accent-color:var(--sea)}
+  .check label{margin:0;font-weight:500}
+
+  .result{background:#fff;border:2px solid var(--sea);border-radius:18px;padding:20px;margin-top:14px;text-align:center}
+  .result .tag{font-size:.8rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .result .total{font-size:2.5rem;font-weight:800;color:var(--sea-dark);margin:2px 0}
+  .result .pp{font-size:1rem;color:var(--ink)}
+  .result .pp b{color:var(--sun)}
+  .bars{margin-top:18px;text-align:left}
+  .bar{margin-bottom:12px}
+  .bar-top{display:flex;justify-content:space-between;font-size:.88rem;margin-bottom:4px}
+  .bar-track{height:10px;background:#efe8d9;border-radius:99px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:99px;transition:width .35s ease}
+  .tip{background:#fff4e6;border:1px dashed var(--sun);border-radius:12px;padding:12px;margin-top:14px;font-size:.9rem}
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+  @media (max-width:560px){.actions{grid-template-columns:1fr}}
+  .btn{
+    display:block;text-align:center;text-decoration:none;border:0;border-radius:12px;padding:14px;
+    font-size:.95rem;font-weight:700;cursor:pointer;color:#fff;
+  }
+  .btn.wa{background:#1fa855}
+  .btn.alt{background:var(--sea-dark)}
+  .cta{
+    margin-top:14px;border-radius:16px;padding:16px;background:#fff;border:1px solid var(--line);
+    font-size:.92rem;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+  }
+  .cta a{color:var(--sea-dark);font-weight:700}
+  .note{font-size:.76rem;color:var(--muted);margin-top:14px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Quanto custa viajar pro Ceará?</h1>
+    <p>Escolha o destino, quantas pessoas e o estilo da viagem. A estimativa sai na hora.</p>
+  </header>
+
+  <section class="card">
+    <h2>Monte a sua viagem</h2>
+
+    <div class="grid">
+      <div>
+        <label for="destino">Destino</label>
+        <select id="destino"></select>
+      </div>
+      <div>
+        <label for="pessoas">Pessoas</label>
+        <div class="stepper">
+          <button type="button" data-step="pessoas" data-dir="-1" aria-label="Menos pessoas">−</button>
+          <input type="number" id="pessoas" min="1" max="20" value="2" inputmode="numeric">
+          <button type="button" data-step="pessoas" data-dir="1" aria-label="Mais pessoas">+</button>
+        </div>
+      </div>
+      <div>
+        <label for="dias">Dias de viagem</label>
+        <div class="stepper">
+          <button type="button" data-step="dias" data-dir="-1" aria-label="Menos dias">−</button>
+          <input type="number" id="dias" min="1" max="15" value="3" inputmode="numeric">
+          <button type="button" data-step="dias" data-dir="1" aria-label="Mais dias">+</button>
+        </div>
+      </div>
+      <div>
+        <label for="porQuarto">Pessoas por quarto</label>
+        <select id="porQuarto">
+          <option value="1">1 (cada um no seu)</option>
+          <option value="2" selected>2 (casal ou dupla)</option>
+          <option value="3">3</option>
+          <option value="4">4 (família)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <label>Estilo da viagem</label>
+      <div class="styles">
+        <div><input type="radio" name="estilo" id="e0" value="0"><label for="e0">Econômico<small>pousada simples</small></label></div>
+        <div><input type="radio" name="estilo" id="e1" value="1" checked><label for="e1">Médio<small>conforto bom</small></label></div>
+        <div><input type="radio" name="estilo" id="e2" value="2"><label for="e2">Confortável<small>resort / premium</small></label></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="range-head"><span>Passeios pagos por pessoa</span><span id="passeiosVal">2</span></div>
+      <input type="range" id="passeios" min="0" max="6" value="2">
+    </div>
+
+    <div class="check">
+      <input type="checkbox" id="transfer" checked>
+      <label for="transfer">Incluir transporte de ida e volta saindo de Fortaleza</label>
+    </div>
+    <div class="check">
+      <input type="checkbox" id="reserva" checked>
+      <label for="reserva">Somar 10% de reserva pra imprevistos</label>
+    </div>
+  </section>
+
+  <section class="result" aria-live="polite">
+    <div class="tag">Estimativa total</div>
+    <div class="total" id="total">R$ 0</div>
+    <div class="pp" id="pp"></div>
+
+    <div class="bars" id="bars"></div>
+  </section>
+
+  <div class="tip" id="dica"></div>
+
+  <div class="actions">
+    <a class="btn wa" id="btnWhats" href="#" target="_blank" rel="noopener">Enviar pro WhatsApp</a>
+    <button class="btn alt" id="btnCopiar" type="button">Copiar resumo</button>
+  </div>
+
+  <div class="cta" id="cta">
+    <span>Tem pousada, restaurante ou passeio no Ceará?</span>
+    <a id="ctaLink" href="#" target="_blank" rel="noopener">Divulgue no Hoje no Ceará</a>
+  </div>
+
+  <p class="note" id="nota"></p>
+</div>
+
+<script>
+/* ============================================================
+   CONFIGURAÇÃO (edite aqui)
+   ============================================================ */
+var CONFIG = {
+  atualizadoEm: "outubro de 2026",
+  siteNome: "Hoje no Ceará",
+  siteUrl: "",                 // ex.: "https://seusite.com.br/calculadora-viagem-ceara" (se vazio, usa o endereço da página)
+  whatsappAnuncio: "",         // ex.: "5585999999999" (DDI+DDD+número). Se vazio, o botão de divulgação some.
+  mensagemAnuncio: "Olá! Vi a calculadora de viagem do Hoje no Ceará e quero divulgar meu negócio."
+};
+
+/* Valores MÉDIOS ESTIMADOS em reais. Vá ajustando conforme pesquisar preços.
+   hosp = diária do QUARTO [econômico, médio, confortável]
+   comida = por pessoa/dia [econômico, médio, confortável]
+   passeio = valor médio de UM passeio por pessoa
+   transfer = ida e volta por pessoa saindo de Fortaleza
+   passeiosEx = exemplos citados na dica */
+var DESTINOS = [
+  { nome:"Fortaleza", hosp:[180,350,700], comida:[90,160,300], passeio:60, transfer:0,
+    passeiosEx:"Beira-Mar, Mercado Central, Centro Dragão do Mar e Praia do Futuro",
+    dica:"Boa parte do roteiro em Fortaleza é de graça: calçadão, praias e feirinhas. Reserve o orçamento pra comida e pra um passeio de buggy ou catamarã." },
+  { nome:"Jericoacoara", hosp:[250,500,1000], comida:[110,190,350], passeio:120, transfer:300,
+    passeiosEx:"buggy pelas lagoas, pôr do sol na duna e passeio de barco",
+    dica:"Jeri tem alta temporada cara (julho e dezembro a janeiro). O transfer de Fortaleza leva umas 5 a 6 horas, então vale ficar pelo menos 3 dias." },
+  { nome:"Canoa Quebrada", hosp:[160,320,600], comida:[80,140,250], passeio:80, transfer:100,
+    passeiosEx:"buggy pelas dunas, passeio na Broadway e pôr do sol na falésia",
+    dica:"Pousadas com café da manhã costumam compensar. A Broadway concentra a noite e os restaurantes." },
+  { nome:"Beberibe (Morro Branco e Praia das Fontes)", hosp:[150,300,550], comida:[80,140,240], passeio:70, transfer:60,
+    passeiosEx:"labirinto das falésias, buggy e passeio nas lagoas",
+    dica:"Dá pra fazer bate e volta saindo de Fortaleza. Se for dormir, a diária fica mais em conta que nos destinos mais famosos." },
+  { nome:"Cumbuco", hosp:[200,380,750], comida:[90,170,300], passeio:90, transfer:50,
+    passeiosEx:"buggy nas dunas, kitesurf e passeio na Lagoa do Banana",
+    dica:"É o destino de praia mais perto de Fortaleza. Ótimo pra fim de semana curto, e a aula de kitesurf pesa no orçamento." },
+  { nome:"Aquiraz (Prainha e Beach Park)", hosp:[220,450,900], comida:[90,170,320], passeio:180, transfer:50,
+    passeiosEx:"Beach Park, Prainha e passeio de catamarã",
+    dica:"O ingresso do parque aquático puxa o custo pra cima. Comprar antecipado e fora de feriado costuma sair mais barato." },
+  { nome:"Flecheiras e Mundaú", hosp:[180,350,700], comida:[80,150,280], passeio:80, transfer:120,
+    passeiosEx:"rio Mundaú, passeio de buggy e piscinas naturais",
+    dica:"Menos lotado e mais tranquilo. Procure pousadas com cozinha se for em grupo ou família, que ajuda a economizar na comida." },
+  { nome:"Guaramiranga (serra)", hosp:[200,380,750], comida:[90,160,290], passeio:50, transfer:90,
+    passeiosEx:"trilhas, mirantes e cafés e chocolates da serra",
+    dica:"Clima ameno e preços sobem forte nos festivais (como o Jazz & Blues) e nos feriados. Reserve com antecedência." }
+];
+
+/* ============================================================
+   LÓGICA
+   ============================================================ */
+var $ = function(id){ return document.getElementById(id); };
+var fmt = function(v){ return "R$ " + Math.round(v).toLocaleString("pt-BR"); };
+var ESTILOS = ["Econômico","Médio","Confortável"];
+
+// monta o select de destinos
+DESTINOS.forEach(function(d,i){
+  var o = document.createElement("option");
+  o.value = i; o.textContent = d.nome;
+  $("destino").appendChild(o);
+});
+
+function clamp(el){
+  var min = +el.min, max = +el.max, v = parseInt(el.value,10);
+  if (isNaN(v)) v = min;
+  el.value = Math.min(max, Math.max(min, v));
+}
+
+function estilo(){
+  var r = document.querySelector('input[name="estilo"]:checked');
+  return r ? +r.value : 1;
+}
+
+var ultimoResumo = "";
+
+function calcular(){
+  clamp($("pessoas")); clamp($("dias"));
+  var d = DESTINOS[+$("destino").value];
+  var pessoas = +$("pessoas").value;
+  var dias = +$("dias").value;
+  var noites = Math.max(dias - 1, 0);
+  var porQuarto = +$("porQuarto").value;
+  var quartos = Math.ceil(pessoas / porQuarto);
+  var e = estilo();
+  var qtdPasseios = +$("passeios").value;
+  $("passeiosVal").textContent = qtdPasseios;
+
+  var hosp = quartos * noites * d.hosp[e];
+  var comida = pessoas * dias * d.comida[e];
+  var passeios = pessoas * qtdPasseios * d.passeio;
+  var transp = $("transfer").checked ? pessoas * d.transfer : 0;
+  var sub = hosp + comida + passeios + transp;
+  var reserva = $("reserva").checked ? sub * 0.10 : 0;
+  var total = sub + reserva;
+
+  $("total").textContent = fmt(total);
+  $("pp").innerHTML = "Dá <b>" + fmt(total / pessoas) + "</b> por pessoa" +
+    (dias > 0 ? " (" + fmt(total / pessoas / dias) + " por dia)" : "");
+
+  var itens = [
+    { nome:"Hospedagem (" + quartos + (quartos>1?" quartos":" quarto") + ", " + noites + (noites===1?" noite":" noites") + ")", v:hosp, cor:"#0e7c86" },
+    { nome:"Alimentação", v:comida, cor:"#f2893a" },
+    { nome:"Passeios", v:passeios, cor:"#1f9d6b" },
+    { nome:"Transporte ida e volta", v:transp, cor:"#7a6bd1" }
+  ];
+  if (reserva > 0) itens.push({ nome:"Reserva (10%)", v:reserva, cor:"#b8a98d" });
+
+  $("bars").innerHTML = itens.map(function(it){
+    var pct = total > 0 ? (it.v / total * 100) : 0;
+    return '<div class="bar"><div class="bar-top"><span>' + it.nome + '</span><b>' + fmt(it.v) + '</b></div>' +
+           '<div class="bar-track"><div class="bar-fill" style="width:' + pct.toFixed(1) + '%;background:' + it.cor + '"></div></div></div>';
+  }).join("");
+
+  $("dica").innerHTML = "<b>Dica pra " + d.nome.split(" (")[0] + ":</b> " + d.dica +
+    (qtdPasseios > 0 ? " Passeios que costumam entrar na conta: " + d.passeiosEx + "." : "");
+
+  var link = CONFIG.siteUrl || location.href;
+  ultimoResumo =
+    "Simulei uma viagem pro Ceará:\n" +
+    "Destino: " + d.nome + "\n" +
+    pessoas + (pessoas>1?" pessoas":" pessoa") + ", " + dias + (dias>1?" dias":" dia") + ", estilo " + ESTILOS[e].toLowerCase() + "\n" +
+    "Total estimado: " + fmt(total) + " (" + fmt(total / pessoas) + " por pessoa)\n\n" +
+    "Faça a sua conta: " + link;
+
+  $("btnWhats").href = "https://wa.me/?text=" + encodeURIComponent(ultimoResumo);
+}
+
+// eventos
+["destino","pessoas","dias","porQuarto","passeios","transfer","reserva"].forEach(function(id){
+  $(id).addEventListener("input", calcular);
+  $(id).addEventListener("change", calcular);
+});
+Array.prototype.forEach.call(document.querySelectorAll('input[name="estilo"]'), function(r){
+  r.addEventListener("change", calcular);
+});
+Array.prototype.forEach.call(document.querySelectorAll(".stepper button"), function(b){
+  b.addEventListener("click", function(){
+    var el = $(b.getAttribute("data-step"));
+    el.value = (parseInt(el.value,10) || 1) + parseInt(b.getAttribute("data-dir"),10);
+    calcular();
+  });
+});
+
+$("btnCopiar").addEventListener("click", function(){
+  var btn = $("btnCopiar");
+  function ok(){ btn.textContent = "Copiado!"; setTimeout(function(){ btn.textContent = "Copiar resumo"; }, 1800); }
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(ultimoResumo).then(ok, fallback);
+  } else { fallback(); }
+  function fallback(){
+    var t = document.createElement("textarea");
+    t.value = ultimoResumo; document.body.appendChild(t); t.select();
+    try { document.execCommand("copy"); ok(); } catch(e){}
+    document.body.removeChild(t);
+  }
+});
+
+// CTA de divulgação
+if (CONFIG.whatsappAnuncio) {
+  $("ctaLink").href = "https://wa.me/" + CONFIG.whatsappAnuncio + "?text=" + encodeURIComponent(CONFIG.mensagemAnuncio);
+} else {
+  $("cta").style.display = "none";
+}
+
+$("nota").textContent = "Valores médios estimados, atualizados em " + CONFIG.atualizadoEm +
+  ". Preços reais variam com a temporada, feriados e disponibilidade. Use como referência. " + CONFIG.siteNome + ".";
+
+calcular();
+</script>
+</body>
+</html>
