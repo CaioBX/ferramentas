@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quando ir ao Ceará</title>
+<meta name="description" content="Melhor época para visitar o Ceará, mês a mês: chuva, sol, temperatura, mar, vento e movimento de turistas, com dados do INMET. Uma ferramenta do Hoje no Ceará.">
+<meta name="googlebot" content="noindex, indexifembedded">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F2433;
+    --muted:#567085;
+    --paper:#FFFFFF;
+    --mist:#F0F5F9;
+    --line:#D8E3EB;
+    --ocean:#0B4F7A;
+    --sea:#1F7FB8;
+    --sun:#F2B705;
+    --radius-lg:22px;
+    --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink)}
+  body{font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .tool{max-width:820px;margin:0 auto;padding:20px 16px 18px}
+  button{font:inherit;color:inherit}
+  :focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+
+  .top{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+  .top h1{font-family:var(--display);font-weight:700;font-size:clamp(1.65rem,4.6vw,2.35rem);line-height:1.05;letter-spacing:-.02em;margin:0 0 6px;font-variation-settings:"opsz" 96}
+  .lead{margin:0;color:var(--muted);max-width:54ch}
+  .tops{display:flex;flex-direction:column;gap:8px;align-items:flex-end}
+  .seg{display:flex;background:var(--mist);border-radius:999px;padding:3px;gap:2px}
+  .seg button{border:0;background:none;padding:6px 10px;border-radius:999px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--paper);color:var(--ocean);box-shadow:0 1px 2px rgba(15,36,51,.12)}
+
+  .goals{margin-top:18px}
+  .group-label{font-size:.82rem;color:var(--muted);margin:0 0 6px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chips button{border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 13px;font-size:.92rem;cursor:pointer;line-height:1.25}
+  .chips button[aria-pressed="true"]{background:var(--sun);border-color:var(--sun);color:var(--ink);font-weight:700}
+  .goal-note{margin:8px 2px 0;font-size:.95rem;min-height:1.5em}
+  .goal-note strong{font-family:var(--display)}
+
+  /* Faixa do ano */
+  .year{margin-top:14px;border:1.5px solid var(--line);border-radius:var(--radius-lg);padding:10px 8px 4px}
+  .year svg{display:block;width:100%}
+  .year .col{cursor:pointer}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;padding:2px 10px 6px;font-size:.8rem;color:var(--muted)}
+  .legend i{display:inline-block;vertical-align:-1px;margin-right:5px}
+  .legend .bar{width:10px;height:12px;border-radius:3px;background:var(--sea)}
+  .legend .dot{width:11px;height:11px;border-radius:50%;background:var(--sun)}
+  .legend .band{width:16px;height:5px;border-radius:3px;background:var(--sun);vertical-align:2px}
+
+  /* Mês escolhido */
+  .month{margin-top:18px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:22px;align-items:start}
+  .m-head h2{font-family:var(--display);font-weight:700;font-size:clamp(2.2rem,8vw,3.4rem);line-height:.95;letter-spacing:-.03em;margin:0;text-transform:none}
+  .verdict{display:inline-block;margin-top:12px;border-radius:999px;padding:4px 14px;font-weight:700;font-size:.95rem}
+  .tip{margin:14px 0 0;font-size:1.06rem;line-height:1.5;max-width:46ch}
+  .stats{list-style:none;margin:0;padding:0;border-top:1.5px solid var(--ink)}
+  .stats li{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--line)}
+  .stats .k{color:var(--muted);font-size:.92rem}
+  .stats .v{font-family:var(--display);font-weight:700;font-size:1.15rem;text-align:right;font-variant-numeric:tabular-nums}
+  .stats .v small{display:block;font-family:var(--body);font-weight:400;font-size:.8rem;color:var(--muted)}
+  .meter{display:inline-flex;gap:3px;margin-left:8px;vertical-align:1px}
+  .meter i{width:7px;height:12px;border-radius:2px;background:var(--line)}
+  .meter i.on{background:var(--ocean)}
+
+  .about{margin-top:20px;background:var(--mist);border-radius:var(--radius-lg);padding:16px 20px;font-size:.95rem}
+  .about p{margin:0;max-width:66ch}
+  footer{margin-top:16px;color:var(--muted);font-size:.8rem;line-height:1.5}
+  footer p{margin:0 0 4px}
+  footer a{color:inherit}
+  footer .brand{color:var(--ink);font-weight:700}
+
+  @media (max-width:640px){
+    .month{grid-template-columns:1fr;gap:14px}
+    .tops{align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+<main class="tool" aria-live="polite">
+  <header class="top">
+    <div>
+      <h1 id="t-title"></h1>
+      <p class="lead" id="t-lead"></p>
+    </div>
+    <div class="tops">
+      <div class="seg" role="group" id="langs"></div>
+      <div class="seg" role="group" id="units"></div>
+    </div>
+  </header>
+
+  <div class="goals">
+    <p class="group-label" id="t-goal"></p>
+    <div class="chips" role="group" id="goals"></div>
+    <p class="goal-note" id="goal-note"></p>
+  </div>
+
+  <div class="year">
+    <div id="strip"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <section class="month" id="month"></section>
+  <section class="about"><p id="about"></p></section>
+  <footer id="foot"></footer>
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= Dados =================
+   Normais climatológicas 1991–2020 do INMET, estação de Fortaleza:
+   máxima e mínima médias (°C), chuva (mm), dias com chuva (≥ 1 mm), horas de sol no mês.
+   Mar (°C) aproximado. Vento e movimento: 1 = baixo, 2 = médio, 3 = alto. */
+var DATA = [
+  {max:31.2, min:24.5, rain:156.4, rdays:13, sunh:220.4, sea:28, wind:2, crowd:3},
+  {max:31.1, min:24.3, rain:187.0, rdays:14, sunh:183.0, sea:28, wind:1, crowd:2},
+  {max:30.8, min:23.9, rain:336.9, rdays:20, sunh:172.7, sea:28, wind:1, crowd:1},
+  {max:30.6, min:23.8, rain:385.0, rdays:21, sunh:152.8, sea:28, wind:1, crowd:1},
+  {max:30.8, min:23.8, rain:229.0, rdays:16, sunh:211.9, sea:28, wind:1, crowd:1},
+  {max:30.5, min:23.2, rain:130.0, rdays:10, sunh:219.2, sea:28, wind:2, crowd:2},
+  {max:30.6, min:22.8, rain:69.7,  rdays:7,  sunh:254.2, sea:27, wind:3, crowd:3},
+  {max:31.1, min:22.9, rain:20.0,  rdays:3,  sunh:288.5, sea:26, wind:3, crowd:2},
+  {max:31.4, min:23.6, rain:13.6,  rdays:3,  sunh:287.1, sea:26, wind:3, crowd:2},
+  {max:31.6, min:24.3, rain:9.5,   rdays:3,  sunh:294.2, sea:27, wind:3, crowd:2},
+  {max:31.7, min:24.7, rain:9.8,   rdays:3,  sunh:287.7, sea:27, wind:3, crowd:2},
+  {max:31.7, min:24.9, rain:37.1,  rdays:5,  sunh:274.2, sea:27, wind:2, crowd:3}
+];
+var DAYS = [31,28.25,31,30,31,30,31,31,30,31,30,31];
+/* Objetivos: meses recomendados (0 = janeiro) */
+var GOALS = {
+  praia:[7,8,9,10,11],
+  kite:[6,7,8,9,10,11,0],
+  lagoas:[5,6,7],
+  calmo:[2,3,4,5,7,8,9,10]
+};
+var GOAL_KEYS = ["praia","kite","lagoas","calmo"];
+
+/* ================= Textos ================= */
+var LANGS = ["pt","en","es","fr","it"];
+var LOCALE = {pt:"pt-BR", en:"en-GB", es:"es-ES", fr:"fr-FR", it:"it-IT"};
+var T = {
+pt:{
+  title:"Quando ir ao Ceará",
+  lead:"A melhor época para visitar o Ceará, mês a mês: chuva, sol, calor, mar, vento e movimento de turistas.",
+  langGroup:"Idioma", unitGroup:"Temperatura", monthGroup:"Meses do ano",
+  goal:"Qual é a sua prioridade?",
+  goals:{praia:"Praia e sol", kite:"Kitesurf", lagoas:"Lagoas cheias", calmo:"Menos movimento"},
+  goalNote:"Melhores meses: <strong>{list}</strong>",
+  legRain:"Chuva", legSun:"Horas de sol", legGoal:"Recomendado para a sua prioridade",
+  verdicts:["Seco e ensolarado","Sol com algumas chuvas","Época de chuvas"],
+  rain:"Chuva no mês", rainDays:"{n} dias com chuva", sun:"Sol por dia", sunVal:"{h} h",
+  temp:"Máxima e mínima", sea:"Temperatura do mar", wind:"Vento", crowd:"Movimento de turistas",
+  levels:["Fraco","Moderado","Forte"], crowds:["Baixo","Médio","Alto"],
+  about:"Os números de chuva, sol e temperatura são as normais climatológicas 1991–2020 do INMET para Fortaleza. Todo o litoral do Ceará segue o mesmo calendário de chuvas, com volumes diferentes de uma praia para outra. São médias de 30 anos: cada ano pode chover mais ou menos.",
+  source:"Fonte: INMET, Normais Climatológicas do Brasil 1991–2020 (estação Fortaleza). Temperatura do mar, vento e movimento de turistas são estimativas.",
+  madeBy:"Uma ferramenta do <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>",
+  tips:[
+    "Alta temporada de verão e férias: praias cheias, sol forte e ainda vento bom para kite. Reserve a hospedagem com antecedência.",
+    "Começam as chuvas, em geral rápidas e à tarde. Quando o carnaval cai em fevereiro, as cidades do litoral ficam lotadas.",
+    "Junto com abril, é o mês mais chuvoso. Bom para quem busca preços baixos, mas tenha um plano para os dias de chuva.",
+    "Pico da quadra chuvosa: o céu fica nublado com frequência, e as dunas e lagoas começam a encher.",
+    "As chuvas diminuem ao longo do mês. Preços ainda baixos e lagoas enchendo perto de Jericoacoara.",
+    "Fim da quadra chuvosa, lagoas cheias e o vento voltando. Um dos melhores custos-benefícios do ano.",
+    "Férias escolares e início da temporada de vento: sol voltando forte, kitesurfistas chegando e lagoas ainda cheias.",
+    "Quase não chove e o vento fica forte: começa a melhor fase para kitesurf e windsurf.",
+    "Seco, ensolarado e com vento. Ótimo para kite e passeios de buggy, e fora das férias os preços são melhores.",
+    "Um dos meses mais secos e ensolarados do ano, com vento forte. Bom equilíbrio entre clima e movimento.",
+    "Sol, vento e pouco movimento antes do verão. No fim do período seco, as lagoas estão mais baixas.",
+    "A alta temporada começa com o Réveillon: praias cheias e preços mais altos. Reserve cedo."
+  ]
+},
+en:{
+  title:"When to visit Ceará",
+  lead:"The best time to visit Ceará, Brazil, month by month: rain, sunshine, heat, sea, wind and tourist crowds.",
+  langGroup:"Language", unitGroup:"Temperature", monthGroup:"Months of the year",
+  goal:"What matters most to you?",
+  goals:{praia:"Beach and sun", kite:"Kitesurfing", lagoas:"Full lagoons", calmo:"Fewer crowds"},
+  goalNote:"Best months: <strong>{list}</strong>",
+  legRain:"Rain", legSun:"Sunshine hours", legGoal:"Recommended for your priority",
+  verdicts:["Dry and sunny","Sunny with some showers","Rainy season"],
+  rain:"Monthly rainfall", rainDays:"{n} rainy days", sun:"Sunshine per day", sunVal:"{h} h",
+  temp:"High and low", sea:"Sea temperature", wind:"Wind", crowd:"Tourist crowds",
+  levels:["Light","Moderate","Strong"], crowds:["Low","Medium","High"],
+  about:"Rain, sunshine and temperature figures are INMET's 1991–2020 climate normals for Fortaleza. The whole Ceará coast follows the same rainy-season calendar, with different amounts from one beach to the next. These are 30-year averages: any given year can be wetter or drier.",
+  source:"Source: INMET (Brazil's National Institute of Meteorology), 1991–2020 climate normals, Fortaleza station. Sea temperature, wind and crowds are estimates.",
+  madeBy:"A tool by <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>",
+  tips:[
+    "Summer high season and school holidays: busy beaches, strong sun and still good wind for kiting. Book your stay early.",
+    "The rains begin, usually short afternoon showers. When Carnival falls in February, coastal towns fill up.",
+    "Together with April, the rainiest month. Good for lower prices, but have a plan for rainy days.",
+    "The peak of the rainy season: skies are often cloudy, and the dunes and lagoons start to fill.",
+    "The rain eases through the month. Prices are still low and the lagoons near Jericoacoara are filling up.",
+    "The rainy season ends, the lagoons are full and the wind returns. One of the best-value months of the year.",
+    "Brazilian school holidays and the start of the wind season: strong sun returns, kitesurfers arrive and the lagoons are still full.",
+    "Almost no rain and strong wind: the best stretch for kitesurfing and windsurfing begins.",
+    "Dry, sunny and windy. Great for kiting and buggy tours, with better prices outside the holidays.",
+    "One of the driest and sunniest months of the year, with strong wind. A good balance of weather and crowds.",
+    "Sun, wind and few crowds before summer. At the end of the dry season, the lagoons are lower.",
+    "High season begins with New Year's Eve: busy beaches and higher prices. Book early."
+  ]
+},
+es:{
+  title:"Cuándo ir a Ceará",
+  lead:"La mejor época para visitar Ceará, Brasil, mes a mes: lluvia, sol, calor, mar, viento y afluencia de turistas.",
+  langGroup:"Idioma", unitGroup:"Temperatura", monthGroup:"Meses del año",
+  goal:"¿Cuál es tu prioridad?",
+  goals:{praia:"Playa y sol", kite:"Kitesurf", lagoas:"Lagunas llenas", calmo:"Menos gente"},
+  goalNote:"Mejores meses: <strong>{list}</strong>",
+  legRain:"Lluvia", legSun:"Horas de sol", legGoal:"Recomendado para tu prioridad",
+  verdicts:["Seco y soleado","Sol con algunas lluvias","Temporada de lluvias"],
+  rain:"Lluvia en el mes", rainDays:"{n} días de lluvia", sun:"Sol al día", sunVal:"{h} h",
+  temp:"Máxima y mínima", sea:"Temperatura del mar", wind:"Viento", crowd:"Afluencia de turistas",
+  levels:["Flojo","Moderado","Fuerte"], crowds:["Baja","Media","Alta"],
+  about:"Los datos de lluvia, sol y temperatura son las normales climatológicas 1991–2020 del INMET para Fortaleza. Todo el litoral de Ceará sigue el mismo calendario de lluvias, con cantidades distintas de una playa a otra. Son promedios de 30 años: cada año puede llover más o menos.",
+  source:"Fuente: INMET (Instituto Nacional de Meteorología de Brasil), normales climatológicas 1991–2020, estación Fortaleza. La temperatura del mar, el viento y la afluencia son estimaciones.",
+  madeBy:"Una herramienta de <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>",
+  tips:[
+    "Temporada alta de verano y vacaciones: playas llenas, sol fuerte y todavía buen viento para el kite. Reserva el alojamiento con antelación.",
+    "Empiezan las lluvias, por lo general cortas y por la tarde. Cuando el carnaval cae en febrero, los pueblos de la costa se llenan.",
+    "Junto con abril, es el mes más lluvioso. Bueno para encontrar precios bajos, pero ten un plan para los días de lluvia.",
+    "El pico de la temporada de lluvias: el cielo suele estar nublado y las dunas y lagunas empiezan a llenarse.",
+    "Las lluvias disminuyen a lo largo del mes. Los precios siguen bajos y las lagunas cerca de Jericoacoara se van llenando.",
+    "Termina la temporada de lluvias, las lagunas están llenas y vuelve el viento. Uno de los meses con mejor relación calidad-precio.",
+    "Vacaciones escolares en Brasil y comienzo de la temporada de viento: vuelve el sol fuerte, llegan los kitesurfistas y las lagunas siguen llenas.",
+    "Casi no llueve y el viento es fuerte: empieza la mejor época para el kitesurf y el windsurf.",
+    "Seco, soleado y con viento. Ideal para el kite y los paseos en buggy, con mejores precios fuera de las vacaciones.",
+    "Uno de los meses más secos y soleados del año, con viento fuerte. Buen equilibrio entre clima y afluencia.",
+    "Sol, viento y poca gente antes del verano. Al final de la época seca, las lagunas están más bajas.",
+    "La temporada alta empieza con la Nochevieja: playas llenas y precios más altos. Reserva con tiempo."
+  ]
+},
+fr:{
+  title:"Quand partir au Ceará",
+  lead:"La meilleure période pour visiter le Ceará, au Brésil, mois par mois : pluie, soleil, chaleur, mer, vent et affluence.",
+  langGroup:"Langue", unitGroup:"Température", monthGroup:"Mois de l'année",
+  goal:"Quelle est votre priorité ?",
+  goals:{praia:"Plage et soleil", kite:"Kitesurf", lagoas:"Lagunes pleines", calmo:"Moins de monde"},
+  goalNote:"Meilleurs mois : <strong>{list}</strong>",
+  legRain:"Pluie", legSun:"Heures de soleil", legGoal:"Conseillé pour votre priorité",
+  verdicts:["Sec et ensoleillé","Soleil avec quelques averses","Saison des pluies"],
+  rain:"Pluie dans le mois", rainDays:"{n} jours de pluie", sun:"Soleil par jour", sunVal:"{h} h",
+  temp:"Maximale et minimale", sea:"Température de la mer", wind:"Vent", crowd:"Affluence touristique",
+  levels:["Faible","Modéré","Fort"], crowds:["Faible","Moyenne","Forte"],
+  about:"Les chiffres de pluie, d'ensoleillement et de température sont les normales climatiques 1991–2020 de l'INMET pour Fortaleza. Toute la côte du Ceará suit le même calendrier des pluies, avec des quantités différentes d'une plage à l'autre. Ce sont des moyennes sur 30 ans : chaque année peut être plus ou moins pluvieuse.",
+  source:"Source : INMET (Institut national de météorologie du Brésil), normales climatiques 1991–2020, station de Fortaleza. Température de la mer, vent et affluence sont des estimations.",
+  madeBy:"Un outil de <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>",
+  tips:[
+    "Haute saison d'été et vacances scolaires brésiliennes : plages animées, soleil fort et encore du bon vent pour le kite. Réservez tôt.",
+    "Les pluies commencent, en général de courtes averses l'après-midi. Quand le carnaval tombe en février, les villes de la côte sont pleines.",
+    "Avec avril, c'est le mois le plus pluvieux. Intéressant pour les prix bas, mais prévoyez un plan pour les jours de pluie.",
+    "Le pic de la saison des pluies : le ciel est souvent nuageux, et les dunes et lagunes commencent à se remplir.",
+    "Les pluies diminuent au fil du mois. Les prix restent bas et les lagunes près de Jericoacoara se remplissent.",
+    "Fin de la saison des pluies, lagunes pleines et retour du vent. L'un des meilleurs rapports qualité-prix de l'année.",
+    "Vacances scolaires brésiliennes et début de la saison du vent : le soleil revient, les kitesurfeurs arrivent et les lagunes sont encore pleines.",
+    "Il ne pleut presque plus et le vent souffle fort : la meilleure période pour le kitesurf et la planche à voile commence.",
+    "Sec, ensoleillé et venté. Idéal pour le kite et les balades en buggy, avec de meilleurs prix hors vacances.",
+    "L'un des mois les plus secs et ensoleillés de l'année, avec un vent fort. Bon équilibre entre météo et affluence.",
+    "Soleil, vent et peu de monde avant l'été. En fin de saison sèche, les lagunes sont plus basses.",
+    "La haute saison commence avec le réveillon du Nouvel An : plages bondées et prix plus élevés. Réservez tôt."
+  ]
+},
+it:{
+  title:"Quando andare in Ceará",
+  lead:"Il periodo migliore per visitare il Ceará, in Brasile, mese per mese: pioggia, sole, caldo, mare, vento e affollamento.",
+  langGroup:"Lingua", unitGroup:"Temperatura", monthGroup:"Mesi dell'anno",
+  goal:"Qual è la tua priorità?",
+  goals:{praia:"Spiaggia e sole", kite:"Kitesurf", lagoas:"Lagune piene", calmo:"Meno gente"},
+  goalNote:"Mesi migliori: <strong>{list}</strong>",
+  legRain:"Pioggia", legSun:"Ore di sole", legGoal:"Consigliato per la tua priorità",
+  verdicts:["Secco e soleggiato","Sole con qualche pioggia","Stagione delle piogge"],
+  rain:"Pioggia nel mese", rainDays:"{n} giorni di pioggia", sun:"Sole al giorno", sunVal:"{h} h",
+  temp:"Massima e minima", sea:"Temperatura del mare", wind:"Vento", crowd:"Affollamento turistico",
+  levels:["Debole","Moderato","Forte"], crowds:["Basso","Medio","Alto"],
+  about:"I dati di pioggia, sole e temperatura sono le normali climatologiche 1991–2020 dell'INMET per Fortaleza. Tutta la costa del Ceará segue lo stesso calendario delle piogge, con quantità diverse da una spiaggia all'altra. Sono medie di 30 anni: ogni anno può piovere di più o di meno.",
+  source:"Fonte: INMET (Istituto nazionale di meteorologia del Brasile), normali climatologiche 1991–2020, stazione di Fortaleza. Temperatura del mare, vento e affollamento sono stime.",
+  madeBy:"Uno strumento di <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>",
+  tips:[
+    "Alta stagione estiva e vacanze scolastiche brasiliane: spiagge piene, sole forte e ancora buon vento per il kite. Prenota per tempo.",
+    "Iniziano le piogge, di solito brevi e al pomeriggio. Quando il carnevale cade a febbraio, i paesi della costa si riempiono.",
+    "Insieme ad aprile, è il mese più piovoso. Buono per i prezzi bassi, ma tieni pronto un piano per i giorni di pioggia.",
+    "Il picco della stagione delle piogge: il cielo è spesso nuvoloso e le dune e le lagune iniziano a riempirsi.",
+    "Le piogge diminuiscono nel corso del mese. I prezzi sono ancora bassi e le lagune vicino a Jericoacoara si stanno riempiendo.",
+    "Finisce la stagione delle piogge, le lagune sono piene e torna il vento. Uno dei mesi con il miglior rapporto qualità-prezzo.",
+    "Vacanze scolastiche brasiliane e inizio della stagione del vento: torna il sole forte, arrivano i kitesurfisti e le lagune sono ancora piene.",
+    "Non piove quasi mai e il vento è forte: inizia il periodo migliore per kitesurf e windsurf.",
+    "Secco, soleggiato e ventoso. Ottimo per il kite e le escursioni in buggy, con prezzi migliori fuori dalle vacanze.",
+    "Uno dei mesi più secchi e soleggiati dell'anno, con vento forte. Buon equilibrio tra clima e affollamento.",
+    "Sole, vento e poca gente prima dell'estate. Alla fine della stagione secca le lagune sono più basse.",
+    "L'alta stagione inizia con Capodanno: spiagge piene e prezzi più alti. Prenota presto."
+  ]
+}
+};
+
+/* ================= Estado ================= */
+var params = new URLSearchParams(location.search);
+function store(k, v){ try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch(e){ return null; } }
+var qm = parseInt(params.get("mes"), 10);
+var state = {
+  lang: detectLang(),
+  month: qm >= 1 && qm <= 12 ? qm - 1 : new Date(Date.now() - 3 * 3600e3).getUTCMonth(),
+  goal: GOALS[params.get("prioridade")] ? params.get("prioridade") : null,
+  unit: store("hnc-temp") === "F" ? "F" : "C"
+};
+function detectLang(){
+  var q = (params.get("lang") || "").toLowerCase();
+  if (LANGS.indexOf(q) >= 0) return q;
+  var host = "", path = "";
+  try { if (location.ancestorOrigins && location.ancestorOrigins.length) host = new URL(location.ancestorOrigins[0]).hostname; } catch(e){}
+  try { if (document.referrer){ var u = new URL(document.referrer); host = host || u.hostname; path = u.pathname; } } catch(e){}
+  var m = host.match(/^(en|es|fr|it)\./) || path.match(/^\/(en|es|fr|it)(\/|$)/);
+  if (m) return m[1];
+  if (/hojenoceara\.com\.br$/.test(host)) return "pt";
+  var nav = (navigator.language || "pt").slice(0, 2).toLowerCase();
+  return LANGS.indexOf(nav) >= 0 ? nav : "pt";
+}
+function tr(){ return T[state.lang]; }
+function fill(s, o){ return s.replace(/\{(\w+)\}/g, function(_, k){ return o[k] != null ? o[k] : ""; }); }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+function num(v, d){ return new Intl.NumberFormat(LOCALE[state.lang], {minimumFractionDigits:d || 0, maximumFractionDigits:d || 0}).format(v); }
+function temp(c){ return state.unit === "F" ? Math.round(c * 9 / 5 + 32) + "°F" : Math.round(c) + "°C"; }
+function monthName(i, style){
+  var s = new Intl.DateTimeFormat(LOCALE[state.lang], {month: style || "long", timeZone:"UTC"}).format(new Date(Date.UTC(2026, i, 15)));
+  s = s.replace(".", "");
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+function verdict(i){ var r = DATA[i].rain; return r < 40 ? 0 : r <= 160 ? 1 : 2; }
+var VERDICT_STYLE = [{bg:"#F2B705", fg:"#0F2433"}, {bg:"#BFE3E4", fg:"#0F2433"}, {bg:"#1F7FB8", fg:"#FFFFFF"}];
+var $ = function(id){ return document.getElementById(id); };
+
+/* ================= Interface ================= */
+function renderStatic(){
+  var t = tr();
+  document.documentElement.lang = LOCALE[state.lang];
+  document.title = t.title;
+  $("t-title").textContent = t.title;
+  $("t-lead").textContent = t.lead;
+  $("t-goal").textContent = t.goal;
+  $("langs").setAttribute("aria-label", t.langGroup);
+  $("units").setAttribute("aria-label", t.unitGroup);
+  $("goals").setAttribute("aria-label", t.goal);
+  $("langs").innerHTML = LANGS.map(function(l){
+    return '<button type="button" data-lang="' + l + '" aria-pressed="' + (l === state.lang) + '" lang="' + LOCALE[l] + '">' + l.toUpperCase() + '</button>';
+  }).join("");
+  $("units").innerHTML = ["C","F"].map(function(u){
+    return '<button type="button" data-unit="' + u + '" aria-pressed="' + (u === state.unit) + '">°' + u + '</button>';
+  }).join("");
+  $("legend").innerHTML = '<span><i class="bar"></i>' + esc(t.legRain) + '</span><span><i class="dot"></i>' + esc(t.legSun) + '</span>' +
+    (state.goal ? '<span><i class="band"></i>' + esc(t.legGoal) + '</span>' : '');
+  $("about").textContent = t.about;
+  $("foot").innerHTML = '<p>' + t.madeBy + '</p><p>' + esc(t.source) + '</p>';
+}
+
+function renderGoals(){
+  var t = tr();
+  $("goals").innerHTML = GOAL_KEYS.map(function(g){
+    return '<button type="button" data-goal="' + g + '" aria-pressed="' + (g === state.goal) + '">' + esc(t.goals[g]) + '</button>';
+  }).join("");
+  if (state.goal){
+    var ms = GOALS[state.goal].slice().sort(function(a, b){ return a - b; });
+    // meses seguidos viram intervalo (ex.: julho a janeiro)
+    var order = state.goal === "kite" ? [6,7,8,9,10,11,0] : ms;
+    var names = order.map(function(i){ return monthName(i, "short"); });
+    $("goal-note").innerHTML = fill(t.goalNote, {list: esc(names.join(", "))});
+  } else {
+    $("goal-note").innerHTML = "";
+  }
+}
+
+function drawStrip(){
+  var t = tr(), box = $("strip");
+  var W = Math.max(280, Math.round(box.clientWidth || 760)), narrow = W < 520;
+  var H = narrow ? 190 : 210, cw = W / 12;
+  var barTop = 26, barBase = narrow ? 112 : 124, maxBar = barBase - barTop;
+  var sunY = barBase + (narrow ? 26 : 30), labelY = H - 26;
+  var maxRain = 400, svg = "";
+  var good = state.goal ? GOALS[state.goal] : [];
+  DATA.forEach(function(d, i){
+    var x = i * cw, cx = x + cw / 2, sel = i === state.month;
+    var bw = Math.min(cw * 0.5, 26), bh = Math.max(3, d.rain / maxRain * maxBar);
+    var sunPerDay = d.sunh / DAYS[i], r = 3 + (sunPerDay - 4.5) / (10 - 4.5) * (narrow ? 7 : 9);
+    svg += '<g class="col" data-m="' + i + '" role="button" tabindex="0" aria-pressed="' + sel + '" aria-label="' + esc(monthName(i)) + '">' +
+      '<rect x="' + (x + 2).toFixed(1) + '" y="4" width="' + (cw - 4).toFixed(1) + '" height="' + (H - 8) + '" rx="12" fill="' + (sel ? "#E6F1F8" : "transparent") + '"' + (sel ? ' stroke="#0B4F7A" stroke-width="1.5"' : '') + '/>' +
+      '<rect x="' + (cx - bw / 2).toFixed(1) + '" y="' + (barBase - bh).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + bh.toFixed(1) + '" rx="' + Math.min(5, bw / 3).toFixed(1) + '" fill="#1F7FB8" opacity="' + (sel ? 1 : .8) + '"/>' +
+      ((!narrow || sel) ? '<text x="' + cx.toFixed(1) + '" y="' + (barBase - bh - 6).toFixed(1) + '" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="' + (narrow ? 10.5 : 11.5) + '" fill="#567085">' + Math.round(d.rain) + '</text>' : '') +
+      '<line x1="' + (x + 6).toFixed(1) + '" x2="' + (x + cw - 6).toFixed(1) + '" y1="' + barBase + '" y2="' + barBase + '" stroke="#D8E3EB"/>' +
+      '<circle cx="' + cx.toFixed(1) + '" cy="' + sunY + '" r="' + r.toFixed(1) + '" fill="#F2B705"/>' +
+      '<text x="' + cx.toFixed(1) + '" y="' + labelY + '" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="700" font-size="' + (narrow ? 10.5 : 14) + '" fill="' + (sel ? "#0B4F7A" : "#0F2433") + '">' + esc(monthName(i, "short")) + '</text>' +
+      (good.indexOf(i) >= 0 ? '<rect x="' + (cx - cw * 0.3).toFixed(1) + '" y="' + (labelY + 9) + '" width="' + (cw * 0.6).toFixed(1) + '" height="5" rx="2.5" fill="#F2B705"/>' : '') +
+      '</g>';
+  });
+  svg += '<text x="6" y="16" font-family="Atkinson Hyperlegible, sans-serif" font-size="11" fill="#567085">mm</text>';
+  box.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="group" aria-label="' + esc(t.monthGroup) + '">' + svg + '</svg>';
+}
+
+function meter(level){
+  return '<span class="meter" aria-hidden="true">' + [1,2,3].map(function(k){ return '<i' + (k <= level ? ' class="on"' : '') + '></i>'; }).join("") + '</span>';
+}
+
+function renderMonth(){
+  var t = tr(), i = state.month, d = DATA[i], v = verdict(i), st = VERDICT_STYLE[v];
+  var sunPerDay = d.sunh / DAYS[i];
+  $("month").innerHTML =
+    '<div class="m-head"><h2>' + esc(monthName(i)) + '</h2>' +
+      '<span class="verdict" style="background:' + st.bg + ';color:' + st.fg + '">' + esc(t.verdicts[v]) + '</span>' +
+      '<p class="tip">' + esc(t.tips[i]) + '</p></div>' +
+    '<ul class="stats">' +
+      '<li><span class="k">' + esc(t.rain) + '</span><span class="v">' + num(Math.round(d.rain)) + ' mm<small>' + esc(fill(t.rainDays, {n: d.rdays})) + '</small></span></li>' +
+      '<li><span class="k">' + esc(t.sun) + '</span><span class="v">' + esc(fill(t.sunVal, {h: num(sunPerDay, 1)})) + '</span></li>' +
+      '<li><span class="k">' + esc(t.temp) + '</span><span class="v">' + temp(d.max) + ' / ' + temp(d.min) + '</span></li>' +
+      '<li><span class="k">' + esc(t.sea) + '</span><span class="v">≈ ' + temp(d.sea) + '</span></li>' +
+      '<li><span class="k">' + esc(t.wind) + '</span><span class="v">' + esc(t.levels[d.wind - 1]) + meter(d.wind) + '</span></li>' +
+      '<li><span class="k">' + esc(t.crowd) + '</span><span class="v">' + esc(t.crowds[d.crowd - 1]) + meter(d.crowd) + '</span></li>' +
+    '</ul>';
+}
+
+function renderAll(){ renderStatic(); renderGoals(); drawStrip(); renderMonth(); postHeight(); }
+
+/* ================= Eventos ================= */
+$("langs").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if (!b) return;
+  state.lang = b.getAttribute("data-lang"); renderAll();
+});
+$("units").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if (!b) return;
+  state.unit = b.getAttribute("data-unit"); store("hnc-temp", state.unit); renderAll();
+});
+$("goals").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if (!b) return;
+  var g = b.getAttribute("data-goal");
+  state.goal = state.goal === g ? null : g;
+  if (state.goal && GOALS[state.goal].indexOf(state.month) < 0){
+    // leva o visitante ao primeiro mês recomendado a partir de agora
+    var now = new Date(Date.now() - 3 * 3600e3).getUTCMonth();
+    for (var k = 0; k < 12; k++){ var m = (now + k) % 12; if (GOALS[state.goal].indexOf(m) >= 0){ state.month = m; break; } }
+  }
+  renderAll();
+});
+function pickMonth(e){
+  var g = e.target.closest(".col"); if (!g) return;
+  state.month = +g.getAttribute("data-m"); drawStrip(); renderMonth(); postHeight();
+}
+$("strip").addEventListener("click", pickMonth);
+$("strip").addEventListener("keydown", function(e){
+  if (e.key === "Enter" || e.key === " "){ e.preventDefault(); pickMonth(e); }
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft"){
+    state.month = (state.month + (e.key === "ArrowRight" ? 1 : 11)) % 12; drawStrip(); renderMonth();
+    var c = document.querySelector('.col[data-m="' + state.month + '"]'); if (c) c.focus();
+  }
+});
+
+var lastH = 0;
+function postHeight(){
+  var h = Math.ceil(document.documentElement.scrollHeight);
+  if (h !== lastH && window.parent !== window){ lastH = h; window.parent.postMessage({hncTool:"quando-ir", height:h}, "*"); }
+}
+var lastW = 0;
+if (window.ResizeObserver){
+  new ResizeObserver(function(){
+    var w = document.body.clientWidth;
+    if (w !== lastW){ lastW = w; drawStrip(); }
+    postHeight();
+  }).observe(document.body);
+}
+document.fonts && document.fonts.ready.then(drawStrip);
+
+renderAll();
+})();
+</script>
+</body>
+</html>
