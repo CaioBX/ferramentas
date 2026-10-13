@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dicionário Cearês</title>
+<meta name="description" content="Dicionário Cearês: as gírias, comidas e frases que você vai ouvir no Ceará, com áudio, significado e exemplo. Uma ferramenta do Hoje no Ceará.">
+<meta name="googlebot" content="noindex, indexifembedded">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F2433;
+    --muted:#567085;
+    --paper:#FFFFFF;
+    --mist:#F0F5F9;
+    --line:#D8E3EB;
+    --ocean:#0B4F7A;
+    --night:#0E2A44;
+    --sea:#1F7FB8;
+    --sun:#F2B705;
+    --radius-lg:22px;
+    --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink)}
+  body{font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .tool{max-width:820px;margin:0 auto;padding:20px 16px 18px}
+  button,input{font:inherit;color:inherit}
+  :focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+
+  .top{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+  .top h1{font-family:var(--display);font-weight:700;font-size:clamp(1.65rem,4.6vw,2.35rem);line-height:1.05;letter-spacing:-.02em;margin:0 0 6px;font-variation-settings:"opsz" 96}
+  .lead{margin:0;color:var(--muted);max-width:54ch}
+  .seg{display:flex;background:var(--mist);border-radius:999px;padding:3px;gap:2px}
+  .seg button{border:0;background:none;padding:6px 10px;border-radius:999px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--paper);color:var(--ocean);box-shadow:0 1px 2px rgba(15,36,51,.12)}
+
+  /* Palavra do dia */
+  .hero{margin-top:18px;background:var(--night);color:#fff;border-radius:var(--radius-lg);padding:22px 24px 20px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-70px;top:-70px;width:230px;height:230px;border-radius:50%;border:22px solid var(--sun);opacity:.9}
+  .hero .label{margin:0;font-size:.88rem;color:#BFD6E6;position:relative}
+  .hero .word{font-family:var(--display);font-weight:800;font-size:clamp(2.6rem,11vw,4.6rem);line-height:.95;letter-spacing:-.035em;margin:8px 0 12px;position:relative;font-variation-settings:"opsz" 96;overflow-wrap:anywhere}
+  .hero .word span{background:linear-gradient(transparent 84%, var(--sun) 84%, var(--sun) 93%, transparent 93%)}
+  .hero .meaning{font-size:1.12rem;line-height:1.45;margin:0;max-width:52ch;position:relative}
+  .hero .ex{margin:12px 0 0;color:#DCEAF4;position:relative;max-width:56ch}
+  .hero .ex q{font-style:italic;quotes:"“" "”"}
+  .hero .ex .tr{display:block;color:#9FBCD1;font-size:.92rem;margin-top:2px}
+  .hero .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;position:relative}
+  .btn{display:inline-flex;align-items:center;gap:7px;border:0;border-radius:12px;padding:9px 14px;font-weight:700;font-size:.92rem;cursor:pointer;text-decoration:none;line-height:1.2}
+  .btn svg{width:17px;height:17px;flex:0 0 auto}
+  .btn.sun{background:var(--sun);color:var(--ink)}
+  .btn.ghost{background:rgba(255,255,255,.1);color:#fff}
+  .btn.wa{background:#1FA855;color:#fff}
+
+  /* Busca e filtros */
+  .finder{margin-top:22px;display:grid;gap:10px}
+  .search{position:relative}
+  .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+  .search input{width:100%;border:1.5px solid var(--line);border-radius:14px;padding:12px 14px 12px 42px;font-size:1.02rem;background:var(--paper)}
+  .search input:focus{border-color:var(--ocean);outline:none;box-shadow:0 0 0 3px rgba(31,127,184,.18)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .chips button{border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 13px;font-size:.92rem;cursor:pointer;line-height:1.25}
+  .chips button[aria-pressed="true"]{background:var(--ocean);border-color:var(--ocean);color:#fff}
+  .count{margin-left:auto;color:var(--muted);font-size:.86rem}
+
+  /* Verbetes */
+  .entries{list-style:none;margin:12px 0 0;padding:0;border-top:1.5px solid var(--ink)}
+  .entry{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 14px;padding:14px 2px;border-bottom:1px solid var(--line)}
+  .entry h3{font-family:var(--display);font-weight:700;font-size:1.32rem;line-height:1.15;margin:0;letter-spacing:-.01em}
+  .entry .cat{font-size:.78rem;color:var(--muted);margin-left:8px;font-family:var(--body);font-weight:400;letter-spacing:0}
+  .entry .m{grid-column:1 / -1;margin:2px 0 0;max-width:64ch}
+  .entry .ex{grid-column:1 / -1;margin:4px 0 0;color:var(--muted);font-size:.95rem;max-width:64ch}
+  .entry .ex q{font-style:italic;color:var(--ink);quotes:"“" "”"}
+  .entry .ex .tr{display:block;font-size:.88rem}
+  .play{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:var(--paper);display:grid;place-items:center;cursor:pointer;color:var(--ocean);align-self:start}
+  .play svg{width:18px;height:18px}
+  .play.on{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+  .none{color:var(--muted);padding:16px 2px;margin:0}
+
+  .note{margin-top:16px;background:var(--mist);border-radius:var(--radius-lg);padding:14px 18px;font-size:.92rem;color:var(--muted)}
+  .note p{margin:0}
+  footer{margin-top:16px;color:var(--muted);font-size:.8rem;line-height:1.5}
+  footer p{margin:0 0 4px}
+  footer .brand{color:var(--ink);font-weight:700}
+  .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:8px 16px;font-size:.9rem;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast.show{opacity:1}
+  @media (prefers-reduced-motion: reduce){ .toast{transition:none} }
+</style>
+</head>
+<body>
+<main class="tool">
+  <header class="top">
+    <div>
+      <h1 id="t-title"></h1>
+      <p class="lead" id="t-lead"></p>
+    </div>
+    <div class="seg" role="group" id="langs"></div>
+  </header>
+
+  <section class="hero" id="hero" aria-live="polite"></section>
+
+  <div class="finder">
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input type="search" id="q" autocomplete="off">
+    </div>
+    <div class="chips" role="group" id="cats"></div>
+  </div>
+
+  <ul class="entries" id="entries" aria-live="polite"></ul>
+
+  <div class="note"><p id="note"></p></div>
+  <footer id="foot"></footer>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= Configuração ================= */
+var CONFIG = {
+  // Link da matéria do portal onde o dicionário está incorporado (versão em português). Vai nas mensagens compartilhadas.
+  shareURL: "https://hojenoceara.com.br"
+};
+
+/* ================= Verbetes =================
+   cat: giria | comida | frase
+   m: significado em cada idioma; ex: exemplo em português; ext: tradução do exemplo */
+var WORDS = [
+  {id:"arretado", w:"Arretado", cat:"giria",
+   m:{pt:"Muito bom, excelente. Dependendo do tom, também pode significar irritado.", en:"Really great, awesome. Depending on the tone, it can also mean annoyed.", es:"Muy bueno, excelente. Según el tono, también puede significar enfadado.", fr:"Super, génial. Selon le ton, ça peut aussi vouloir dire énervé.", it:"Ottimo, fantastico. A seconda del tono, può anche voler dire arrabbiato."},
+   ex:"Esse baião de dois tá arretado de bom!", ext:{en:"This baião de dois is seriously good!", es:"¡Este baião de dois está buenísimo!", fr:"Ce baião de dois est vraiment génial !", it:"Questo baião de dois è buonissimo!"}},
+  {id:"macho", w:"Macho", cat:"giria",
+   m:{pt:"Jeito carinhoso de chamar alguém, como “cara” ou “amigo”. Vale até para mulheres.", en:"A friendly way to address someone, like “mate” or “dude”. It's even used with women.", es:"Forma cariñosa de llamar a alguien, como “tío” o “amigo”. Se usa incluso con mujeres.", fr:"Façon amicale d'interpeller quelqu'un, comme « mec » ou « mon pote ». On le dit même aux femmes.", it:"Modo affettuoso di chiamare qualcuno, come “amico” o “bello”. Si usa anche con le donne."},
+   ex:"Macho, bora pra praia?", ext:{en:"Hey mate, shall we go to the beach?", es:"Tío, ¿vamos a la playa?", fr:"Mec, on va à la plage ?", it:"Amico, andiamo in spiaggia?"}},
+  {id:"massa", w:"Massa", cat:"giria",
+   m:{pt:"Legal, muito bom.", en:"Cool, great.", es:"Genial, muy bueno.", fr:"Cool, trop bien.", it:"Figo, bellissimo."},
+   ex:"O passeio de buggy foi massa demais!", ext:{en:"The buggy ride was so cool!", es:"¡El paseo en buggy fue genial!", fr:"La balade en buggy était trop bien !", it:"Il giro in buggy è stato fighissimo!"}},
+  {id:"avalie", w:"Avalie", cat:"giria",
+   m:{pt:"“Imagine só!”. Serve para dar ênfase.", en:"“Just imagine!” Used for emphasis.", es:"“¡Imagínate!”. Se usa para dar énfasis.", fr:"« Imagine un peu ! ». Sert à insister.", it:"“Immagina un po'!”. Si usa per dare enfasi."},
+   ex:"Avalie o calor que tá fazendo hoje!", ext:{en:"Just imagine how hot it is today!", es:"¡Imagínate el calor que hace hoy!", fr:"Imagine un peu la chaleur qu'il fait aujourd'hui !", it:"Immagina il caldo che fa oggi!"}},
+  {id:"mah", w:"Mah", cat:"giria",
+   m:{pt:"Interjeição bem de Fortaleza, para espanto ou indignação.", en:"A very Fortaleza interjection for surprise or indignation.", es:"Interjección muy de Fortaleza, de sorpresa o indignación.", fr:"Interjection typique de Fortaleza, pour la surprise ou l'indignation.", it:"Interiezione tipica di Fortaleza, per stupore o indignazione."},
+   ex:"Mah, tu ainda não foi pra Jeri?", ext:{en:"What?! You still haven't been to Jeri?", es:"¿Qué? ¿Todavía no fuiste a Jeri?", fr:"Quoi ?! Tu n'es toujours pas allé à Jeri ?", it:"Ma dai, non sei ancora stato a Jeri?"}},
+  {id:"oxe", w:"Oxe", cat:"giria",
+   m:{pt:"Espanto ou estranhamento, como “ué, como assim?”.", en:"Surprise or puzzlement, like “huh?” or “wait, what?”.", es:"Sorpresa o extrañeza, como “¿eh?” o “¿cómo?”.", fr:"Surprise ou étonnement, comme « hein ? » ou « comment ça ? ».", it:"Stupore o perplessità, come “eh?” o “come sarebbe?”."},
+   ex:"Oxe, já acabou o caranguejo?", ext:{en:"Huh? The crab's already gone?", es:"¿Eh? ¿Ya se acabó el cangrejo?", fr:"Hein ? Il n'y a déjà plus de crabe ?", it:"Eh? È già finito il granchio?"}},
+  {id:"abestado", w:"Abestado", cat:"giria",
+   m:{pt:"Bobo, tolo, abobalhado.", en:"Silly, foolish, a bit dim.", es:"Bobo, tonto.", fr:"Bête, niais.", it:"Sciocco, tontolone."},
+   ex:"Deixe de ser abestado, macho!", ext:{en:"Stop being silly, mate!", es:"¡Deja de ser bobo, tío!", fr:"Arrête de faire l'idiot, mec !", it:"Smettila di fare lo sciocco, amico!"}},
+  {id:"pirangueiro", w:"Pirangueiro", cat:"giria",
+   m:{pt:"Pão-duro, mão de vaca, quem não gosta de gastar.", en:"Stingy, tight-fisted, someone who hates spending money.", es:"Tacaño, agarrado, que no le gusta gastar.", fr:"Radin, pingre, qui déteste dépenser.", it:"Tirchio, spilorcio, chi non vuole spendere."},
+   ex:"Ele é pirangueiro, nunca divide a conta.", ext:{en:"He's so stingy, he never splits the bill.", es:"Es un tacaño, nunca paga su parte.", fr:"Il est radin, il ne partage jamais l'addition.", it:"È un tirchio, non divide mai il conto."}},
+  {id:"mangar", w:"Mangar", cat:"giria",
+   m:{pt:"Zombar, tirar sarro de alguém.", en:"To tease or make fun of someone.", es:"Burlarse, tomarle el pelo a alguien.", fr:"Se moquer de quelqu'un, le charrier.", it:"Prendere in giro qualcuno."},
+   ex:"Pare de mangar de mim!", ext:{en:"Stop making fun of me!", es:"¡Deja de burlarte de mí!", fr:"Arrête de te moquer de moi !", it:"Smettila di prendermi in giro!"}},
+  {id:"aperreado", w:"Aperreado", cat:"giria",
+   m:{pt:"Preocupado, aflito, apressado.", en:"Worried, stressed, in a rush.", es:"Preocupado, agobiado, con prisa.", fr:"Inquiet, stressé, pressé.", it:"Preoccupato, in ansia, di fretta."},
+   ex:"Tô aperreado com o horário do voo.", ext:{en:"I'm stressed about my flight time.", es:"Estoy agobiado con la hora del vuelo.", fr:"Je suis stressé par l'heure de mon vol.", it:"Sono in ansia per l'orario del volo."}},
+  {id:"munganga", w:"Munganga", cat:"giria",
+   m:{pt:"Careta, frescura, exagero para chamar atenção.", en:"Pulling faces, fussing, putting on a show to get attention.", es:"Muecas, remilgos, exageración para llamar la atención.", fr:"Grimaces, chichis, simagrées pour se faire remarquer.", it:"Smorfie, capricci, esagerazioni per farsi notare."},
+   ex:"Deixe de munganga e prove o caranguejo!", ext:{en:"Stop fussing and try the crab!", es:"¡Deja de remilgos y prueba el cangrejo!", fr:"Arrête tes chichis et goûte le crabe !", it:"Smettila con i capricci e assaggia il granchio!"}},
+  {id:"boneco", w:"Botar boneco", cat:"giria",
+   m:{pt:"Fazer escândalo, armar confusão.", en:"To make a scene, kick up a fuss.", es:"Montar un escándalo, armar lío.", fr:"Faire une scène, faire un scandale.", it:"Fare una scenata, fare casino."},
+   ex:"Ele botou boneco porque a pizza atrasou.", ext:{en:"He made a scene because the pizza was late.", es:"Montó un escándalo porque la pizza llegó tarde.", fr:"Il a fait une scène parce que la pizza était en retard.", it:"Ha fatto una scenata perché la pizza era in ritardo."}},
+  {id:"brocado", w:"Brocado", cat:"giria",
+   m:{pt:"Com muita fome.", en:"Starving, really hungry.", es:"Muerto de hambre.", fr:"Affamé, mort de faim.", it:"Affamato, morto di fame."},
+   ex:"Tô brocado, bora comer uma tapioca!", ext:{en:"I'm starving, let's grab a tapioca!", es:"Estoy muerto de hambre, ¡vamos a comer una tapioca!", fr:"Je meurs de faim, allons manger une tapioca !", it:"Sto morendo di fame, andiamo a mangiare una tapioca!"}},
+  {id:"ruma", w:"Ruma", cat:"giria",
+   m:{pt:"Monte, grande quantidade.", en:"A pile, a whole lot.", es:"Montón, gran cantidad.", fr:"Un tas, une foule.", it:"Un mucchio, un sacco."},
+   ex:"Tinha uma ruma de gente na Beira-Mar.", ext:{en:"There were loads of people on the Beira-Mar.", es:"Había un montón de gente en la Beira-Mar.", fr:"Il y avait un monde fou sur la Beira-Mar.", it:"C'era un sacco di gente sulla Beira-Mar."}},
+  {id:"rabiola", w:"Só o pó da rabiola", cat:"giria",
+   m:{pt:"Exausto, acabado. Rabiola é a rabeira da pipa.", en:"Completely worn out. A rabiola is the tail of a kite.", es:"Agotado, hecho polvo. La rabiola es la cola de la cometa.", fr:"Épuisé, lessivé. La rabiola, c'est la queue du cerf-volant.", it:"Distrutto, sfinito. La rabiola è la coda dell'aquilone."},
+   ex:"Depois da trilha, fiquei só o pó da rabiola.", ext:{en:"After the hike, I was completely worn out.", es:"Después del sendero, quedé hecho polvo.", fr:"Après la randonnée, j'étais lessivé.", it:"Dopo il sentiero ero distrutto."}},
+  {id:"rebolar", w:"Rebolar no mato", cat:"giria",
+   m:{pt:"Jogar fora, descartar.", en:"To throw away, get rid of.", es:"Tirar, deshacerse de algo.", fr:"Jeter, se débarrasser de quelque chose.", it:"Buttare via, sbarazzarsi di qualcosa."},
+   ex:"Essa chinela velha? Pode rebolar no mato.", ext:{en:"These old flip-flops? You can throw them away.", es:"¿Estas chanclas viejas? Puedes tirarlas.", fr:"Ces vieilles tongs ? Tu peux les jeter.", it:"Queste ciabatte vecchie? Puoi buttarle via."}},
+
+  {id:"baiao", w:"Baião de dois", cat:"comida",
+   m:{pt:"Arroz e feijão cozidos juntos, com queijo coalho. Prato símbolo do Ceará.", en:"Rice and beans cooked together with queijo coalho cheese. Ceará's signature dish.", es:"Arroz y frijoles cocidos juntos, con queso coalho. El plato emblema de Ceará.", fr:"Riz et haricots cuits ensemble, avec du fromage coalho. Le plat emblématique du Ceará.", it:"Riso e fagioli cotti insieme, con formaggio coalho. Il piatto simbolo del Ceará."}},
+  {id:"pacoca", w:"Paçoca", cat:"comida",
+   m:{pt:"No Ceará é salgada: carne de sol pilada com farinha de mandioca. Nada a ver com o doce de amendoim.", en:"In Ceará it's savoury: sun-dried beef pounded with cassava flour, nothing like the peanut sweet of the same name.", es:"En Ceará es salada: carne de sol machacada con harina de mandioca, nada que ver con el dulce de cacahuete.", fr:"Au Ceará, elle est salée : viande séchée pilée avec de la farine de manioc, rien à voir avec la douceur à la cacahuète du même nom.", it:"In Ceará è salata: carne essiccata pestata con farina di manioca, niente a che vedere con il dolce di arachidi."}},
+  {id:"caranguejo", w:"Quinta do caranguejo", cat:"comida",
+   m:{pt:"Tradição de Fortaleza: comer caranguejo na quinta-feira, principalmente nas barracas da Praia do Futuro.", en:"A Fortaleza tradition: eating crab on Thursdays, especially at the Praia do Futuro beach kiosks.", es:"Tradición de Fortaleza: comer cangrejo los jueves, sobre todo en los chiringuitos de la Praia do Futuro.", fr:"Tradition de Fortaleza : manger du crabe le jeudi, surtout dans les paillotes de la Praia do Futuro.", it:"Tradizione di Fortaleza: mangiare granchio il giovedì, soprattutto nei chioschi della Praia do Futuro."}},
+  {id:"cajuina", w:"Cajuína", cat:"comida",
+   m:{pt:"Suco de caju clarificado e cozido, sem álcool, de cor dourada.", en:"Clarified, cooked cashew-fruit juice: non-alcoholic and golden in colour.", es:"Zumo de cajú clarificado y cocido, sin alcohol y de color dorado.", fr:"Jus de pomme de cajou clarifié et cuit, sans alcool, à la couleur dorée.", it:"Succo del frutto dell'anacardio chiarificato e cotto, analcolico e di colore dorato."}},
+  {id:"carnedesol", w:"Carne de sol", cat:"comida",
+   m:{pt:"Carne levemente salgada e seca por pouco tempo, servida com macaxeira e manteiga da terra.", en:"Lightly salted, briefly dried beef, served with cassava and manteiga da terra (clarified butter).", es:"Carne ligeramente salada y secada poco tiempo, servida con yuca y manteiga da terra (mantequilla clarificada).", fr:"Viande légèrement salée et séchée, servie avec du manioc et de la manteiga da terra (beurre clarifié).", it:"Carne leggermente salata ed essiccata, servita con manioca e manteiga da terra (burro chiarificato)."}},
+  {id:"coalho", w:"Queijo coalho", cat:"comida",
+   m:{pt:"Queijo firme que vai na brasa sem derreter. Na praia, é vendido assado no espeto.", en:"A firm cheese that can be grilled without melting. On the beach, it's sold grilled on a skewer.", es:"Queso firme que se asa sin derretirse. En la playa se vende asado en brocheta.", fr:"Fromage ferme qui se grille sans fondre. Sur la plage, on le vend grillé en brochette.", it:"Formaggio compatto che si griglia senza sciogliersi. In spiaggia si vende arrostito allo spiedo."}},
+  {id:"tapioca", w:"Tapioca", cat:"comida",
+   m:{pt:"Disco de goma de mandioca feito na chapa, com recheio doce ou salgado.", en:"A flatbread of cassava starch cooked on a griddle, with sweet or savoury fillings.", es:"Disco de almidón de yuca hecho a la plancha, con relleno dulce o salado.", fr:"Galette de fécule de manioc cuite sur une plaque, garnie de sucré ou de salé.", it:"Disco di amido di manioca cotto sulla piastra, con ripieno dolce o salato."}},
+  {id:"panelada", w:"Panelada", cat:"comida",
+   m:{pt:"Cozido forte de bucho e tripas de boi, tradicional nos mercados do Ceará.", en:"A hearty stew of beef tripe, a tradition at Ceará's markets.", es:"Guiso contundente de mondongo y tripas de res, tradicional en los mercados de Ceará.", fr:"Ragoût copieux de tripes de bœuf, une tradition des marchés du Ceará.", it:"Stufato robusto di trippa di manzo, tradizionale nei mercati del Ceará."}},
+
+  {id:"bomdia", w:"Bom dia!", cat:"frase",
+   m:{pt:"Use até o meio-dia. Depois, “boa tarde” e, à noite, “boa noite”.", en:"Good morning! Use it until noon; then “boa tarde” (afternoon) and “boa noite” (evening).", es:"¡Buenos días! Hasta el mediodía; luego “boa tarde” y, por la noche, “boa noite”.", fr:"Bonjour ! Jusqu'à midi ; ensuite « boa tarde », puis « boa noite » le soir.", it:"Buongiorno! Fino a mezzogiorno; poi “boa tarde” e, la sera, “boa noite”."}},
+  {id:"obrigado", w:"Obrigado / Obrigada", cat:"frase", say:"Obrigado. Obrigada.",
+   m:{pt:"Homem diz “obrigado”; mulher diz “obrigada”.", en:"Thank you. Men say “obrigado”, women say “obrigada”.", es:"Gracias. Los hombres dicen “obrigado” y las mujeres, “obrigada”.", fr:"Merci. Les hommes disent « obrigado », les femmes « obrigada ».", it:"Grazie. Gli uomini dicono “obrigado”, le donne “obrigada”."}},
+  {id:"quanto", w:"Quanto custa?", cat:"frase",
+   m:{pt:"Para perguntar o preço.", en:"How much is it?", es:"¿Cuánto cuesta?", fr:"Combien ça coûte ?", it:"Quanto costa?"}},
+  {id:"cartao", w:"Aceita cartão?", cat:"frase",
+   m:{pt:"Quase tudo aceita cartão ou Pix, mas barracas pequenas às vezes só aceitam dinheiro.", en:"Do you take cards? Most places take cards or Pix (Brazil's instant payment), but small stalls sometimes want cash.", es:"¿Acepta tarjeta? Casi todo acepta tarjeta o Pix (el pago instantáneo brasileño), pero algunos puestos pequeños solo aceptan efectivo.", fr:"Vous acceptez la carte ? Presque partout on accepte la carte ou le Pix (paiement instantané brésilien), mais certains petits stands veulent du liquide.", it:"Accetta la carta? Quasi ovunque si paga con carta o Pix (il pagamento istantaneo brasiliano), ma alcuni chioschi vogliono contanti."}},
+  {id:"conta", w:"A conta, por favor.", cat:"frase",
+   m:{pt:"Nos restaurantes, os 10% do garçom costumam vir na conta e são opcionais.", en:"The bill, please. A 10% service charge is usually included, and it's optional.", es:"La cuenta, por favor. Suele incluir un 10% de servicio, que es opcional.", fr:"L'addition, s'il vous plaît. Un service de 10 % est souvent inclus, et il reste facultatif.", it:"Il conto, per favore. Di solito include un 10% di servizio, che è facoltativo."}},
+  {id:"coco", w:"Uma água de coco, por favor.", cat:"frase",
+   m:{pt:"Na praia, vem direto no coco, com canudo.", en:"A coconut water, please. On the beach it's served straight from the coconut with a straw.", es:"Un agua de coco, por favor. En la playa se sirve en el mismo coco, con pajita.", fr:"Une eau de coco, s'il vous plaît. Sur la plage, elle est servie directement dans la noix, avec une paille.", it:"Un'acqua di cocco, per favore. In spiaggia te la servono direttamente nel cocco, con la cannuccia."}},
+  {id:"onde", w:"Onde fica a praia?", cat:"frase",
+   m:{pt:"Para pedir direção.", en:"Where is the beach?", es:"¿Dónde está la playa?", fr:"Où est la plage ?", it:"Dov'è la spiaggia?"}},
+  {id:"olhando", w:"Tô só olhando.", cat:"frase",
+   m:{pt:"Forma falada de “estou só olhando”. Útil com os vendedores da praia e da feirinha.", en:"I'm just looking. Handy with beach vendors and at the craft fair.", es:"Solo estoy mirando. Útil con los vendedores de la playa y en la feria.", fr:"Je regarde seulement. Pratique avec les vendeurs de plage et au marché d'artisanat.", it:"Sto solo guardando. Utile con i venditori in spiaggia e alla fiera dell'artigianato."}}
+];
+var CATS = ["all","giria","comida","frase"];
+
+/* ================= Textos da interface ================= */
+var LANGS = ["pt","en","es","fr","it"];
+var LOCALE = {pt:"pt-BR", en:"en-GB", es:"es-ES", fr:"fr-FR", it:"it-IT"};
+var T = {
+pt:{
+  title:"Dicionário Cearês",
+  lead:"As palavras e expressões que você vai ouvir no Ceará, com áudio, significado e exemplo de uso.",
+  langGroup:"Idioma", wordOfDay:"Palavra do dia", picked:"Escolhida para você",
+  listen:"Ouvir", listenEx:"Ouvir o exemplo", another:"Outra palavra", wa:"Enviar no WhatsApp", copy:"Copiar", copied:"Copiado!",
+  search:"Buscar palavra ou significado", cats:{all:"Todas", giria:"Gírias e expressões", comida:"Comida", frase:"Frases úteis"},
+  catShort:{giria:"gíria", comida:"comida", frase:"frase útil"},
+  count:"{n} verbetes", count1:"1 verbete", none:"Nenhuma palavra encontrada para “{q}”.",
+  share:"“{w}”, no cearês: {m} Veja o Dicionário Cearês do Hoje no Ceará: {url}",
+  note:"O áudio usa a voz do seu celular ou computador, então a pronúncia é aproximada. O sotaque cearense de verdade, só indo lá.",
+  noAudio:"Seu navegador não tem voz em português para o áudio.",
+  madeBy:"Uma ferramenta do <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>"
+},
+en:{
+  title:"The Cearês Dictionary",
+  lead:"The words and expressions you'll hear in Ceará, Brazil, with audio, meaning and an example.",
+  langGroup:"Language", wordOfDay:"Word of the day", picked:"Picked for you",
+  listen:"Listen", listenEx:"Listen to the example", another:"Another word", wa:"Send on WhatsApp", copy:"Copy", copied:"Copied!",
+  search:"Search a word or meaning", cats:{all:"All", giria:"Slang and sayings", comida:"Food", frase:"Useful phrases"},
+  catShort:{giria:"slang", comida:"food", frase:"useful phrase"},
+  count:"{n} entries", count1:"1 entry", none:"No words found for “{q}”.",
+  share:"“{w}” in Ceará slang: {m} See the Cearês Dictionary by Hoje no Ceará: {url}",
+  note:"The audio uses your phone or computer's voice, so the pronunciation is approximate. For the real Ceará accent, you'll have to visit.",
+  noAudio:"Your browser has no Portuguese voice for the audio.",
+  madeBy:"A tool by <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>"
+},
+es:{
+  title:"Diccionario Cearês",
+  lead:"Las palabras y expresiones que vas a oír en Ceará, Brasil, con audio, significado y ejemplo de uso.",
+  langGroup:"Idioma", wordOfDay:"Palabra del día", picked:"Elegida para ti",
+  listen:"Escuchar", listenEx:"Escuchar el ejemplo", another:"Otra palabra", wa:"Enviar por WhatsApp", copy:"Copiar", copied:"¡Copiado!",
+  search:"Buscar palabra o significado", cats:{all:"Todas", giria:"Jerga y expresiones", comida:"Comida", frase:"Frases útiles"},
+  catShort:{giria:"jerga", comida:"comida", frase:"frase útil"},
+  count:"{n} entradas", count1:"1 entrada", none:"No se encontraron palabras para “{q}”.",
+  share:"“{w}”, en la jerga de Ceará: {m} Mira el Diccionario Cearês de Hoje no Ceará: {url}",
+  note:"El audio usa la voz de tu móvil o computadora, así que la pronunciación es aproximada. El verdadero acento cearense, solo yendo allí.",
+  noAudio:"Tu navegador no tiene voz en portugués para el audio.",
+  madeBy:"Una herramienta de <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>"
+},
+fr:{
+  title:"Le dictionnaire Cearês",
+  lead:"Les mots et expressions que vous entendrez au Ceará, au Brésil, avec audio, définition et exemple.",
+  langGroup:"Langue", wordOfDay:"Le mot du jour", picked:"Choisi pour vous",
+  listen:"Écouter", listenEx:"Écouter l'exemple", another:"Un autre mot", wa:"Envoyer sur WhatsApp", copy:"Copier", copied:"Copié !",
+  search:"Chercher un mot ou une définition", cats:{all:"Tous", giria:"Argot et expressions", comida:"Cuisine", frase:"Phrases utiles"},
+  catShort:{giria:"argot", comida:"cuisine", frase:"phrase utile"},
+  count:"{n} entrées", count1:"1 entrée", none:"Aucun mot trouvé pour « {q} ».",
+  share:"« {w} », en argot du Ceará : {m} Découvrez le dictionnaire Cearês de Hoje no Ceará : {url}",
+  note:"L'audio utilise la voix de votre téléphone ou ordinateur : la prononciation est approximative. Pour le vrai accent du Ceará, il faudra y aller.",
+  noAudio:"Votre navigateur n'a pas de voix portugaise pour l'audio.",
+  madeBy:"Un outil de <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>"
+},
+it:{
+  title:"Il dizionario Cearês",
+  lead:"Le parole e le espressioni che sentirai in Ceará, in Brasile, con audio, significato ed esempio d'uso.",
+  langGroup:"Lingua", wordOfDay:"La parola del giorno", picked:"Scelta per te",
+  listen:"Ascolta", listenEx:"Ascolta l'esempio", another:"Un'altra parola", wa:"Invia su WhatsApp", copy:"Copia", copied:"Copiato!",
+  search:"Cerca una parola o un significato", cats:{all:"Tutte", giria:"Gergo ed espressioni", comida:"Cibo", frase:"Frasi utili"},
+  catShort:{giria:"gergo", comida:"cibo", frase:"frase utile"},
+  count:"{n} voci", count1:"1 voce", none:"Nessuna parola trovata per “{q}”.",
+  share:"“{w}”, nel gergo del Ceará: {m} Scopri il dizionario Cearês di Hoje no Ceará: {url}",
+  note:"L'audio usa la voce del tuo telefono o computer, quindi la pronuncia è approssimativa. Per il vero accento del Ceará, bisogna andarci.",
+  noAudio:"Il tuo browser non ha una voce in portoghese per l'audio.",
+  madeBy:"Uno strumento di <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>"
+}
+};
+
+/* ================= Estado ================= */
+var params = new URLSearchParams(location.search);
+var SLANG = WORDS.filter(function(w){ return w.cat === "giria"; });
+var dayIndex = Math.floor((Date.now() - 3 * 3600e3) / 864e5);
+var state = {
+  lang: detectLang(),
+  hero: (WORDS.filter(function(w){ return w.id === params.get("palavra"); })[0] || SLANG[dayIndex % SLANG.length]).id,
+  heroIsDaily: !params.get("palavra"),
+  cat: "all",
+  q: ""
+};
+function detectLang(){
+  var q = (params.get("lang") || "").toLowerCase();
+  if (LANGS.indexOf(q) >= 0) return q;
+  var host = "", path = "";
+  try { if (location.ancestorOrigins && location.ancestorOrigins.length) host = new URL(location.ancestorOrigins[0]).hostname; } catch(e){}
+  try { if (document.referrer){ var u = new URL(document.referrer); host = host || u.hostname; path = u.pathname; } } catch(e){}
+  var m = host.match(/^(en|es|fr|it)\./) || path.match(/^\/(en|es|fr|it)(\/|$)/);
+  if (m) return m[1];
+  if (/hojenoceara\.com\.br$/.test(host)) return "pt";
+  var nav = (navigator.language || "pt").slice(0, 2).toLowerCase();
+  return LANGS.indexOf(nav) >= 0 ? nav : "pt";
+}
+function tr(){ return T[state.lang]; }
+function fill(s, o){ return s.replace(/\{(\w+)\}/g, function(_, k){ return o[k] != null ? o[k] : ""; }); }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+function norm(s){ return String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+function byId(id){ return WORDS.filter(function(w){ return w.id === id; })[0]; }
+var $ = function(id){ return document.getElementById(id); };
+
+/* ================= Áudio (voz do próprio navegador) ================= */
+var synth = window.speechSynthesis, voice = null;
+function pickVoice(){
+  if (!synth) return;
+  var vs = synth.getVoices();
+  voice = vs.filter(function(v){ return /^pt[-_]BR/i.test(v.lang); })[0] || vs.filter(function(v){ return /^pt/i.test(v.lang); })[0] || null;
+}
+if (synth){ pickVoice(); if (synth.addEventListener) synth.addEventListener("voiceschanged", pickVoice); else synth.onvoiceschanged = pickVoice; }
+var playingBtn = null;
+function speak(text, btn){
+  if (!synth || typeof SpeechSynthesisUtterance === "undefined"){ toast(tr().noAudio); return; }
+  synth.cancel();
+  if (playingBtn) playingBtn.classList.remove("on");
+  var u = new SpeechSynthesisUtterance(text);
+  u.lang = "pt-BR"; u.rate = 0.88;
+  if (voice) u.voice = voice;
+  if (btn){ btn.classList.add("on"); playingBtn = btn; }
+  u.onend = u.onerror = function(){ if (btn) btn.classList.remove("on"); if (playingBtn === btn) playingBtn = null; };
+  synth.speak(u);
+}
+var ICON_PLAY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor" stroke="none"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
+var ICON_SHUFFLE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>';
+var ICON_WA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg>';
+var ICON_COPY = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+
+/* ================= Interface ================= */
+function renderStatic(){
+  var t = tr();
+  document.documentElement.lang = LOCALE[state.lang];
+  document.title = t.title;
+  $("t-title").textContent = t.title;
+  $("t-lead").textContent = t.lead;
+  $("langs").setAttribute("aria-label", t.langGroup);
+  $("langs").innerHTML = LANGS.map(function(l){
+    return '<button type="button" data-lang="' + l + '" aria-pressed="' + (l === state.lang) + '" lang="' + LOCALE[l] + '">' + l.toUpperCase() + '</button>';
+  }).join("");
+  $("q").placeholder = t.search;
+  $("q").setAttribute("aria-label", t.search);
+  $("cats").setAttribute("aria-label", t.search);
+  $("note").textContent = t.note;
+  $("foot").innerHTML = '<p>' + t.madeBy + '</p>';
+}
+
+function exampleHTML(w){
+  if (!w.ex) return "";
+  var trn = state.lang !== "pt" && w.ext ? '<span class="tr" lang="' + LOCALE[state.lang] + '">' + esc(w.ext[state.lang]) + '</span>' : "";
+  return '<q lang="pt-BR">' + esc(w.ex) + '</q>' + trn;
+}
+
+function renderHero(){
+  var t = tr(), w = byId(state.hero);
+  $("hero").innerHTML =
+    '<p class="label">' + esc(state.heroIsDaily ? t.wordOfDay : t.picked) + '</p>' +
+    '<p class="word" lang="pt-BR"><span>' + esc(w.w) + '</span></p>' +
+    '<p class="meaning">' + esc(w.m[state.lang]) + '</p>' +
+    (w.ex ? '<p class="ex">' + exampleHTML(w) + '</p>' : '') +
+    '<div class="acts">' +
+      '<button type="button" class="btn sun" data-say="word">' + ICON_PLAY + esc(t.listen) + '</button>' +
+      (w.ex ? '<button type="button" class="btn ghost" data-say="ex">' + ICON_PLAY + esc(t.listenEx) + '</button>' : '') +
+      '<button type="button" class="btn ghost" data-act="another">' + ICON_SHUFFLE + esc(t.another) + '</button>' +
+      '<a class="btn wa" href="' + esc(waLink(w)) + '" target="_blank" rel="noopener">' + ICON_WA + esc(t.wa) + '</a>' +
+      '<button type="button" class="btn ghost" data-act="copy">' + ICON_COPY + esc(t.copy) + '</button>' +
+    '</div>';
+}
+
+function shareText(w){
+  return fill(tr().share, {w: w.w, m: w.m[state.lang], url: shareURL()});
+}
+function shareURL(){
+  var u = CONFIG.shareURL;
+  if (state.lang !== "pt"){ try { var x = new URL(u); x.hostname = state.lang + ".hojenoceara.com.br"; u = x.toString(); } catch(e){} }
+  return u;
+}
+function waLink(w){ return "https://wa.me/?text=" + encodeURIComponent(shareText(w)); }
+
+function filtered(){
+  var q = norm(state.q.trim());
+  return WORDS.filter(function(w){
+    if (state.cat !== "all" && w.cat !== state.cat) return false;
+    if (!q) return true;
+    return norm(w.w).indexOf(q) >= 0 || norm(w.m[state.lang]).indexOf(q) >= 0 || norm(w.m.pt).indexOf(q) >= 0 || (w.ex && norm(w.ex).indexOf(q) >= 0);
+  });
+}
+
+function renderList(){
+  var t = tr(), list = filtered();
+  $("cats").innerHTML = CATS.map(function(c){
+    return '<button type="button" data-cat="' + c + '" aria-pressed="' + (c === state.cat) + '">' + esc(t.cats[c]) + '</button>';
+  }).join("") + '<span class="count">' + esc(list.length === 1 ? t.count1 : fill(t.count, {n: list.length})) + '</span>';
+  if (!list.length){
+    $("entries").innerHTML = '<li class="none">' + esc(fill(t.none, {q: state.q.trim()})) + '</li>';
+    return;
+  }
+  $("entries").innerHTML = list.map(function(w){
+    return '<li class="entry">' +
+      '<h3 lang="pt-BR">' + esc(w.w) + '<span class="cat">' + esc(t.catShort[w.cat]) + '</span></h3>' +
+      '<button type="button" class="play" data-id="' + w.id + '" aria-label="' + esc(t.listen + ": " + w.w) + '">' + ICON_PLAY + '</button>' +
+      '<p class="m">' + esc(w.m[state.lang]) + '</p>' +
+      (w.ex ? '<p class="ex">' + exampleHTML(w) + '</p>' : '') +
+      '</li>';
+  }).join("");
+}
+
+function renderAll(){ renderStatic(); renderHero(); renderList(); postHeight(); }
+
+/* ================= Ações ================= */
+var toastTimer = null;
+function toast(msg){
+  var el = $("toast"); el.textContent = msg; el.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(function(){ el.classList.remove("show"); }, 1800);
+}
+function copyText(text){
+  function fallback(){
+    var ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); toast(tr().copied); } catch(e){}
+    document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ toast(tr().copied); }, fallback);
+  } else fallback();
+}
+
+$("hero").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if (!b) return;
+  var w = byId(state.hero);
+  if (b.getAttribute("data-say") === "word") speak(w.say || w.w, b);
+  else if (b.getAttribute("data-say") === "ex") speak(w.ex, b);
+  else if (b.getAttribute("data-act") === "another"){
+    var pool = SLANG.filter(function(x){ return x.id !== state.hero; });
+    state.hero = pool[Math.floor(Math.random() * pool.length)].id; state.heroIsDaily = false;
+    renderHero(); postHeight();
+  }
+  else if (b.getAttribute("data-act") === "copy") copyText(shareText(w));
+});
+$("entries").addEventListener("click", function(e){
+  var b = e.target.closest(".play"); if (!b) return;
+  var w = byId(b.getAttribute("data-id"));
+  speak(w.say || w.w, b);
+});
+$("cats").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if (!b) return;
+  state.cat = b.getAttribute("data-cat"); renderList(); postHeight();
+});
+$("q").addEventListener("input", function(e){ state.q = e.target.value; renderList(); postHeight(); });
+$("langs").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if (!b) return;
+  state.lang = b.getAttribute("data-lang"); renderAll();
+});
+
+var lastH = 0;
+function postHeight(){
+  var h = Math.ceil(document.documentElement.scrollHeight);
+  if (h !== lastH && window.parent !== window){ lastH = h; window.parent.postMessage({hncTool:"dicionario-cearense", height:h}, "*"); }
+}
+if (window.ResizeObserver) new ResizeObserver(postHeight).observe(document.body);
+
+renderAll();
+})();
+</script>
+</body>
+</html>
