@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>O que levar para o Ceará</title>
+<meta name="description" content="Checklist de mala para o Ceará: monte sua lista de acordo com o destino, a época e as atividades. Uma ferramenta do Hoje no Ceará.">
+<meta name="googlebot" content="noindex, indexifembedded">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F2433;
+    --muted:#567085;
+    --paper:#FFFFFF;
+    --mist:#F0F5F9;
+    --line:#D8E3EB;
+    --ocean:#0B4F7A;
+    --night:#0E2A44;
+    --sea:#1F7FB8;
+    --sun:#F2B705;
+    --radius-lg:22px;
+    --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink)}
+  body{font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .tool{max-width:820px;margin:0 auto;padding:20px 16px 18px}
+  button,input{font:inherit;color:inherit}
+  :focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+
+  .top{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+  .top h1{font-family:var(--display);font-weight:700;font-size:clamp(1.65rem,4.6vw,2.35rem);line-height:1.05;letter-spacing:-.02em;margin:0 0 6px;font-variation-settings:"opsz" 96}
+  .lead{margin:0;color:var(--muted);max-width:54ch}
+  .seg{display:flex;background:var(--mist);border-radius:999px;padding:3px;gap:2px}
+  .seg button{border:0;background:none;padding:6px 10px;border-radius:999px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--paper);color:var(--ocean);box-shadow:0 1px 2px rgba(15,36,51,.12)}
+
+  /* Perguntas */
+  .setup{margin-top:18px;display:grid;gap:14px}
+  .q-label{font-size:.82rem;color:var(--muted);margin:0 0 6px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chips button{border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 13px;font-size:.92rem;cursor:pointer;line-height:1.25}
+  .chips button[aria-pressed="true"]{background:var(--ocean);border-color:var(--ocean);color:#fff}
+  .months{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .months::-webkit-scrollbar{display:none}
+  .months button{flex:0 0 auto;min-width:46px;border:1.5px solid var(--line);background:var(--paper);border-radius:10px;padding:6px 6px;font-size:.86rem;font-weight:700;cursor:pointer}
+  .months button[aria-pressed="true"]{background:var(--ocean);border-color:var(--ocean);color:#fff}
+  .months button.rainy{border-bottom:3px solid var(--sea)}
+  .row2{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+  .days{max-width:360px}
+  .days{display:flex;align-items:center;gap:12px;border:1.5px solid var(--line);border-radius:14px;padding:6px 14px;min-width:240px}
+  .days input{flex:1;accent-color:var(--ocean);height:26px}
+  .days output{font-family:var(--display);font-weight:700;font-size:1.1rem;min-width:70px;text-align:right}
+
+  /* Etiqueta de progresso */
+  .tag{margin-top:20px;background:var(--night);color:#fff;border-radius:var(--radius-lg);padding:18px 22px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px 20px;align-items:center;position:relative}
+  .tag::before{content:"";position:absolute;left:22px;top:-9px;width:46px;height:18px;border-radius:9px;border:4px solid var(--night);background:var(--paper)}
+  .tag .big{font-family:var(--display);font-weight:800;font-size:clamp(1.6rem,6vw,2.2rem);line-height:1.05;letter-spacing:-.02em;margin:0}
+  .tag .big b{color:var(--sun)}
+  .tag .sub{margin:2px 0 0;color:#BFD6E6;font-size:.92rem}
+  .bar{grid-column:1 / -1;height:10px;border-radius:5px;background:rgba(255,255,255,.12);overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--sun);border-radius:5px;transition:width .3s}
+  .acts{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:8px}
+  .btn{display:inline-flex;align-items:center;gap:7px;border:0;border-radius:12px;padding:8px 13px;font-weight:700;font-size:.9rem;cursor:pointer;text-decoration:none;line-height:1.2}
+  .btn svg{width:17px;height:17px}
+  .btn.wa{background:#1FA855;color:#fff}
+  .btn.ghost{background:rgba(255,255,255,.1);color:#fff}
+
+  /* Lista */
+  .sections{margin-top:6px;columns:2;column-gap:28px}
+  .sec{break-inside:avoid;padding-top:18px}
+  .sec h2{font-family:var(--display);font-weight:700;font-size:1.1rem;margin:0 0 6px;display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:1.5px solid var(--ink);padding-bottom:6px}
+  .sec h2 span{font-family:var(--body);font-weight:400;font-size:.84rem;color:var(--muted)}
+  .items{list-style:none;margin:0;padding:0}
+  .item label{display:grid;grid-template-columns:26px minmax(0,1fr);gap:10px;padding:9px 2px;border-bottom:1px solid var(--line);cursor:pointer;align-items:start}
+  .item input{position:absolute;opacity:0;width:1px;height:1px}
+  .box{width:24px;height:24px;border-radius:7px;border:2px solid #9DB3C2;display:grid;place-items:center;margin-top:1px;background:var(--paper)}
+  .box svg{width:15px;height:15px;opacity:0;color:var(--ink)}
+  .item input:checked + .box{background:var(--sun);border-color:var(--sun)}
+  .item input:checked + .box svg{opacity:1}
+  .item input:focus-visible + .box{outline:3px solid var(--sea);outline-offset:2px}
+  .txt{line-height:1.35}
+  .txt .qty{display:inline-block;margin-left:6px;font-family:var(--display);font-weight:700;font-size:.82rem;color:var(--ocean);background:var(--mist);border-radius:6px;padding:0 6px}
+  .txt small{display:block;color:var(--muted);font-size:.84rem;margin-top:2px}
+  .item input:checked ~ .txt .name{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(15,36,51,.35)}
+
+  .note{margin-top:18px;background:var(--mist);border-radius:var(--radius-lg);padding:14px 18px;font-size:.92rem;color:var(--muted)}
+  .note p{margin:0}
+  footer{margin-top:16px;color:var(--muted);font-size:.8rem;line-height:1.5}
+  footer p{margin:0 0 4px}
+  footer .brand{color:var(--ink);font-weight:700}
+  .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:#fff;border-radius:999px;padding:8px 16px;font-size:.9rem;font-weight:700;opacity:0;transition:opacity .2s;pointer-events:none}
+  .toast.show{opacity:1}
+
+  @media (max-width:640px){
+    .sections{columns:1}
+    .row2{grid-template-columns:1fr;gap:14px}
+    .days{min-width:0}
+  }
+  @media (prefers-reduced-motion: reduce){ .bar i,.toast{transition:none} }
+  @media print{
+    .top .seg,.setup,.acts,.note,.toast{display:none !important}
+    .tag{background:none;color:var(--ink);border:1.5px solid var(--ink);padding:10px 14px}
+    .tag::before,.bar{display:none}
+    .tag .sub{color:var(--muted)}
+    .sections{columns:2}
+  }
+</style>
+</head>
+<body>
+<main class="tool">
+  <header class="top">
+    <div>
+      <h1 id="t-title"></h1>
+      <p class="lead" id="t-lead"></p>
+    </div>
+    <div class="seg" role="group" id="langs"></div>
+  </header>
+
+  <div class="setup">
+    <div><p class="q-label" id="t-where"></p><div class="chips" role="group" id="dests"></div></div>
+    <div class="row2">
+      <div>
+        <p class="q-label" id="t-days"></p>
+        <div class="days"><input type="range" id="days" min="1" max="21" step="1"><output id="days-out" for="days"></output></div>
+      </div>
+      <div style="min-width:0"><p class="q-label" id="t-when"></p><div class="months" role="group" id="months"></div></div>
+    </div>
+    <div><p class="q-label" id="t-doing"></p><div class="chips" role="group" id="acts"></div></div>
+  </div>
+
+  <section class="tag" id="tag" aria-live="polite"></section>
+  <div class="sections" id="sections"></div>
+
+  <div class="note"><p id="note"></p></div>
+  <footer id="foot"></footer>
+</main>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+"use strict";
+
+var CONFIG = {
+  // Link da matéria do portal onde a ferramenta está incorporada (versão em português). Vai na mensagem do WhatsApp.
+  shareURL: "https://hojenoceara.com.br"
+};
+
+var RAINY = [1,2,3,4]; // fevereiro a maio
+var SECS = ["docs","sol","roupas","calcados","praia","atividades","chuva","saude","eletronicos"];
+var DESTS = ["fortaleza","jeri","canoa","varios"];
+var ACTS = ["kite","buggy","lagoas","trilhas","criancas"];
+
+/* ================= Itens =================
+   show(s): quando o item aparece; qty(s): quantidade sugerida; tip: dica opcional (pode depender do estado) */
+function has(s, a){ return s.acts.indexOf(a) >= 0; }
+function rainy(s){ return RAINY.indexOf(s.month) >= 0; }
+function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+var ITEMS = [
+  {id:"doc", sec:"docs", t:{pt:"Documento com foto (RG, CNH ou passaporte)", en:"Photo ID or passport", es:"Documento con foto o pasaporte", fr:"Pièce d'identité ou passeport", it:"Documento d'identità o passaporto"}},
+  {id:"cartao", sec:"docs", t:{pt:"Cartão de crédito e um pouco de dinheiro em espécie", en:"Credit card and some cash", es:"Tarjeta de crédito y algo de efectivo", fr:"Carte bancaire et un peu d'espèces", it:"Carta di credito e un po' di contanti"},
+   tip:{pt:"Barracas e passeios pequenos às vezes só aceitam dinheiro ou Pix.", en:"Small kiosks and tours sometimes only take cash or Pix (Brazil's instant payment).", es:"Algunos puestos y excursiones pequeñas solo aceptan efectivo o Pix (el pago instantáneo brasileño).", fr:"Certains petits stands et excursions n'acceptent que les espèces ou le Pix (paiement instantané brésilien).", it:"Alcuni chioschi e piccole escursioni accettano solo contanti o Pix (il pagamento istantaneo brasiliano)."}},
+  {id:"reservas", sec:"docs", t:{pt:"Reservas e passagens salvas no celular", en:"Bookings and tickets saved on your phone", es:"Reservas y billetes guardados en el móvil", fr:"Réservations et billets enregistrés sur le téléphone", it:"Prenotazioni e biglietti salvati sul telefono"}},
+  {id:"seguro", sec:"docs", t:{pt:"Seguro-viagem ou plano de saúde com cobertura no destino", en:"Travel insurance", es:"Seguro de viaje", fr:"Assurance voyage", it:"Assicurazione di viaggio"}},
+
+  {id:"fps", sec:"sol", t:{pt:"Protetor solar FPS 50", en:"Sunscreen, SPF 50", es:"Protector solar FPS 50", fr:"Crème solaire indice 50", it:"Crema solare SPF 50"},
+   tip:{pt:"Reaplique a cada 2 horas e depois de sair da água.", en:"Reapply every 2 hours and after swimming.", es:"Vuelve a aplicarlo cada 2 horas y después de salir del agua.", fr:"Renouvelez toutes les 2 heures et après la baignade.", it:"Riapplicala ogni 2 ore e dopo ogni bagno."}},
+  {id:"labial", sec:"sol", t:{pt:"Protetor labial com FPS", en:"Lip balm with SPF", es:"Protector labial con FPS", fr:"Baume à lèvres avec indice", it:"Burrocacao con protezione solare"}},
+  {id:"oculos", sec:"sol", t:{pt:"Óculos de sol", en:"Sunglasses", es:"Gafas de sol", fr:"Lunettes de soleil", it:"Occhiali da sole"}},
+  {id:"bone", sec:"sol", t:{pt:"Boné ou chapéu de aba larga", en:"Cap or wide-brimmed hat", es:"Gorra o sombrero de ala ancha", fr:"Casquette ou chapeau à larges bords", it:"Cappellino o cappello a tesa larga"}},
+  {id:"lycra", sec:"sol", t:{pt:"Camiseta com proteção UV", en:"UV-protection shirt (rash guard)", es:"Camiseta con protección UV", fr:"T-shirt anti-UV", it:"Maglietta con protezione UV"},
+   tip:{pt:"Ajuda muito em passeios de barco e buggy, com sol forte o dia todo.", en:"A big help on boat and buggy trips, with strong sun all day.", es:"Ayuda mucho en paseos en barco y buggy, con sol fuerte todo el día.", fr:"Très utile en bateau et en buggy, avec un soleil fort toute la journée.", it:"Molto utile nelle gite in barca e in buggy, con sole forte tutto il giorno."}},
+  {id:"possol", sec:"sol", t:{pt:"Hidratante pós-sol", en:"After-sun lotion", es:"Crema para después del sol", fr:"Lait après-soleil", it:"Doposole"}},
+
+  {id:"camisetas", sec:"roupas", qty:function(s){ return clamp(s.days, 2, 8); }, t:{pt:"Camisetas leves", en:"Light T-shirts", es:"Camisetas ligeras", fr:"T-shirts légers", it:"Magliette leggere"}},
+  {id:"shorts", sec:"roupas", qty:function(s){ return clamp(Math.ceil(s.days / 2), 2, 5); }, t:{pt:"Shorts ou bermudas", en:"Shorts", es:"Pantalones cortos", fr:"Shorts", it:"Pantaloncini"}},
+  {id:"banho", sec:"roupas", qty:function(s){ return s.days <= 2 ? 1 : s.days <= 5 ? 2 : 3; }, t:{pt:"Roupas de banho", en:"Swimwear", es:"Bañadores", fr:"Maillots de bain", it:"Costumi da bagno"}},
+  {id:"intimas", sec:"roupas", qty:function(s){ return Math.min(s.days + 1, 12); }, t:{pt:"Roupas íntimas", en:"Underwear", es:"Ropa interior", fr:"Sous-vêtements", it:"Biancheria intima"}},
+  {id:"noite", sec:"roupas", t:{pt:"Uma roupa para sair à noite", en:"An outfit for going out at night", es:"Un conjunto para salir de noche", fr:"Une tenue pour sortir le soir", it:"Un outfit per uscire la sera"}},
+  {id:"casaco", sec:"roupas", t:{pt:"Casaco leve", en:"Light jacket", es:"Chaqueta ligera", fr:"Veste légère", it:"Giacca leggera"},
+   tip:{pt:"Para ônibus, avião e restaurantes com ar-condicionado forte.", en:"For buses, planes and restaurants with strong air conditioning.", es:"Para autobuses, aviones y restaurantes con aire acondicionado fuerte.", fr:"Pour les bus, l'avion et les restaurants très climatisés.", it:"Per autobus, aerei e ristoranti con aria condizionata forte."}},
+
+  {id:"chinelo", sec:"calcados", t:{pt:"Chinelo", en:"Flip-flops", es:"Chanclas", fr:"Tongs", it:"Infradito"},
+   tip:function(s){ return s.dest === "jeri" ? {pt:"Em Jericoacoara as ruas são de areia: chinelo e sandália resolvem tudo.", en:"Jericoacoara's streets are sand: flip-flops and sandals are all you need.", es:"En Jericoacoara las calles son de arena: chanclas y sandalias bastan.", fr:"À Jericoacoara, les rues sont en sable : tongs et sandales suffisent.", it:"A Jericoacoara le strade sono di sabbia: infradito e sandali bastano."} : null; }},
+  {id:"sandalia", sec:"calcados", t:{pt:"Sandália ou tênis leve para passear", en:"Sandals or light trainers for walking around", es:"Sandalias o zapatillas ligeras para pasear", fr:"Sandales ou baskets légères pour se balader", it:"Sandali o scarpe da ginnastica leggere per passeggiare"}},
+
+  {id:"toalha", sec:"praia", t:{pt:"Toalha de praia de secagem rápida", en:"Quick-dry beach towel", es:"Toalla de playa de secado rápido", fr:"Serviette de plage à séchage rapide", it:"Telo da spiaggia ad asciugatura rapida"}},
+  {id:"estanque", sec:"praia", t:{pt:"Saquinho à prova d'água para o celular", en:"Waterproof phone pouch", es:"Funda impermeable para el móvil", fr:"Pochette étanche pour le téléphone", it:"Custodia impermeabile per il telefono"},
+   tip:{pt:"Essencial em passeios de buggy, barco e lagoas.", en:"Essential on buggy, boat and lagoon trips.", es:"Imprescindible en paseos en buggy, barco y lagunas.", fr:"Indispensable en buggy, en bateau et aux lagunes.", it:"Indispensabile per buggy, barca e lagune."}},
+  {id:"mochila", sec:"praia", t:{pt:"Bolsa ou mochila pequena para o dia", en:"Small day bag or backpack", es:"Bolso o mochila pequeña para el día", fr:"Petit sac ou sac à dos pour la journée", it:"Borsa o zainetto per la giornata"}},
+  {id:"garrafa", sec:"praia", t:{pt:"Garrafa de água reutilizável", en:"Reusable water bottle", es:"Botella de agua reutilizable", fr:"Gourde réutilisable", it:"Borraccia riutilizzabile"},
+   tip:{pt:"Beba água o dia todo: calor e vento desidratam sem você perceber.", en:"Drink water all day: heat and wind dehydrate you without you noticing.", es:"Bebe agua todo el día: el calor y el viento deshidratan sin que lo notes.", fr:"Buvez toute la journée : la chaleur et le vent déshydratent sans qu'on s'en rende compte.", it:"Bevi acqua tutto il giorno: caldo e vento disidratano senza che te ne accorga."}},
+
+  {id:"kiteeq", sec:"atividades", show:function(s){ return has(s, "kite"); }, t:{pt:"Equipamento de kite ou reserva de aluguel na escola", en:"Kite gear, or a rental booked with a school", es:"Equipo de kite o alquiler reservado en una escuela", fr:"Matériel de kite ou location réservée auprès d'une école", it:"Attrezzatura da kite o noleggio prenotato in una scuola"}},
+  {id:"kitelycra", sec:"atividades", show:function(s){ return has(s, "kite"); }, t:{pt:"Lycra de manga longa ou wetsuit curto", en:"Long-sleeve rash guard or shorty wetsuit", es:"Licra de manga larga o neopreno corto", fr:"Lycra manches longues ou shorty", it:"Lycra a maniche lunghe o muta corta"},
+   tip:{pt:"A água fica entre 26 e 28 °C: não precisa de roupa grossa.", en:"The water stays at 26–28 °C: no thick wetsuit needed.", es:"El agua está entre 26 y 28 °C: no hace falta un neopreno grueso.", fr:"L'eau est entre 26 et 28 °C : pas besoin de combinaison épaisse.", it:"L'acqua è tra 26 e 28 °C: non serve una muta spessa."}},
+  {id:"neoprene", sec:"atividades", show:function(s){ return has(s, "kite"); }, t:{pt:"Sapatilha de neoprene", en:"Neoprene water shoes", es:"Escarpines de neopreno", fr:"Chaussons en néoprène", it:"Calzari in neoprene"},
+   tip:{pt:"Protege os pés de pedras e conchas em alguns picos.", en:"Protects your feet from rocks and shells at some spots.", es:"Protege los pies de piedras y conchas en algunos spots.", fr:"Protège les pieds des rochers et coquillages sur certains spots.", it:"Protegge i piedi da sassi e conchiglie in alcuni spot."}},
+  {id:"buff", sec:"atividades", show:function(s){ return has(s, "buggy"); }, t:{pt:"Lenço ou bandana para o rosto", en:"Neck gaiter or bandana", es:"Pañuelo o bandana para la cara", fr:"Foulard ou tour de cou", it:"Bandana o scaldacollo"},
+   tip:{pt:"Nos passeios pelas dunas, protege do vento com areia.", en:"On dune trips it shields you from sand blown by the wind.", es:"En los paseos por las dunas, protege del viento con arena.", fr:"Dans les dunes, protège du vent chargé de sable.", it:"Nelle gite tra le dune protegge dal vento carico di sabbia."}},
+  {id:"enjoo", sec:"atividades", show:function(s){ return has(s, "buggy"); }, t:{pt:"Remédio para enjoo", en:"Motion-sickness tablets", es:"Pastillas para el mareo", fr:"Médicament contre le mal des transports", it:"Farmaco contro il mal d'auto"},
+   tip:{pt:"Para trechos longos de 4x4 em estrada de areia.", en:"For long 4x4 rides on sandy tracks.", es:"Para trayectos largos en 4x4 por caminos de arena.", fr:"Pour les longs trajets en 4x4 sur les pistes de sable.", it:"Per i lunghi tragitti in 4x4 su piste di sabbia."}},
+  {id:"trocalagoa", sec:"atividades", show:function(s){ return has(s, "lagoas"); }, t:{pt:"Roupa de banho extra para trocar", en:"A spare swimsuit to change into", es:"Bañador extra para cambiarte", fr:"Un maillot de rechange", it:"Un costume di ricambio"}},
+  {id:"tenis", sec:"atividades", show:function(s){ return has(s, "trilhas"); }, t:{pt:"Tênis ou papete para caminhar", en:"Trainers or walking sandals", es:"Zapatillas o sandalias de trekking", fr:"Baskets ou sandales de marche", it:"Scarpe da ginnastica o sandali da trekking"},
+   tip:{pt:"Perto do meio-dia, a areia das dunas queima os pés.", en:"Around midday, the dune sand burns your feet.", es:"Cerca del mediodía, la arena de las dunas quema los pies.", fr:"Vers midi, le sable des dunes brûle les pieds.", it:"Verso mezzogiorno la sabbia delle dune scotta i piedi."}},
+  {id:"fpskids", sec:"atividades", show:function(s){ return has(s, "criancas"); }, t:{pt:"Protetor solar infantil", en:"Kids' sunscreen", es:"Protector solar infantil", fr:"Crème solaire pour enfants", it:"Crema solare per bambini"}},
+  {id:"chapeukids", sec:"atividades", show:function(s){ return has(s, "criancas"); }, t:{pt:"Chapéu com aba para as crianças", en:"Sun hats for the kids", es:"Sombreros con ala para los niños", fr:"Chapeaux pour les enfants", it:"Cappellini per i bambini"}},
+  {id:"boia", sec:"atividades", show:function(s){ return has(s, "criancas"); }, t:{pt:"Boia ou colete salva-vidas", en:"Armbands or a life jacket", es:"Manguitos o chaleco salvavidas", fr:"Brassards ou gilet de sauvetage", it:"Braccioli o giubbotto salvagente"}},
+  {id:"lanches", sec:"atividades", show:function(s){ return has(s, "criancas"); }, t:{pt:"Lanches e água extra", en:"Snacks and extra water", es:"Snacks y agua extra", fr:"Goûters et eau en plus", it:"Snack e acqua in più"}},
+
+  {id:"capa", sec:"chuva", show:rainy, t:{pt:"Capa de chuva ou guarda-chuva pequeno", en:"Rain jacket or small umbrella", es:"Chubasquero o paraguas pequeño", fr:"Imperméable ou petit parapluie", it:"Impermeabile o ombrello piccolo"},
+   tip:{pt:"As chuvas costumam ser rápidas e à tarde.", en:"Showers are usually short and in the afternoon.", es:"Las lluvias suelen ser cortas y por la tarde.", fr:"Les averses sont en général courtes et l'après-midi.", it:"Le piogge di solito sono brevi e al pomeriggio."}},
+  {id:"secarapido", sec:"chuva", show:rainy, t:{pt:"Roupas que secam rápido", en:"Quick-dry clothes", es:"Ropa de secado rápido", fr:"Vêtements à séchage rapide", it:"Vestiti ad asciugatura rapida"}},
+
+  {id:"remedios", sec:"saude", t:{pt:"Remédios de uso contínuo, com a receita", en:"Regular medication, with the prescription", es:"Medicamentos habituales, con la receta", fr:"Traitement habituel, avec l'ordonnance", it:"Farmaci abituali, con la ricetta"}},
+  {id:"repelente", sec:"saude", t:{pt:"Repelente", en:"Insect repellent", es:"Repelente de insectos", fr:"Anti-moustique", it:"Repellente per insetti"},
+   tip:{pt:"Mais útil no fim da tarde e à noite.", en:"Most useful in the late afternoon and evening.", es:"Más útil al final de la tarde y por la noche.", fr:"Surtout utile en fin d'après-midi et le soir.", it:"Più utile nel tardo pomeriggio e la sera."}},
+  {id:"kit", sec:"saude", t:{pt:"Kit básico: curativos, analgésico e antialérgico", en:"Basic kit: plasters, painkillers and antihistamines", es:"Botiquín básico: tiritas, analgésico y antialérgico", fr:"Trousse de base : pansements, antidouleur et antihistaminique", it:"Kit base: cerotti, antidolorifico e antistaminico"}},
+
+  {id:"carregador", sec:"eletronicos", t:{pt:"Carregador e bateria portátil", en:"Charger and power bank", es:"Cargador y batería externa", fr:"Chargeur et batterie externe", it:"Caricabatterie e power bank"}},
+  {id:"tomada", sec:"eletronicos", t:{pt:"Adaptador de tomada, se você vem de fora do Brasil", en:"Plug adapter, if you're coming from abroad", es:"Adaptador de enchufe, si vienes de fuera de Brasil", fr:"Adaptateur de prise, si vous venez de l'étranger", it:"Adattatore per prese, se arrivi dall'estero"},
+   tip:{pt:"O Brasil usa o padrão N, de dois ou três pinos redondos. No Ceará, a voltagem é 220 V.", en:"Brazil uses type N sockets, with two or three round pins. In Ceará the voltage is 220 V.", es:"Brasil usa enchufes tipo N, de dos o tres patas redondas. En Ceará el voltaje es de 220 V.", fr:"Le Brésil utilise des prises de type N, à deux ou trois broches rondes. Au Ceará, la tension est de 220 V.", it:"Il Brasile usa prese di tipo N, a due o tre spinotti tondi. In Ceará la tensione è di 220 V."}}
+];
+
+/* ================= Textos da interface ================= */
+var LANGS = ["pt","en","es","fr","it"];
+var LOCALE = {pt:"pt-BR", en:"en-GB", es:"es-ES", fr:"fr-FR", it:"it-IT"};
+var T = {
+pt:{
+  title:"O que levar para o Ceará",
+  lead:"Monte sua lista de mala de acordo com o destino, a época e o que você vai fazer. Vá marcando o que já guardou.",
+  langGroup:"Idioma", where:"Para onde você vai?", when:"Quando?", days:"Quantos dias?", doing:"O que você vai fazer?",
+  dayN:"{n} dias", day1:"1 dia",
+  dests:{fortaleza:"Fortaleza", jeri:"Jericoacoara", canoa:"Canoa Quebrada", varios:"Várias praias"},
+  acts:{kite:"Kitesurf", buggy:"Buggy e 4x4", lagoas:"Lagoas", trilhas:"Dunas e trilhas", criancas:"Com crianças"},
+  secs:{docs:"Documentos e dinheiro", sol:"Proteção contra o sol", roupas:"Roupas", calcados:"Calçados", praia:"Praia e passeios", atividades:"Para as suas atividades", chuva:"Época de chuvas", saude:"Saúde", eletronicos:"Eletrônicos"},
+  progress:"<b>{a}</b> de {b} itens na mala", done:"Mala pronta! Boa viagem.", sub:"{dest}, {days}, em {month}",
+  rainyNote:"Época de chuvas",
+  wa:"Enviar no WhatsApp", copy:"Copiar lista", print:"Imprimir", clear:"Desmarcar tudo", copied:"Lista copiada!",
+  shareTitle:"Minha mala para o Ceará ({sub})", shareFoot:"Lista feita no Hoje no Ceará: {url}",
+  note:"Lista de referência: ajuste conforme o seu estilo de viagem. O que você marcar fica salvo neste navegador.",
+  madeBy:"Uma ferramenta do <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>"
+},
+en:{
+  title:"What to pack for Ceará",
+  lead:"Build your packing list for your destination, season and plans in Ceará, Brazil. Tick things off as you pack.",
+  langGroup:"Language", where:"Where are you going?", when:"When?", days:"How many days?", doing:"What will you do?",
+  dayN:"{n} days", day1:"1 day",
+  dests:{fortaleza:"Fortaleza", jeri:"Jericoacoara", canoa:"Canoa Quebrada", varios:"Several beaches"},
+  acts:{kite:"Kitesurfing", buggy:"Buggy and 4x4 tours", lagoas:"Lagoons", trilhas:"Dunes and hikes", criancas:"With kids"},
+  secs:{docs:"Documents and money", sol:"Sun protection", roupas:"Clothes", calcados:"Shoes", praia:"Beach and trips", atividades:"For your activities", chuva:"Rainy season", saude:"Health", eletronicos:"Electronics"},
+  progress:"<b>{a}</b> of {b} items packed", done:"All packed! Have a great trip.", sub:"{dest}, {days}, in {month}",
+  rainyNote:"Rainy season",
+  wa:"Send on WhatsApp", copy:"Copy list", print:"Print", clear:"Untick all", copied:"List copied!",
+  shareTitle:"My packing list for Ceará ({sub})", shareFoot:"List made with Hoje no Ceará: {url}",
+  note:"A starting point: adjust it to your travel style. Whatever you tick is saved in this browser.",
+  madeBy:"A tool by <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>"
+},
+es:{
+  title:"Qué llevar a Ceará",
+  lead:"Arma tu lista de equipaje según el destino, la época y lo que vas a hacer en Ceará, Brasil. Ve marcando lo que ya guardaste.",
+  langGroup:"Idioma", where:"¿A dónde vas?", when:"¿Cuándo?", days:"¿Cuántos días?", doing:"¿Qué vas a hacer?",
+  dayN:"{n} días", day1:"1 día",
+  dests:{fortaleza:"Fortaleza", jeri:"Jericoacoara", canoa:"Canoa Quebrada", varios:"Varias playas"},
+  acts:{kite:"Kitesurf", buggy:"Buggy y 4x4", lagoas:"Lagunas", trilhas:"Dunas y senderos", criancas:"Con niños"},
+  secs:{docs:"Documentos y dinero", sol:"Protección solar", roupas:"Ropa", calcados:"Calzado", praia:"Playa y excursiones", atividades:"Para tus actividades", chuva:"Temporada de lluvias", saude:"Salud", eletronicos:"Electrónica"},
+  progress:"<b>{a}</b> de {b} cosas en la maleta", done:"¡Maleta lista! Buen viaje.", sub:"{dest}, {days}, en {month}",
+  rainyNote:"Temporada de lluvias",
+  wa:"Enviar por WhatsApp", copy:"Copiar lista", print:"Imprimir", clear:"Desmarcar todo", copied:"¡Lista copiada!",
+  shareTitle:"Mi maleta para Ceará ({sub})", shareFoot:"Lista hecha con Hoje no Ceará: {url}",
+  note:"Una lista de referencia: ajústala a tu estilo de viaje. Lo que marques queda guardado en este navegador.",
+  madeBy:"Una herramienta de <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>"
+},
+fr:{
+  title:"Que mettre dans sa valise pour le Ceará",
+  lead:"Préparez votre liste selon la destination, la saison et vos activités au Ceará, au Brésil. Cochez au fur et à mesure.",
+  langGroup:"Langue", where:"Où allez-vous ?", when:"Quand ?", days:"Combien de jours ?", doing:"Qu'allez-vous faire ?",
+  dayN:"{n} jours", day1:"1 jour",
+  dests:{fortaleza:"Fortaleza", jeri:"Jericoacoara", canoa:"Canoa Quebrada", varios:"Plusieurs plages"},
+  acts:{kite:"Kitesurf", buggy:"Buggy et 4x4", lagoas:"Lagunes", trilhas:"Dunes et randonnées", criancas:"Avec des enfants"},
+  secs:{docs:"Papiers et argent", sol:"Protection solaire", roupas:"Vêtements", calcados:"Chaussures", praia:"Plage et excursions", atividades:"Pour vos activités", chuva:"Saison des pluies", saude:"Santé", eletronicos:"Électronique"},
+  progress:"<b>{a}</b> sur {b} affaires dans la valise", done:"Valise prête ! Bon voyage.", sub:"{dest}, {days}, en {month}",
+  rainyNote:"Saison des pluies",
+  wa:"Envoyer sur WhatsApp", copy:"Copier la liste", print:"Imprimer", clear:"Tout décocher", copied:"Liste copiée !",
+  shareTitle:"Ma valise pour le Ceará ({sub})", shareFoot:"Liste faite avec Hoje no Ceará : {url}",
+  note:"Une liste de départ : adaptez-la à votre façon de voyager. Ce que vous cochez reste enregistré dans ce navigateur.",
+  madeBy:"Un outil de <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>"
+},
+it:{
+  title:"Cosa mettere in valigia per il Ceará",
+  lead:"Prepara la tua lista in base alla destinazione, al periodo e a cosa farai in Ceará, in Brasile. Spunta man mano quello che hai messo in valigia.",
+  langGroup:"Lingua", where:"Dove vai?", when:"Quando?", days:"Quanti giorni?", doing:"Cosa farai?",
+  dayN:"{n} giorni", day1:"1 giorno",
+  dests:{fortaleza:"Fortaleza", jeri:"Jericoacoara", canoa:"Canoa Quebrada", varios:"Più spiagge"},
+  acts:{kite:"Kitesurf", buggy:"Buggy e 4x4", lagoas:"Lagune", trilhas:"Dune e sentieri", criancas:"Con bambini"},
+  secs:{docs:"Documenti e soldi", sol:"Protezione dal sole", roupas:"Abbigliamento", calcados:"Scarpe", praia:"Spiaggia ed escursioni", atividades:"Per le tue attività", chuva:"Stagione delle piogge", saude:"Salute", eletronicos:"Elettronica"},
+  progress:"<b>{a}</b> su {b} cose in valigia", done:"Valigia pronta! Buon viaggio.", sub:"{dest}, {days}, a {month}",
+  rainyNote:"Stagione delle piogge",
+  wa:"Invia su WhatsApp", copy:"Copia la lista", print:"Stampa", clear:"Togli tutte le spunte", copied:"Lista copiata!",
+  shareTitle:"La mia valigia per il Ceará ({sub})", shareFoot:"Lista fatta con Hoje no Ceará: {url}",
+  note:"Una lista di partenza: adattala al tuo modo di viaggiare. Quello che spunti resta salvato in questo browser.",
+  madeBy:"Uno strumento di <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>"
+}
+};
+
+/* ================= Estado (salvo no navegador) ================= */
+var KEY = "hnc-mala";
+function load(){ try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch(e){ return {}; } }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify({dest:state.dest, days:state.days, month:state.month, acts:state.acts, checks:state.checks})); } catch(e){} }
+var params = new URLSearchParams(location.search);
+var saved = load();
+var state = {
+  lang: detectLang(),
+  dest: DESTS.indexOf(params.get("destino")) >= 0 ? params.get("destino") : (DESTS.indexOf(saved.dest) >= 0 ? saved.dest : "fortaleza"),
+  days: clamp(+saved.days || 7, 1, 21),
+  month: saved.month >= 0 && saved.month <= 11 ? saved.month : new Date(Date.now() - 3 * 3600e3).getUTCMonth(),
+  acts: Array.isArray(saved.acts) ? saved.acts.filter(function(a){ return ACTS.indexOf(a) >= 0; }) : [],
+  checks: saved.checks && typeof saved.checks === "object" ? saved.checks : {}
+};
+if (params.get("atividade") && ACTS.indexOf(params.get("atividade")) >= 0 && state.acts.indexOf(params.get("atividade")) < 0) state.acts.push(params.get("atividade"));
+function detectLang(){
+  var q = (params.get("lang") || "").toLowerCase();
+  if (LANGS.indexOf(q) >= 0) return q;
+  var host = "", path = "";
+  try { if (location.ancestorOrigins && location.ancestorOrigins.length) host = new URL(location.ancestorOrigins[0]).hostname; } catch(e){}
+  try { if (document.referrer){ var u = new URL(document.referrer); host = host || u.hostname; path = u.pathname; } } catch(e){}
+  var m = host.match(/^(en|es|fr|it)\./) || path.match(/^\/(en|es|fr|it)(\/|$)/);
+  if (m) return m[1];
+  if (/hojenoceara\.com\.br$/.test(host)) return "pt";
+  var nav = (navigator.language || "pt").slice(0, 2).toLowerCase();
+  return LANGS.indexOf(nav) >= 0 ? nav : "pt";
+}
+function tr(){ return T[state.lang]; }
+function fill(s, o){ return s.replace(/\{(\w+)\}/g, function(_, k){ return o[k] != null ? o[k] : ""; }); }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+function monthName(i, style){ return new Intl.DateTimeFormat(LOCALE[state.lang], {month: style || "long", timeZone:"UTC"}).format(new Date(Date.UTC(2026, i, 15))).replace(".", ""); }
+function cap(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+var $ = function(id){ return document.getElementById(id); };
+
+function visibleItems(){ return ITEMS.filter(function(it){ return !it.show || it.show(state); }); }
+function tipOf(it){ var tp = typeof it.tip === "function" ? it.tip(state) : it.tip; return tp ? tp[state.lang] : ""; }
+function subLine(){
+  var t = tr();
+  return fill(t.sub, {dest: t.dests[state.dest], days: state.days === 1 ? t.day1 : fill(t.dayN, {n: state.days}), month: monthName(state.month)});
+}
+
+/* ================= Interface ================= */
+var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+var ICON_WA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.3-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.1.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .2-1.2c-.1-.1-.3-.2-.5-.3z"/></svg>';
+
+function renderSetup(){
+  var t = tr();
+  document.documentElement.lang = LOCALE[state.lang];
+  document.title = t.title;
+  $("t-title").textContent = t.title;
+  $("t-lead").textContent = t.lead;
+  $("t-where").textContent = t.where;
+  $("t-when").textContent = t.when;
+  $("t-days").textContent = t.days;
+  $("t-doing").textContent = t.doing;
+  $("langs").setAttribute("aria-label", t.langGroup);
+  $("dests").setAttribute("aria-label", t.where);
+  $("months").setAttribute("aria-label", t.when);
+  $("acts").setAttribute("aria-label", t.doing);
+  $("langs").innerHTML = LANGS.map(function(l){
+    return '<button type="button" data-lang="' + l + '" aria-pressed="' + (l === state.lang) + '" lang="' + LOCALE[l] + '">' + l.toUpperCase() + '</button>';
+  }).join("");
+  $("dests").innerHTML = DESTS.map(function(d){
+    return '<button type="button" data-dest="' + d + '" aria-pressed="' + (d === state.dest) + '">' + esc(t.dests[d]) + '</button>';
+  }).join("");
+  $("acts").innerHTML = ACTS.map(function(a){
+    return '<button type="button" data-act="' + a + '" aria-pressed="' + (state.acts.indexOf(a) >= 0) + '">' + esc(t.acts[a]) + '</button>';
+  }).join("");
+  var mh = "";
+  for (var i = 0; i < 12; i++){
+    var r = RAINY.indexOf(i) >= 0;
+    mh += '<button type="button" data-m="' + i + '" aria-pressed="' + (i === state.month) + '"' + (r ? ' class="rainy" title="' + esc(t.rainyNote) + '"' : '') + ' aria-label="' + esc(cap(monthName(i)) + (r ? ", " + t.rainyNote : "")) + '">' + esc(cap(monthName(i, "short"))) + '</button>';
+  }
+  $("months").innerHTML = mh;
+  $("days").value = state.days;
+  $("days-out").textContent = state.days === 1 ? t.day1 : fill(t.dayN, {n: state.days});
+  $("note").textContent = t.note;
+  $("foot").innerHTML = '<p>' + t.madeBy + '</p>';
+}
+
+function renderList(){
+  var t = tr(), items = visibleItems();
+  $("sections").innerHTML = SECS.map(function(sec){
+    var its = items.filter(function(it){ return it.sec === sec; });
+    if (!its.length) return "";
+    var done = its.filter(function(it){ return state.checks[it.id]; }).length;
+    return '<section class="sec"><h2>' + esc(t.secs[sec]) + '<span>' + done + '/' + its.length + '</span></h2><ul class="items">' +
+      its.map(function(it){
+        var q = it.qty ? it.qty(state) : 0, tip = tipOf(it);
+        return '<li class="item"><label><input type="checkbox" data-id="' + it.id + '"' + (state.checks[it.id] ? " checked" : "") + '><span class="box">' + CHECK + '</span>' +
+          '<span class="txt"><span class="name">' + esc(it.t[state.lang]) + '</span>' + (q ? '<span class="qty">×' + q + '</span>' : '') + (tip ? '<small>' + esc(tip) + '</small>' : '') + '</span></label></li>';
+      }).join("") + '</ul></section>';
+  }).join("");
+  renderTag();
+}
+
+function renderTag(){
+  var t = tr(), items = visibleItems();
+  var a = items.filter(function(it){ return state.checks[it.id]; }).length, b = items.length;
+  $("tag").innerHTML =
+    '<div><p class="big">' + (a === b && b ? esc(t.done) : fill(t.progress, {a: a, b: b})) + '</p><p class="sub">' + esc(subLine()) + '</p></div>' +
+    '<div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="' + b + '" aria-valuenow="' + a + '"><i style="width:' + (b ? Math.round(a / b * 100) : 0) + '%"></i></div>' +
+    '<div class="acts">' +
+      '<a class="btn wa" href="' + esc("https://wa.me/?text=" + encodeURIComponent(listText())) + '" target="_blank" rel="noopener">' + ICON_WA + esc(t.wa) + '</a>' +
+      '<button type="button" class="btn ghost" data-do="copy">' + esc(t.copy) + '</button>' +
+      '<button type="button" class="btn ghost" data-do="print">' + esc(t.print) + '</button>' +
+      '<button type="button" class="btn ghost" data-do="clear">' + esc(t.clear) + '</button>' +
+    '</div>';
+}
+
+function shareURL(){
+  var u = CONFIG.shareURL;
+  if (state.lang !== "pt"){ try { var x = new URL(u); x.hostname = state.lang + ".hojenoceara.com.br"; u = x.toString(); } catch(e){} }
+  return u;
+}
+function listText(){
+  var t = tr(), items = visibleItems(), out = [fill(t.shareTitle, {sub: subLine()}), ""];
+  SECS.forEach(function(sec){
+    var its = items.filter(function(it){ return it.sec === sec; });
+    if (!its.length) return;
+    out.push("*" + t.secs[sec] + "*");
+    its.forEach(function(it){
+      var q = it.qty ? " (×" + it.qty(state) + ")" : "";
+      out.push((state.checks[it.id] ? "✅ " : "⬜ ") + it.t[state.lang] + q);
+    });
+    out.push("");
+  });
+  out.push(fill(t.shareFoot, {url: shareURL()}));
+  return out.join("\n");
+}
+
+/* ================= Ações ================= */
+var toastTimer = null;
+function toast(msg){ var el = $("toast"); el.textContent = msg; el.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(function(){ el.classList.remove("show"); }, 1800); }
+function copyText(text){
+  function fallback(){
+    var ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); toast(tr().copied); } catch(e){}
+    document.body.removeChild(ta);
+  }
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function(){ toast(tr().copied); }, fallback);
+  else fallback();
+}
+
+function refresh(){ save(); renderSetup(); renderList(); postHeight(); }
+
+$("langs").addEventListener("click", function(e){ var b = e.target.closest("button"); if (!b) return; state.lang = b.getAttribute("data-lang"); refresh(); });
+$("dests").addEventListener("click", function(e){ var b = e.target.closest("button"); if (!b) return; state.dest = b.getAttribute("data-dest"); refresh(); });
+$("months").addEventListener("click", function(e){ var b = e.target.closest("button"); if (!b) return; state.month = +b.getAttribute("data-m"); refresh(); });
+$("acts").addEventListener("click", function(e){
+  var b = e.target.closest("button"); if (!b) return;
+  var a = b.getAttribute("data-act"), i = state.acts.indexOf(a);
+  if (i >= 0) state.acts.splice(i, 1); else state.acts.push(a);
+  refresh();
+});
+$("days").addEventListener("input", function(e){
+  state.days = +e.target.value;
+  var t = tr(); $("days-out").textContent = state.days === 1 ? t.day1 : fill(t.dayN, {n: state.days});
+  save(); renderList();
+});
+$("sections").addEventListener("change", function(e){
+  var c = e.target; if (!c.matches || !c.matches('input[type="checkbox"]')) return;
+  var id = c.getAttribute("data-id");
+  if (c.checked) state.checks[id] = 1; else delete state.checks[id];
+  save();
+  // atualiza contadores sem redesenhar a lista (mantém o foco)
+  var sec = c.closest(".sec"), boxes = sec.querySelectorAll('input[type="checkbox"]'), n = 0;
+  Array.prototype.forEach.call(boxes, function(x){ if (x.checked) n++; });
+  sec.querySelector("h2 span").textContent = n + "/" + boxes.length;
+  renderTag();
+});
+$("tag").addEventListener("click", function(e){
+  var b = e.target.closest("button[data-do]"); if (!b) return;
+  var d = b.getAttribute("data-do");
+  if (d === "copy") copyText(listText());
+  else if (d === "print") window.print();
+  else if (d === "clear"){ state.checks = {}; save(); renderList(); }
+});
+
+var lastH = 0;
+function postHeight(){
+  var h = Math.ceil(document.documentElement.scrollHeight);
+  if (h !== lastH && window.parent !== window){ lastH = h; window.parent.postMessage({hncTool:"o-que-levar", height:h}, "*"); }
+}
+if (window.ResizeObserver) new ResizeObserver(postHeight).observe(document.body);
+
+refresh();
+})();
+</script>
+</body>
+</html>
