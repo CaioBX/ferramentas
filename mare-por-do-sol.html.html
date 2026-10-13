@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maré e pôr do sol no Ceará</title>
+<meta name="description" content="Horários de maré alta, maré baixa, nascer e pôr do sol para as praias mais visitadas do Ceará. Uma ferramenta do Hoje no Ceará.">
+<!-- Esta página não aparece sozinha no Google, mas o conteúdo conta quando está incorporado na matéria do portal -->
+<meta name="googlebot" content="noindex, indexifembedded">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F2433;
+    --muted:#567085;
+    --paper:#FFFFFF;
+    --mist:#F0F5F9;
+    --line:#D8E3EB;
+    --ocean:#0B4F7A;
+    --sea:#1F7FB8;
+    --sun:#F2B705;
+    --sun-deep:#8A6200;
+    --radius-lg:22px;
+    --radius-sm:10px;
+    --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+    --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--paper);color:var(--ink)}
+  body{font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .tool{max-width:820px;margin:0 auto;padding:20px 16px 18px}
+  button,select{font:inherit;color:inherit}
+  :focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+
+  /* Cabeçalho */
+  .top{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
+  .top h1{font-family:var(--display);font-weight:700;font-size:clamp(1.65rem,4.6vw,2.35rem);line-height:1.05;letter-spacing:-.02em;margin:0 0 6px;font-variation-settings:"opsz" 96}
+  .lead{margin:0;color:var(--muted);max-width:52ch}
+  .langs{display:flex;background:var(--mist);border-radius:999px;padding:3px;gap:2px}
+  .langs button{border:0;background:none;padding:6px 10px;border-radius:999px;font-size:.82rem;font-weight:700;color:var(--muted);cursor:pointer;letter-spacing:.02em}
+  .langs button[aria-pressed="true"]{background:var(--paper);color:var(--ocean);box-shadow:0 1px 2px rgba(15,36,51,.12)}
+
+  /* Controles */
+  .controls{margin-top:18px;display:grid;gap:12px}
+  .beach-field{position:relative}
+  .beach-field label{position:absolute;left:16px;top:8px;font-size:.75rem;color:var(--muted)}
+  .beach-field select{appearance:none;-webkit-appearance:none;width:100%;border:1.5px solid var(--line);border-radius:14px;background:var(--paper);padding:26px 44px 9px 16px;font-family:var(--display);font-weight:700;font-size:1.2rem;cursor:pointer}
+  .beach-field::after{content:"";position:absolute;right:18px;top:50%;width:9px;height:9px;border-right:2.5px solid var(--ocean);border-bottom:2.5px solid var(--ocean);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+  .days{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+  .days::-webkit-scrollbar{display:none}
+  .days button{flex:0 0 auto;min-width:64px;border:1.5px solid var(--line);background:var(--paper);border-radius:12px;padding:6px 10px;cursor:pointer;text-align:center;line-height:1.2}
+  .days button span{display:block}
+  .days .wd{font-size:.78rem;color:var(--muted)}
+  .days .dn{font-family:var(--display);font-weight:700;font-size:1.1rem}
+  .days button[aria-pressed="true"]{background:var(--ocean);border-color:var(--ocean);color:#fff}
+  .days button[aria-pressed="true"] .wd{color:#CFE4F2}
+
+  /* Horizonte: o gráfico do dia */
+  .horizon{margin-top:16px}
+  .chart{position:relative;border-radius:var(--radius-lg);overflow:hidden;background:#0E2A44;min-height:200px}
+  .chart svg{display:block;width:100%}
+  .chart .msg{position:absolute;inset:auto 16px 16px 16px;color:#fff;font-size:.92rem}
+  .insight{margin:14px 2px 0;font-size:1.06rem;line-height:1.45;max-width:62ch}
+  .insight strong{font-family:var(--display);font-weight:700}
+  .next{margin:6px 2px 0;color:var(--muted);font-size:.92rem}
+  .retry{margin-left:6px;border:0;background:none;color:var(--sea);font-weight:700;text-decoration:underline;cursor:pointer;padding:0}
+
+  /* Almanaque do dia */
+  .almanac{margin-top:20px;display:grid;grid-template-columns:1.1fr 1fr 1fr;border-top:1.5px solid var(--ink)}
+  .almanac section{padding:14px 18px 6px 0}
+  .almanac section + section{padding-left:18px;border-left:1px solid var(--line)}
+  .almanac h2{font-family:var(--display);font-weight:700;font-size:1.05rem;margin:0 0 10px}
+  .rows{list-style:none;margin:0;padding:0}
+  .rows li{display:grid;grid-template-columns:18px 1fr auto;align-items:baseline;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
+  .rows li:last-child{border-bottom:0}
+  .rows .k{color:var(--muted);font-size:.9rem}
+  .rows .v{font-family:var(--display);font-weight:700;font-size:1.15rem;font-variant-numeric:tabular-nums;text-align:right}
+  .rows .v small{display:block;font-family:var(--body);font-weight:400;font-size:.78rem;color:var(--muted)}
+  .rows.sun li{grid-template-columns:1fr auto}
+  .glyph{width:14px;height:14px;align-self:center}
+  .empty{color:var(--muted);font-size:.9rem;margin:0}
+  .moon{display:flex;gap:14px;align-items:center}
+  .moon svg{flex:0 0 auto}
+  .moon .name{font-family:var(--display);font-weight:700;font-size:1.15rem;line-height:1.2}
+  .moon .pct{color:var(--muted);font-size:.88rem}
+  .moon-note{margin:10px 0 0;font-size:.9rem;line-height:1.45}
+
+  /* Sobre a praia */
+  .about{margin-top:18px;background:var(--mist);border-radius:var(--radius-lg);padding:18px 20px}
+  .about h2{font-family:var(--display);font-weight:700;font-size:1.25rem;margin:0}
+  .about .city{color:var(--muted);font-size:.9rem;margin:0 0 8px}
+  .about p.tip{margin:0;max-width:64ch}
+  .about a{display:inline-block;margin-top:10px;color:var(--ocean);font-weight:700}
+
+  footer{margin-top:16px;color:var(--muted);font-size:.8rem;line-height:1.5}
+  footer p{margin:0 0 4px}
+  footer a{color:inherit}
+  footer .brand{color:var(--ink);font-weight:700}
+
+  @media (max-width:640px){
+    .almanac{grid-template-columns:1fr 1fr}
+    .almanac section:first-child{grid-column:1 / -1;padding-right:0}
+    .almanac section:nth-child(2){padding-left:0;border-left:0}
+    .almanac section:nth-child(2),.almanac section:nth-child(3){border-top:1px solid var(--line)}
+  }
+  @media (max-width:380px){
+    .almanac{grid-template-columns:1fr}
+    .almanac section + section{padding-left:0;border-left:0}
+  }
+</style>
+</head>
+<body>
+<main class="tool" id="app" aria-live="polite">
+  <header class="top">
+    <div>
+      <h1 id="t-title"></h1>
+      <p class="lead" id="t-lead"></p>
+    </div>
+    <div class="langs" role="group" aria-label="Idioma" id="langs"></div>
+  </header>
+
+  <div class="controls">
+    <div class="beach-field">
+      <label for="beach" id="t-beach"></label>
+      <select id="beach"></select>
+    </div>
+    <div class="days" id="days" role="group"></div>
+  </div>
+
+  <section class="horizon">
+    <div class="chart" id="chart"></div>
+    <p class="insight" id="insight"></p>
+    <p class="next" id="next"></p>
+  </section>
+
+  <div class="almanac">
+    <section><h2 id="t-tides"></h2><div id="tides"></div></section>
+    <section><h2 id="t-sun"></h2><ul class="rows sun" id="sun"></ul></section>
+    <section><h2 id="t-moon"></h2><div id="moon"></div></section>
+  </div>
+
+  <section class="about" id="about"></section>
+
+  <footer id="foot"></footer>
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= Configuração ================= */
+var CONFIG = {
+  // Chave da Open-Meteo para uso comercial. Deixe vazio enquanto usar o plano gratuito.
+  apiKey: "",
+  // Cole aqui o link do guia de cada praia no portal (versão em português). Vazio = sem link.
+  guides: {
+    jericoacoara: "",
+    prea: "",
+    icarai: "",
+    flecheiras: "",
+    lagoinha: "",
+    paracuru: "",
+    taiba: "",
+    cumbuco: "",
+    futuro: "",
+    canoa: "",
+    morrobranco: ""
+  }
+};
+
+/* ================= Praias ================= */
+var BEACHES = [
+  {id:"jericoacoara", name:"Jericoacoara", city:"Jijoca de Jericoacoara", region:"oeste", lat:-2.7953, lon:-40.5137},
+  {id:"prea", name:"Preá", city:"Cruz", region:"oeste", lat:-2.8180, lon:-40.4180},
+  {id:"icarai", name:"Icaraí de Amontada", city:"Amontada", region:"oeste", lat:-2.9900, lon:-39.6500},
+  {id:"flecheiras", name:"Flecheiras", city:"Trairi", region:"oeste", lat:-3.2196, lon:-39.2685},
+  {id:"lagoinha", name:"Lagoinha", city:"Paraipaba", region:"oeste", lat:-3.3100, lon:-39.1500},
+  {id:"paracuru", name:"Paracuru", city:"Paracuru", region:"oeste", lat:-3.3970, lon:-39.0110},
+  {id:"taiba", name:"Taíba", city:"São Gonçalo do Amarante", region:"oeste", lat:-3.5070, lon:-38.9100},
+  {id:"cumbuco", name:"Cumbuco", city:"Caucaia", region:"oeste", lat:-3.6270, lon:-38.7280},
+  {id:"futuro", name:"Praia do Futuro", city:"Fortaleza", region:"fortaleza", lat:-3.7570, lon:-38.4600},
+  {id:"morrobranco", name:"Morro Branco", city:"Beberibe", region:"leste", lat:-4.1570, lon:-38.1090},
+  {id:"canoa", name:"Canoa Quebrada", city:"Aracati", region:"leste", lat:-4.5240, lon:-37.6990}
+];
+
+/* ================= Textos nos 5 idiomas ================= */
+var LANGS = ["pt","en","es","fr","it"];
+var LOCALE = {pt:"pt-BR", en:"en-GB", es:"es-ES", fr:"fr-FR", it:"it-IT"};
+var T = {
+pt:{
+  title:"Maré e pôr do sol no Ceará",
+  lead:"Horários de maré alta, maré baixa, nascer e pôr do sol nas praias mais visitadas do estado.",
+  beach:"Praia", langGroup:"Idioma", dayGroup:"Dia",
+  regions:{oeste:"Litoral oeste", fortaleza:"Fortaleza", leste:"Litoral leste"},
+  today:"Hoje", tomorrow:"Amanhã", now:"agora",
+  high:"Maré alta", low:"Maré baixa", highL:"maré alta", lowL:"maré baixa",
+  tides:"Marés do dia", sun:"Sol", moon:"Lua",
+  sunrise:"Nascer do sol", golden:"Hora dourada", sunset:"Pôr do sol", dayLength:"Duração do dia",
+  phases:["Lua nova","Lua crescente","Quarto crescente","Crescente gibosa","Lua cheia","Minguante gibosa","Quarto minguante","Lua minguante"],
+  lit:"{n}% iluminada",
+  spring:"Maré de sizígia: perto da lua nova e da cheia, as marés baixas descem mais. Bom momento para as piscinas naturais.",
+  neap:"Maré de quadratura: diferença menor entre a maré alta e a baixa.",
+  insightLow:"Maré baixa com luz do dia às <strong>{time}</strong> ({height}). Boa janela para caminhar e para as piscinas naturais: {from} às {to}.",
+  insightNight:"Hoje as marés baixas acontecem fora da luz do dia. Veja os próximos dias para encontrar uma janela de dia.",
+  insightSunset:"Pôr do sol às <strong>{time}</strong>.",
+  next:"Próxima: {type} em {dur}",
+  loading:"Carregando a previsão da maré…",
+  error:"Não foi possível carregar a maré agora. Os horários do sol e da lua continuam valendo.",
+  retry:"Tentar de novo",
+  noTides:"Sem dados de maré para este dia.",
+  heightNote:"Alturas em relação ao nível médio do mar.",
+  guide:"Ler o guia completo",
+  chartLabel:"Gráfico da maré em {beach} em {date}",
+  source:"Previsão da maré: <a href=\"https://open-meteo.com/\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a> (modelo Météo-France), licença CC BY 4.0. Sol e lua calculados para as coordenadas de cada praia.",
+  disclaimer:"Horários aproximados, calculados por modelo numérico. Para navegação e pesca, use a Tábua de Marés oficial da Marinha do Brasil.",
+  madeBy:"Uma ferramenta do <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>",
+  tips:{
+    jericoacoara:"A Pedra Furada fica a cerca de 3 km da vila. Pela areia, o caminho só fica livre com a maré baixa; com a maré alta, a opção é a trilha pelo morro. O pôr do sol tradicional é visto da Duna do Pôr do Sol.",
+    prea:"Vizinha de Jericoacoara, é um dos principais destinos de kitesurf do Ceará e ponto de partida de downwinds pelo litoral oeste.",
+    icarai:"Vila tranquila de pescadores e destino de kitesurf. Com a maré baixa, a praia fica larga e boa para longas caminhadas.",
+    flecheiras:"Conhecida pelas piscinas naturais que se formam entre os arrecifes na maré baixa. Programe a visita para perto desse horário.",
+    lagoinha:"Coqueiral, dunas e falésias baixas, com um mirante que guarda uma das vistas mais conhecidas do litoral oeste.",
+    paracuru:"Praia de pedras e destino tradicional de kitesurf. A maré baixa revela as formações rochosas da orla.",
+    taiba:"Point de kitesurf e windsurf, com dunas e lagoas perto da praia.",
+    cumbuco:"Dunas, passeios de buggy, a Lagoa do Banana e ventos constantes que fizeram a fama do lugar no kitesurf.",
+    futuro:"A praia das barracas de Fortaleza. O mar é aberto e costuma ser forte; na maré baixa, a faixa de areia fica maior para caminhar.",
+    morrobranco:"Falésias de areias coloridas e o Labirinto das Falésias. Com a maré baixa, a caminhada pela beira-mar até a Praia das Fontes fica mais fácil.",
+    canoa:"Falésias avermelhadas, a rua Broadway e passeios de buggy. Na maré baixa, dá para caminhar mais longe junto às falésias."
+  }
+},
+en:{
+  title:"Tides and sunset in Ceará",
+  lead:"High and low tide times, sunrise and sunset for the most visited beaches in Ceará, Brazil.",
+  beach:"Beach", langGroup:"Language", dayGroup:"Day",
+  regions:{oeste:"West coast", fortaleza:"Fortaleza", leste:"East coast"},
+  today:"Today", tomorrow:"Tomorrow", now:"now",
+  high:"High tide", low:"Low tide", highL:"high tide", lowL:"low tide",
+  tides:"Today's tides", sun:"Sun", moon:"Moon",
+  sunrise:"Sunrise", golden:"Golden hour", sunset:"Sunset", dayLength:"Day length",
+  phases:["New moon","Waxing crescent","First quarter","Waxing gibbous","Full moon","Waning gibbous","Last quarter","Waning crescent"],
+  lit:"{n}% illuminated",
+  spring:"Spring tides: around the new and full moon, low tides drop further. A good time for the natural pools.",
+  neap:"Neap tides: a smaller difference between high and low water.",
+  insightLow:"Daylight low tide at <strong>{time}</strong> ({height}). Good window for walking and the natural pools: {from} to {to}.",
+  insightNight:"Today's low tides fall outside daylight hours. Check the coming days for a daytime window.",
+  insightSunset:"Sunset at <strong>{time}</strong>.",
+  next:"Next: {type} in {dur}",
+  loading:"Loading the tide forecast…",
+  error:"The tide forecast couldn't load right now. Sun and moon times are still accurate.",
+  retry:"Try again",
+  noTides:"No tide data for this day.",
+  heightNote:"Heights relative to mean sea level.",
+  guide:"Read the full guide",
+  chartLabel:"Tide chart for {beach} on {date}",
+  source:"Tide forecast: <a href=\"https://open-meteo.com/\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a> (Météo-France model), CC BY 4.0 licence. Sun and moon calculated for each beach's coordinates.",
+  disclaimer:"Approximate times from a numerical model. For navigation and fishing, use the official Brazilian Navy tide tables.",
+  madeBy:"A tool by <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>",
+  tips:{
+    jericoacoara:"Pedra Furada, the rock arch, is about 3 km from the village. The beach route is only clear at low tide; at high tide, take the trail over the hill. The classic sunset spot is the Sunset Dune (Duna do Pôr do Sol).",
+    prea:"Next door to Jericoacoara, Preá is one of Ceará's top kitesurfing spots and a starting point for downwinders along the west coast.",
+    icarai:"A quiet fishing village and kitesurfing destination. At low tide the beach gets wide and great for long walks.",
+    flecheiras:"Known for the natural pools that form between the reefs at low tide. Plan your visit close to that time.",
+    lagoinha:"Coconut groves, dunes and low cliffs, with a lookout that offers one of the best-known views on the west coast.",
+    paracuru:"A rocky beach and a long-standing kitesurfing spot. Low tide reveals the rock formations along the shore.",
+    taiba:"A kitesurfing and windsurfing spot, with dunes and lagoons close to the beach.",
+    cumbuco:"Dunes, buggy rides, Lagoa do Banana and steady winds that made the village famous for kitesurfing.",
+    futuro:"Fortaleza's beach of seaside kiosks. The sea is open and often strong; at low tide there is more sand for walking.",
+    morrobranco:"Cliffs of coloured sand and the Cliff Labyrinth (Labirinto das Falésias). At low tide, the shoreline walk to Praia das Fontes is easier.",
+    canoa:"Red cliffs, Broadway street and buggy rides. At low tide you can walk further along the foot of the cliffs."
+  }
+},
+es:{
+  title:"Marea y puesta de sol en Ceará",
+  lead:"Horarios de marea alta y baja, amanecer y puesta de sol en las playas más visitadas de Ceará, Brasil.",
+  beach:"Playa", langGroup:"Idioma", dayGroup:"Día",
+  regions:{oeste:"Litoral oeste", fortaleza:"Fortaleza", leste:"Litoral este"},
+  today:"Hoy", tomorrow:"Mañana", now:"ahora",
+  high:"Marea alta", low:"Marea baja", highL:"marea alta", lowL:"marea baja",
+  tides:"Mareas del día", sun:"Sol", moon:"Luna",
+  sunrise:"Amanecer", golden:"Hora dorada", sunset:"Puesta de sol", dayLength:"Duración del día",
+  phases:["Luna nueva","Luna creciente","Cuarto creciente","Gibosa creciente","Luna llena","Gibosa menguante","Cuarto menguante","Luna menguante"],
+  lit:"{n}% iluminada",
+  spring:"Mareas vivas: cerca de la luna nueva y la llena, las mareas bajas bajan más. Buen momento para las piscinas naturales.",
+  neap:"Mareas muertas: menor diferencia entre la marea alta y la baja.",
+  insightLow:"Marea baja con luz de día a las <strong>{time}</strong> ({height}). Buena ventana para caminar y para las piscinas naturales: de {from} a {to}.",
+  insightNight:"Hoy las mareas bajas ocurren fuera de las horas de luz. Mira los próximos días para encontrar una ventana de día.",
+  insightSunset:"Puesta de sol a las <strong>{time}</strong>.",
+  next:"Próxima: {type} en {dur}",
+  loading:"Cargando la previsión de la marea…",
+  error:"No se pudo cargar la marea ahora. Los horarios del sol y de la luna siguen siendo válidos.",
+  retry:"Reintentar",
+  noTides:"No hay datos de marea para este día.",
+  heightNote:"Alturas respecto al nivel medio del mar.",
+  guide:"Leer la guía completa",
+  chartLabel:"Gráfico de la marea en {beach} el {date}",
+  source:"Previsión de la marea: <a href=\"https://open-meteo.com/\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a> (modelo de Météo-France), licencia CC BY 4.0. Sol y luna calculados para las coordenadas de cada playa.",
+  disclaimer:"Horarios aproximados, calculados por un modelo numérico. Para navegación y pesca, usa las tablas de mareas oficiales de la Marina de Brasil.",
+  madeBy:"Una herramienta de <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>",
+  tips:{
+    jericoacoara:"La Pedra Furada está a unos 3 km del pueblo. Por la arena, el camino solo queda libre con marea baja; con marea alta, la opción es el sendero por el cerro. El atardecer clásico se ve desde la Duna do Pôr do Sol.",
+    prea:"Vecina de Jericoacoara, es uno de los principales destinos de kitesurf de Ceará y punto de partida de downwinds por el litoral oeste.",
+    icarai:"Tranquilo pueblo de pescadores y destino de kitesurf. Con marea baja, la playa se vuelve ancha e ideal para largas caminatas.",
+    flecheiras:"Conocida por las piscinas naturales que se forman entre los arrecifes con marea baja. Planifica la visita cerca de ese horario.",
+    lagoinha:"Cocoteros, dunas y acantilados bajos, con un mirador que ofrece una de las vistas más conocidas del litoral oeste.",
+    paracuru:"Playa de piedras y destino tradicional de kitesurf. La marea baja deja a la vista las formaciones rocosas de la orilla.",
+    taiba:"Punto de kitesurf y windsurf, con dunas y lagunas cerca de la playa.",
+    cumbuco:"Dunas, paseos en buggy, la Lagoa do Banana y vientos constantes que hicieron famoso el lugar en el kitesurf.",
+    futuro:"La playa de los chiringuitos de Fortaleza. El mar es abierto y suele ser fuerte; con marea baja hay más arena para caminar.",
+    morrobranco:"Acantilados de arenas de colores y el Laberinto de los Acantilados. Con marea baja, la caminata por la orilla hasta la Praia das Fontes es más fácil.",
+    canoa:"Acantilados rojizos, la calle Broadway y paseos en buggy. Con marea baja se puede caminar más lejos al pie de los acantilados."
+  }
+},
+fr:{
+  title:"Marées et coucher du soleil au Ceará",
+  lead:"Horaires des marées hautes et basses, du lever et du coucher du soleil sur les plages les plus visitées du Ceará, au Brésil.",
+  beach:"Plage", langGroup:"Langue", dayGroup:"Jour",
+  regions:{oeste:"Côte ouest", fortaleza:"Fortaleza", leste:"Côte est"},
+  today:"Aujourd'hui", tomorrow:"Demain", now:"maintenant",
+  high:"Marée haute", low:"Marée basse", highL:"marée haute", lowL:"marée basse",
+  tides:"Marées du jour", sun:"Soleil", moon:"Lune",
+  sunrise:"Lever du soleil", golden:"Heure dorée", sunset:"Coucher du soleil", dayLength:"Durée du jour",
+  phases:["Nouvelle lune","Premier croissant","Premier quartier","Gibbeuse croissante","Pleine lune","Gibbeuse décroissante","Dernier quartier","Dernier croissant"],
+  lit:"{n} % éclairée",
+  spring:"Marées de vives-eaux : autour de la nouvelle et de la pleine lune, les basses mers descendent davantage. Bon moment pour les piscines naturelles.",
+  neap:"Marées de mortes-eaux : écart plus faible entre la haute et la basse mer.",
+  insightLow:"Marée basse en plein jour à <strong>{time}</strong> ({height}). Bon créneau pour marcher et profiter des piscines naturelles : de {from} à {to}.",
+  insightNight:"Aujourd'hui, les marées basses tombent en dehors des heures de jour. Consultez les jours suivants pour trouver un créneau en journée.",
+  insightSunset:"Coucher du soleil à <strong>{time}</strong>.",
+  next:"Prochaine : {type} dans {dur}",
+  loading:"Chargement des prévisions de marée…",
+  error:"Impossible de charger la marée pour le moment. Les horaires du soleil et de la lune restent valables.",
+  retry:"Réessayer",
+  noTides:"Pas de données de marée pour ce jour.",
+  heightNote:"Hauteurs par rapport au niveau moyen de la mer.",
+  guide:"Lire le guide complet",
+  chartLabel:"Graphique de la marée à {beach} le {date}",
+  source:"Prévision des marées : <a href=\"https://open-meteo.com/\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a> (modèle Météo-France), licence CC BY 4.0. Soleil et lune calculés pour les coordonnées de chaque plage.",
+  disclaimer:"Horaires approximatifs issus d'un modèle numérique. Pour la navigation et la pêche, utilisez les annuaires de marées officiels de la Marine brésilienne.",
+  madeBy:"Un outil de <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>",
+  tips:{
+    jericoacoara:"La Pedra Furada, l'arche de pierre, se trouve à environ 3 km du village. Par la plage, le passage n'est dégagé qu'à marée basse ; à marée haute, prenez le sentier sur la colline. Le coucher de soleil classique se regarde depuis la Duna do Pôr do Sol.",
+    prea:"Voisine de Jericoacoara, c'est l'un des principaux spots de kitesurf du Ceará et un point de départ des downwinds le long de la côte ouest.",
+    icarai:"Village de pêcheurs paisible et spot de kitesurf. À marée basse, la plage devient large et idéale pour de longues balades.",
+    flecheiras:"Connue pour ses piscines naturelles qui se forment entre les récifs à marée basse. Prévoyez la visite autour de cet horaire.",
+    lagoinha:"Cocotiers, dunes et falaises basses, avec un belvédère qui offre l'une des vues les plus connues de la côte ouest.",
+    paracuru:"Plage de rochers et spot de kitesurf historique. La marée basse dévoile les formations rocheuses du rivage.",
+    taiba:"Spot de kitesurf et de windsurf, avec des dunes et des lagunes près de la plage.",
+    cumbuco:"Dunes, balades en buggy, la Lagoa do Banana et des vents réguliers qui ont fait la réputation du village pour le kitesurf.",
+    futuro:"La plage des paillotes de Fortaleza. La mer est ouverte et souvent forte ; à marée basse, la bande de sable s'élargit pour marcher.",
+    morrobranco:"Falaises de sables colorés et le Labyrinthe des Falaises. À marée basse, la balade le long du rivage jusqu'à Praia das Fontes est plus facile.",
+    canoa:"Falaises rougeâtres, la rue Broadway et balades en buggy. À marée basse, on peut marcher plus loin au pied des falaises."
+  }
+},
+it:{
+  title:"Maree e tramonto in Ceará",
+  lead:"Orari di alta e bassa marea, alba e tramonto nelle spiagge più visitate del Ceará, in Brasile.",
+  beach:"Spiaggia", langGroup:"Lingua", dayGroup:"Giorno",
+  regions:{oeste:"Costa ovest", fortaleza:"Fortaleza", leste:"Costa est"},
+  today:"Oggi", tomorrow:"Domani", now:"adesso",
+  high:"Alta marea", low:"Bassa marea", highL:"alta marea", lowL:"bassa marea",
+  tides:"Maree del giorno", sun:"Sole", moon:"Luna",
+  sunrise:"Alba", golden:"Ora d'oro", sunset:"Tramonto", dayLength:"Durata del giorno",
+  phases:["Luna nuova","Luna crescente","Primo quarto","Gibbosa crescente","Luna piena","Gibbosa calante","Ultimo quarto","Luna calante"],
+  lit:"{n}% illuminata",
+  spring:"Maree vive: intorno alla luna nuova e alla luna piena, la bassa marea scende di più. Buon momento per le piscine naturali.",
+  neap:"Maree morte: minore differenza tra alta e bassa marea.",
+  insightLow:"Bassa marea con la luce del giorno alle <strong>{time}</strong> ({height}). Finestra ideale per camminare e per le piscine naturali: dalle {from} alle {to}.",
+  insightNight:"Oggi le basse maree cadono fuori dalle ore di luce. Guarda i prossimi giorni per trovare una finestra di giorno.",
+  insightSunset:"Tramonto alle <strong>{time}</strong>.",
+  next:"Prossima: {type} tra {dur}",
+  loading:"Caricamento della previsione di marea…",
+  error:"Non è stato possibile caricare la marea ora. Gli orari del sole e della luna restano validi.",
+  retry:"Riprova",
+  noTides:"Nessun dato di marea per questo giorno.",
+  heightNote:"Altezze rispetto al livello medio del mare.",
+  guide:"Leggi la guida completa",
+  chartLabel:"Grafico della marea a {beach} il {date}",
+  source:"Previsione della marea: <a href=\"https://open-meteo.com/\" target=\"_blank\" rel=\"noopener\">Open-Meteo</a> (modello Météo-France), licenza CC BY 4.0. Sole e luna calcolati per le coordinate di ogni spiaggia.",
+  disclaimer:"Orari approssimativi, calcolati da un modello numerico. Per navigazione e pesca, usa le tavole di marea ufficiali della Marina brasiliana.",
+  madeBy:"Uno strumento di <a class=\"brand\" href=\"https://hojenoceara.com.br\" target=\"_top\">Hoje no Ceará</a>",
+  tips:{
+    jericoacoara:"La Pedra Furada, l'arco di roccia, è a circa 3 km dal villaggio. Lungo la spiaggia il passaggio è libero solo con la bassa marea; con l'alta marea si prende il sentiero sulla collina. Il tramonto classico si guarda dalla Duna do Pôr do Sol.",
+    prea:"Vicina a Jericoacoara, è una delle principali mete di kitesurf del Ceará e punto di partenza dei downwind lungo la costa ovest.",
+    icarai:"Tranquillo villaggio di pescatori e meta di kitesurf. Con la bassa marea la spiaggia diventa larga e perfetta per lunghe passeggiate.",
+    flecheiras:"Famosa per le piscine naturali che si formano tra le barriere coralline con la bassa marea. Organizza la visita vicino a quell'orario.",
+    lagoinha:"Palmeti di cocco, dune e falesie basse, con un belvedere che regala uno dei panorami più noti della costa ovest.",
+    paracuru:"Spiaggia di rocce e meta storica del kitesurf. La bassa marea scopre le formazioni rocciose lungo la riva.",
+    taiba:"Spot di kitesurf e windsurf, con dune e lagune vicino alla spiaggia.",
+    cumbuco:"Dune, giri in buggy, la Lagoa do Banana e venti costanti che hanno reso il villaggio famoso per il kitesurf.",
+    futuro:"La spiaggia dei chioschi di Fortaleza. Il mare è aperto e spesso forte; con la bassa marea c'è più sabbia per camminare.",
+    morrobranco:"Falesie di sabbie colorate e il Labirinto delle Falesie. Con la bassa marea, la passeggiata sulla riva fino a Praia das Fontes è più facile.",
+    canoa:"Falesie rossastre, la via Broadway e giri in buggy. Con la bassa marea si cammina più lontano ai piedi delle falesie."
+  }
+}
+};
+
+/* ================= Tempo (Ceará: UTC−3, sem horário de verão) ================= */
+var OFFSET = -3 * 3600e3, HOUR = 3600e3, DAY = 864e5;
+function lp(t){ var d = new Date(t + OFFSET); return {y:d.getUTCFullYear(), m:d.getUTCMonth(), d:d.getUTCDate(), h:d.getUTCHours(), mi:d.getUTCMinutes()}; }
+function dayStartOf(t){ var p = lp(t); return Date.UTC(p.y, p.m, p.d) - OFFSET; }
+function pad(n){ return (n < 10 ? "0" : "") + n; }
+function fmtTime(t){ var p = lp(Math.round(t / 60000) * 60000); return pad(p.h) + ":" + pad(p.mi); }
+function fmtDur(ms){ var m = Math.max(0, Math.round(ms / 60000)), h = Math.floor(m / 60); m = m % 60; return h ? h + " h " + (m ? pad(m) + " min" : "") : m + " min"; }
+
+/* ================= Sol (algoritmo do SunCalc / NOAA) ================= */
+var rad = Math.PI / 180, J1970 = 2440588, J2000 = 2451545, OBL = rad * 23.4397, J0 = 0.0009;
+function toDays(t){ return t / DAY - 0.5 + J1970 - J2000; }
+function fromJulian(j){ return (j + 0.5 - J1970) * DAY; }
+function sunTimes(t, lat, lng){
+  var lw = rad * -lng, phi = rad * lat, d = toDays(t);
+  var n = Math.round(d - J0 - lw / (2 * Math.PI));
+  var ds = J0 + lw / (2 * Math.PI) + n;
+  var M = rad * (357.5291 + 0.98560028 * ds);
+  var C = rad * (1.9148 * Math.sin(M) + 0.02 * Math.sin(2 * M) + 0.0003 * Math.sin(3 * M));
+  var L = M + C + rad * 102.9372 + Math.PI;
+  var dec = Math.asin(Math.sin(OBL) * Math.sin(L));
+  var Jnoon = J2000 + ds + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2 * L);
+  function at(h){
+    var w = Math.acos((Math.sin(h * rad) - Math.sin(phi) * Math.sin(dec)) / (Math.cos(phi) * Math.cos(dec)));
+    var a = J0 + (w + lw) / (2 * Math.PI) + n;
+    var Jset = J2000 + a + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2 * L);
+    return {rise: fromJulian(Jnoon - (Jset - Jnoon)), set: fromJulian(Jset)};
+  }
+  var s = at(-0.833), g = at(6), c = at(-6);
+  return {sunrise:s.rise, sunset:s.set, golden:g.set, dawn:c.rise, dusk:c.set};
+}
+
+/* ================= Lua ================= */
+function moonInfo(t){
+  var syn = 29.530588853, ref = Date.UTC(2000, 0, 6, 18, 14);
+  var p = ((t - ref) / DAY / syn) % 1; if (p < 0) p += 1;
+  var illum = (1 - Math.cos(2 * Math.PI * p)) / 2;
+  var idx = Math.floor(p * 8 + 0.5) % 8;
+  var dSyz = Math.min(p, 1 - p, Math.abs(p - 0.5));
+  var dQuad = Math.min(Math.abs(p - 0.25), Math.abs(p - 0.75));
+  return {p:p, illum:illum, idx:idx, spring:dSyz < 0.085, neap:dQuad < 0.085};
+}
+function moonSVG(p, size){
+  var R = size / 2 - 2, c = size / 2, waxing = p < 0.5;
+  var rx = Math.abs(Math.cos(2 * Math.PI * p)) * R;
+  var illum = (1 - Math.cos(2 * Math.PI * p)) / 2;
+  // Hemisfério sul: lua crescente iluminada à esquerda
+  var s1 = waxing ? 0 : 1;
+  var s2 = illum < 0.5 ? (waxing ? 1 : 0) : (waxing ? 0 : 1);
+  var lit = "M" + c + "," + (c - R) + " A" + R + "," + R + " 0 0 " + s1 + " " + c + "," + (c + R) +
+            " A" + rx.toFixed(2) + "," + R + " 0 0 " + s2 + " " + c + "," + (c - R) + " Z";
+  return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '" aria-hidden="true">' +
+    '<circle cx="' + c + '" cy="' + c + '" r="' + R + '" fill="#1C3A55"/>' +
+    (illum > 0.01 ? '<path d="' + lit + '" fill="#F4EFD9"/>' : '') +
+    '<circle cx="' + c + '" cy="' + c + '" r="' + R + '" fill="none" stroke="#0F2433" stroke-opacity=".25"/></svg>';
+}
+
+/* ================= Maré (Open-Meteo) ================= */
+var tideCache = {};
+function tideURL(b){
+  var base = CONFIG.apiKey ? "https://customer-marine-api.open-meteo.com/v1/marine" : "https://marine-api.open-meteo.com/v1/marine";
+  return base + "?latitude=" + b.lat + "&longitude=" + b.lon +
+    "&hourly=sea_level_height_msl&timezone=America%2FFortaleza&past_days=1&forecast_days=8&cell_selection=sea" +
+    (CONFIG.apiKey ? "&apikey=" + encodeURIComponent(CONFIG.apiKey) : "");
+}
+function loadTide(b){
+  if (tideCache[b.id]) return tideCache[b.id];
+  var pr = fetch(tideURL(b)).then(function(r){
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.json();
+  }).then(function(j){
+    var off = (j.utc_offset_seconds || 0) * 1000, hs = j.hourly.sea_level_height_msl, pts = [];
+    j.hourly.time.forEach(function(s, i){
+      var h = hs[i]; if (h == null || !isFinite(h)) return;
+      var dd = s.split("T")[0].split("-"), tt = s.split("T")[1].split(":");
+      pts.push({t: Date.UTC(+dd[0], +dd[1] - 1, +dd[2], +tt[0], +tt[1]) - off, h: h});
+    });
+    if (pts.length < 24) throw new Error("sem dados");
+    return {pts: pts, ext: extremes(pts)};
+  });
+  tideCache[b.id] = pr;
+  pr.catch(function(){ delete tideCache[b.id]; });
+  return pr;
+}
+function extremes(pts){
+  var out = [];
+  for (var i = 1; i < pts.length - 1; i++){
+    var a = pts[i-1].h, b = pts[i].h, c = pts[i+1].h;
+    var hi = b > a && b >= c, lo = b < a && b <= c;
+    if (!hi && !lo) continue;
+    var den = a - 2 * b + c, o = den !== 0 ? (a - c) / (2 * den) : 0;
+    o = Math.max(-0.5, Math.min(0.5, o));
+    var step = o >= 0 ? pts[i+1].t - pts[i].t : pts[i].t - pts[i-1].t;
+    out.push({type: hi ? "high" : "low", t: pts[i].t + o * step, h: b - (a - c) * o / 4});
+  }
+  // remove oscilações pequenas que não são marés de verdade
+  var changed = true;
+  while (changed){
+    changed = false;
+    for (var k = 0; k < out.length - 1; k++){
+      if (out[k].type === out[k+1].type){
+        var keep = out[k].type === "high" ? (out[k].h >= out[k+1].h ? k : k+1) : (out[k].h <= out[k+1].h ? k : k+1);
+        out.splice(keep === k ? k + 1 : k, 1); changed = true; break;
+      }
+      if (Math.abs(out[k+1].h - out[k].h) < 0.08){ out.splice(k, 2); changed = true; break; }
+    }
+  }
+  return out;
+}
+
+/* ================= Estado ================= */
+var params = new URLSearchParams(location.search);
+var state = {
+  lang: detectLang(),
+  beach: BEACHES.filter(function(b){ return b.id === params.get("praia"); })[0] || BEACHES[0],
+  day: 0,
+  tide: null, tideStatus: "loading"
+};
+
+function detectLang(){
+  var q = (params.get("lang") || "").toLowerCase();
+  if (LANGS.indexOf(q) >= 0) return q;
+  var host = "", path = "";
+  try { if (location.ancestorOrigins && location.ancestorOrigins.length) host = new URL(location.ancestorOrigins[0]).hostname; } catch(e){}
+  try { if (document.referrer){ var u = new URL(document.referrer); host = host || u.hostname; path = u.pathname; } } catch(e){}
+  var m = host.match(/^(en|es|fr|it)\./) || path.match(/^\/(en|es|fr|it)(\/|$)/);
+  if (m) return m[1];
+  if (/hojenoceara\.com\.br$/.test(host)) return "pt";
+  var nav = (navigator.language || "pt").slice(0, 2).toLowerCase();
+  return LANGS.indexOf(nav) >= 0 ? nav : "pt";
+}
+function tr(){ return T[state.lang]; }
+function fill(s, o){ return s.replace(/\{(\w+)\}/g, function(_, k){ return o[k] != null ? o[k] : ""; }); }
+function fmtHeight(h){
+  return new Intl.NumberFormat(LOCALE[state.lang], {minimumFractionDigits:1, maximumFractionDigits:1, signDisplay:"exceptZero"}).format(Math.round(h * 10) / 10).replace("-", "−") + " m";
+}
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+
+/* ================= Interface ================= */
+var $ = function(id){ return document.getElementById(id); };
+var today0 = dayStartOf(Date.now());
+
+function renderStatic(){
+  var t = tr();
+  document.documentElement.lang = LOCALE[state.lang];
+  document.title = t.title;
+  $("t-title").textContent = t.title;
+  $("t-lead").textContent = t.lead;
+  $("t-beach").textContent = t.beach;
+  $("t-tides").textContent = t.tides;
+  $("t-sun").textContent = t.sun;
+  $("t-moon").textContent = t.moon;
+  $("langs").setAttribute("aria-label", t.langGroup);
+  $("days").setAttribute("aria-label", t.dayGroup);
+
+  $("langs").innerHTML = LANGS.map(function(l){
+    return '<button type="button" data-lang="' + l + '" aria-pressed="' + (l === state.lang) + '" lang="' + LOCALE[l] + '">' + l.toUpperCase() + '</button>';
+  }).join("");
+
+  var groups = ["oeste","fortaleza","leste"];
+  $("beach").innerHTML = groups.map(function(g){
+    return '<optgroup label="' + esc(t.regions[g]) + '">' + BEACHES.filter(function(b){ return b.region === g; }).map(function(b){
+      return '<option value="' + b.id + '"' + (b.id === state.beach.id ? " selected" : "") + '>' + esc(b.name) + '</option>';
+    }).join("") + '</optgroup>';
+  }).join("");
+
+  var wdf = new Intl.DateTimeFormat(LOCALE[state.lang], {weekday:"short", timeZone:"UTC"});
+  var html = "";
+  for (var i = 0; i < 8; i++){
+    var ds = today0 + i * DAY, dt = new Date(ds + OFFSET);
+    var wd = i === 0 ? t.today : i === 1 ? t.tomorrow : wdf.format(dt).replace(".", "");
+    wd = wd.charAt(0).toUpperCase() + wd.slice(1);
+    html += '<button type="button" data-day="' + i + '" aria-pressed="' + (i === state.day) + '"><span class="wd">' + esc(wd) + '</span><span class="dn">' + dt.getUTCDate() + '</span></button>';
+  }
+  $("days").innerHTML = html;
+
+  $("foot").innerHTML = '<p>' + t.madeBy + '</p><p>' + t.heightNote + ' ' + t.disclaimer + '</p><p>' + t.source + '</p>';
+}
+
+function dayData(){
+  var b = state.beach, ds = today0 + state.day * DAY;
+  var sun = sunTimes(ds + 12 * HOUR, b.lat, b.lon);
+  var ext = state.tide ? state.tide.ext.filter(function(e){ return e.t >= ds && e.t < ds + DAY; }) : [];
+  return {ds: ds, sun: sun, ext: ext, moon: moonInfo(ds + 12 * HOUR)};
+}
+
+function render(){
+  var t = tr(), d = dayData(), b = state.beach;
+  drawChart(d);
+
+  // Frase principal do dia
+  var ins = "", nextTxt = "";
+  if (state.tideStatus === "loading"){
+    ins = t.loading;
+  } else if (state.tideStatus === "error"){
+    ins = esc(t.error) + ' ' + fill(t.insightSunset, {time: fmtTime(d.sun.sunset)}) + ' <button type="button" class="retry" id="retry">' + esc(t.retry) + '</button>';
+  } else {
+    var dayLows = d.ext.filter(function(e){ return e.type === "low" && e.t > d.sun.sunrise && e.t < d.sun.sunset; });
+    if (dayLows.length){
+      var best = dayLows.reduce(function(a, c){ return c.h < a.h ? c : a; });
+      ins = fill(t.insightLow, {
+        time: fmtTime(best.t), height: fmtHeight(best.h),
+        from: fmtTime(Math.max(best.t - 90 * 60e3, d.sun.sunrise)),
+        to: fmtTime(Math.min(best.t + 90 * 60e3, d.sun.sunset))
+      });
+    } else if (d.ext.length){
+      ins = esc(t.insightNight);
+    } else {
+      ins = esc(t.noTides);
+    }
+    ins += " " + fill(t.insightSunset, {time: fmtTime(d.sun.sunset)});
+    if (state.day === 0){
+      var now = Date.now();
+      var nx = state.tide.ext.filter(function(e){ return e.t > now; })[0];
+      if (nx) nextTxt = fill(t.next, {type: nx.type === "high" ? t.highL : t.lowL, dur: fmtDur(nx.t - now).trim()});
+    }
+  }
+  $("insight").innerHTML = ins;
+  $("next").textContent = nextTxt;
+  var rb = $("retry"); if (rb) rb.onclick = function(){ fetchTide(); };
+
+  // Marés do dia
+  if (state.tideStatus === "ok" && d.ext.length){
+    $("tides").innerHTML = '<ul class="rows">' + d.ext.map(function(e){
+      var up = e.type === "high";
+      var g = up ? '<svg class="glyph" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 2 L13 11 H1 Z" fill="#1F7FB8"/></svg>'
+                 : '<svg class="glyph" viewBox="0 0 14 14" aria-hidden="true"><path d="M7 12 L1 3 H13 Z" fill="#8A6200"/></svg>';
+      return '<li>' + g + '<span class="k">' + (up ? t.high : t.low) + '</span><span class="v">' + fmtTime(e.t) + '<small>' + fmtHeight(e.h) + '</small></span></li>';
+    }).join("") + '</ul>';
+  } else {
+    $("tides").innerHTML = '<p class="empty">' + esc(state.tideStatus === "loading" ? t.loading : t.noTides) + '</p>';
+  }
+
+  // Sol
+  $("sun").innerHTML =
+    '<li><span class="k">' + t.sunrise + '</span><span class="v">' + fmtTime(d.sun.sunrise) + '</span></li>' +
+    '<li><span class="k">' + t.golden + '</span><span class="v">' + fmtTime(d.sun.golden) + '</span></li>' +
+    '<li><span class="k">' + t.sunset + '</span><span class="v">' + fmtTime(d.sun.sunset) + '</span></li>' +
+    '<li><span class="k">' + t.dayLength + '</span><span class="v">' + fmtDur(d.sun.sunset - d.sun.sunrise).trim() + '</span></li>';
+
+  // Lua
+  var mo = d.moon;
+  $("moon").innerHTML = '<div class="moon">' + moonSVG(mo.p, 56) + '<div><div class="name">' + esc(t.phases[mo.idx]) + '</div><div class="pct">' +
+    fill(t.lit, {n: Math.round(mo.illum * 100)}) + '</div></div></div>' +
+    (mo.spring ? '<p class="moon-note">' + esc(t.spring) + '</p>' : mo.neap ? '<p class="moon-note">' + esc(t.neap) + '</p>' : '');
+
+  // Sobre a praia
+  var link = CONFIG.guides[b.id];
+  if (link && state.lang !== "pt"){
+    try { var u = new URL(link); u.hostname = state.lang + ".hojenoceara.com.br"; link = u.toString(); } catch(e){}
+  }
+  $("about").innerHTML = '<h2>' + esc(b.name) + '</h2><p class="city">' + esc(b.city) + ', Ceará</p><p class="tip">' + esc(t.tips[b.id]) + '</p>' +
+    (link ? '<a href="' + esc(link) + '" target="_top">' + esc(t.guide) + '</a>' : '');
+
+  postHeight();
+}
+
+/* ================= Gráfico: o dia como um horizonte ================= */
+function drawChart(d){
+  var box = $("chart"), W = Math.max(280, Math.round(box.clientWidth || 700));
+  var H = W < 520 ? 220 : 260, top = 40, bottom = H - 28;
+  var ds = d.ds, x = function(t){ return (t - ds) / DAY * W; };
+  var f = function(t){ return Math.max(0, Math.min(1, (t - ds) / DAY)); };
+  var s = d.sun;
+  var stops = [
+    [0, "#0E2A44"], [f(s.dawn - 40 * 60e3), "#0E2A44"], [f(s.dawn), "#4A5B80"], [f(s.sunrise), "#F3B867"],
+    [f(s.sunrise + 90 * 60e3), "#CFE7F6"], [f(s.sunset - 90 * 60e3), "#CFE7F6"], [f(s.sunset), "#F2A65A"],
+    [f(s.dusk), "#4A5B80"], [f(s.dusk + 40 * 60e3), "#0E2A44"], [1, "#0E2A44"]
+  ];
+  var g = '<defs><linearGradient id="sky" x1="0" x2="1" y1="0" y2="0">' +
+    stops.map(function(st){ return '<stop offset="' + (st[0] * 100).toFixed(2) + '%" stop-color="' + st[1] + '"/>'; }).join("") +
+    '</linearGradient><linearGradient id="haze" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".18"/></linearGradient>' +
+    '<linearGradient id="water" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2A8BCB"/><stop offset="1" stop-color="#0A3F63"/></linearGradient>' +
+    '<clipPath id="clip"><rect x="0" y="0" width="' + W + '" height="' + bottom + '"/></clipPath></defs>';
+  var svg = g + '<rect width="' + W + '" height="' + bottom + '" fill="url(#sky)"/><rect width="' + W + '" height="' + bottom + '" fill="url(#haze)"/>';
+
+  var isDay = function(t){ return t > s.sunrise && t < s.sunset; };
+  var t = tr();
+
+  if (state.tide){
+    var all = state.tide.pts, lo = Infinity, hi = -Infinity;
+    all.forEach(function(p){ if (p.h < lo) lo = p.h; if (p.h > hi) hi = p.h; });
+    lo -= 0.25; hi += 0.25;
+    var y0 = top + (bottom - top) * 0.28, y1 = bottom - 6;
+    var y = function(h){ return y0 + (hi - h) / (hi - lo) * (y1 - y0); };
+    var pts = all.filter(function(p){ return p.t >= ds - 3 * HOUR && p.t <= ds + DAY + 3 * HOUR; })
+                 .map(function(p){ return [x(p.t), y(p.h)]; });
+    if (pts.length > 3){
+      var path = "M" + pts[0][0].toFixed(1) + "," + pts[0][1].toFixed(1);
+      for (var i = 0; i < pts.length - 1; i++){
+        var p0 = pts[i-1] || pts[i], p1 = pts[i], p2 = pts[i+1], p3 = pts[i+2] || p2;
+        path += " C" + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + "," + (p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + " " +
+                (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + "," + (p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + " " +
+                p2[0].toFixed(1) + "," + p2[1].toFixed(1);
+      }
+      var area = path + " L" + pts[pts.length-1][0].toFixed(1) + "," + bottom + " L" + pts[0][0].toFixed(1) + "," + bottom + " Z";
+      svg += '<g clip-path="url(#clip)"><path d="' + area + '" fill="url(#water)" opacity=".95"/>' +
+             '<path d="' + path + '" fill="none" stroke="#fff" stroke-width="2" stroke-opacity=".9"/></g>';
+
+      d.ext.forEach(function(e){
+        var ex = x(e.t), ey = y(e.h), dayLight = isDay(e.t);
+        var tx = Math.max(26, Math.min(W - 26, ex));
+        var ink = dayLight ? "#0F2433" : "#FFFFFF", halo = dayLight ? "#E6F2FA" : "#0E2A44";
+        svg += '<circle cx="' + ex.toFixed(1) + '" cy="' + ey.toFixed(1) + '" r="5" fill="#fff" stroke="' + (e.type === "high" ? "#0B4F7A" : "#8A6200") + '" stroke-width="2.5"/>' +
+          '<text x="' + tx.toFixed(1) + '" y="' + (ey - 26).toFixed(1) + '" text-anchor="middle" font-family="Bricolage Grotesque, sans-serif" font-weight="700" font-size="15" fill="' + ink + '" stroke="' + halo + '" stroke-width="3" paint-order="stroke" stroke-linejoin="round">' + fmtTime(e.t) + '</text>' +
+          '<text x="' + tx.toFixed(1) + '" y="' + (ey - 11).toFixed(1) + '" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-size="12" fill="' + ink + '" stroke="' + halo + '" stroke-width="3" paint-order="stroke" stroke-linejoin="round">' + fmtHeight(e.h) + '</text>';
+      });
+    }
+  } else {
+    var calm = bottom - (bottom - top) * 0.32;
+    svg += '<rect x="0" y="' + calm + '" width="' + W + '" height="' + (bottom - calm) + '" fill="url(#water)" opacity="' + (state.tideStatus === "loading" ? ".55" : ".35") + '"/>';
+  }
+
+  // Nascer e pôr do sol no alto do gráfico
+  [[s.sunrise, true], [s.sunset, false]].forEach(function(o){
+    var sx = x(o[0]);
+    var anchor = o[1] ? "start" : "end", lx = o[1] ? sx + 12 : sx - 12;
+    svg += '<line x1="' + sx.toFixed(1) + '" x2="' + sx.toFixed(1) + '" y1="26" y2="' + bottom + '" stroke="#fff" stroke-opacity=".55" stroke-dasharray="2 4"/>' +
+      '<circle cx="' + sx.toFixed(1) + '" cy="20" r="6.5" fill="#F2B705" stroke="#fff" stroke-width="2"/>' +
+      '<text x="' + lx.toFixed(1) + '" y="25" text-anchor="' + anchor + '" font-family="Bricolage Grotesque, sans-serif" font-weight="700" font-size="14" fill="#0F2433" stroke="#E9F4FB" stroke-width="3" paint-order="stroke" stroke-linejoin="round">' +
+      (W < 560 ? "" : esc(o[1] ? t.sunrise : t.sunset) + ' ') + fmtTime(o[0]) + '</text>';
+  });
+
+  // Agora (o selo fica por cima; a linha fica atrás dos rótulos)
+  if (state.day === 0){
+    var nx = x(Date.now());
+    svg = svg.replace('<g clip-path', '<line x1="' + nx.toFixed(1) + '" x2="' + nx.toFixed(1) + '" y1="34" y2="' + bottom + '" stroke="#F2B705" stroke-width="2"/><g clip-path');
+    if (!state.tide) svg += '<line x1="' + nx.toFixed(1) + '" x2="' + nx.toFixed(1) + '" y1="34" y2="' + bottom + '" stroke="#F2B705" stroke-width="2"/>';
+    svg += '<rect x="' + (nx - 30).toFixed(1) + '" y="' + (bottom - 24) + '" width="60" height="18" rx="9" fill="#F2B705"/>' +
+      '<text x="' + nx.toFixed(1) + '" y="' + (bottom - 11) + '" text-anchor="middle" font-family="Atkinson Hyperlegible, sans-serif" font-weight="700" font-size="11" fill="#0F2433">' + esc(t.now) + '</text>';
+  }
+
+  // Horas
+  var ticks = W < 520 ? [0, 6, 12, 18, 24] : [0, 3, 6, 9, 12, 15, 18, 21, 24];
+  svg += '<rect y="' + bottom + '" width="' + W + '" height="' + (H - bottom) + '" fill="#0A3352"/>';
+  ticks.forEach(function(h){
+    var tx = h / 24 * W, anchor = h === 0 ? "start" : h === 24 ? "end" : "middle";
+    svg += '<text x="' + (h === 0 ? 10 : h === 24 ? W - 10 : tx).toFixed(1) + '" y="' + (bottom + 18) + '" text-anchor="' + anchor + '" font-family="Atkinson Hyperlegible, sans-serif" font-size="11.5" fill="#BFD6E6">' + pad(h % 24) + ':00</text>';
+  });
+
+  var dateTxt = new Intl.DateTimeFormat(LOCALE[state.lang], {day:"numeric", month:"long", timeZone:"UTC"}).format(new Date(ds + OFFSET));
+  box.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="' + W + '" height="' + H + '" role="img" aria-label="' + esc(fill(t.chartLabel, {beach: state.beach.name, date: dateTxt})) + '">' + svg + '</svg>';
+}
+
+/* ================= Eventos ================= */
+function fetchTide(){
+  var b = state.beach;
+  state.tide = null; state.tideStatus = "loading"; render();
+  loadTide(b).then(function(data){
+    if (state.beach !== b) return;
+    state.tide = data; state.tideStatus = "ok"; render();
+  }).catch(function(){
+    if (state.beach !== b) return;
+    state.tideStatus = "error"; render();
+  });
+}
+
+$("langs").addEventListener("click", function(e){
+  var btn = e.target.closest("button"); if (!btn) return;
+  state.lang = btn.getAttribute("data-lang"); renderStatic(); render();
+});
+$("days").addEventListener("click", function(e){
+  var btn = e.target.closest("button"); if (!btn) return;
+  state.day = +btn.getAttribute("data-day");
+  Array.prototype.forEach.call($("days").children, function(c){ c.setAttribute("aria-pressed", c === btn); });
+  render();
+});
+$("beach").addEventListener("change", function(e){
+  state.beach = BEACHES.filter(function(b){ return b.id === e.target.value; })[0];
+  fetchTide();
+});
+
+/* Ajusta a altura do iframe na página do portal */
+var lastH = 0;
+function postHeight(){
+  var h = Math.ceil(document.documentElement.scrollHeight);
+  if (h !== lastH && window.parent !== window){ lastH = h; window.parent.postMessage({hncTool:"mare-por-do-sol", height:h}, "*"); }
+}
+var lastW = 0;
+if (window.ResizeObserver){
+  new ResizeObserver(function(){
+    var w = $("chart").clientWidth;
+    if (w !== lastW){ lastW = w; render(); } else postHeight();
+  }).observe(document.body);
+}
+document.fonts && document.fonts.ready.then(render);
+setInterval(function(){ if (state.day === 0) render(); }, 5 * 60e3);
+
+renderStatic();
+fetchTide();
+})();
+</script>
+</body>
+</html>
